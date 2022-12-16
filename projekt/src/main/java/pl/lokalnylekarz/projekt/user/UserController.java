@@ -1,11 +1,11 @@
-package pl.lokalnylekarz.projekt.opinia;
+package pl.lokalnylekarz.projekt.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class OpiniaController {
+public class UserController {
 
-    private final OpiniaService service;
+    private final UserService service;
 }

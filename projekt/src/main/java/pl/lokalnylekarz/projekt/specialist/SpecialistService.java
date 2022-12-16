@@ -1,10 +1,9 @@
-package pl.lokalnylekarz.projekt.placowka;
+package pl.lokalnylekarz.projekt.specialist;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
-public class PlacowkaService {
-
+@Service
+public class SpecialistService {
 }

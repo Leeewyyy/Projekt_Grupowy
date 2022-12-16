@@ -7,9 +7,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EntityScan("pl.lokalnylekarz.projekt.model")
-@ComponentScan(basePackages = {"pl.lokalnylekarz.projekt.database.seeder"})
-@EnableJpaRepositories("pl.lokalnylekarz.projekt.repository")
+//@EntityScan("pl.lokalnylekarz.projekt.model")
+//@ComponentScan(basePackages = {"pl.lokalnylekarz.projekt.database.seeder"})
+//@EnableJpaRepositories("pl.lokalnylekarz.projekt.repository")
 public class ProjektApplication {
 
 	public static void main(String[] args) {

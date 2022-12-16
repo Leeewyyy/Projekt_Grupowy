@@ -1,11 +1,11 @@
-package pl.lokalnylekarz.projekt.uzytkownik;
+package pl.lokalnylekarz.projekt.specialist;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public class UzytkownikController {
+public class SpecialistController {
 
-    private final UzytkownikService service;
+    private final SpecialistService service;
 }
