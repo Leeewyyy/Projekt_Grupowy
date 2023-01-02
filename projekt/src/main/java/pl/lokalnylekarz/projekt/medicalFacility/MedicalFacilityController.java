@@ -1,26 +1,30 @@
 package pl.lokalnylekarz.projekt.medicalFacility;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.catalina.mapper.Mapper;
+import org.springframework.web.bind.annotation.*;
 import pl.lokalnylekarz.projekt.api.Endpoint;
-import pl.lokalnylekarz.projekt.model.MedicalFacility;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping(Endpoint.MEDICAL_FACILITIES_BASE_ROUTE)
 public class MedicalFacilityController {
 
     private final MedicalFacilityService service;
 
-
-    @GetMapping(Endpoint.GET_ALL_MEDICAL_FACILITIES)
+    @GetMapping()
     @ResponseBody
-    public List<MedicalFacility> getMedicalFacilities(){
+    @JsonIgnoreProperties("specialist")
+    public List<MedicalFacilityDto> getMedicalFacilities() {
         return service.getAll();
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public MedicalFacilityDto getMedicalFacilityDetails(@PathVariable(value = "id") Long id) {
+        return service.get(id);
     }
 }
