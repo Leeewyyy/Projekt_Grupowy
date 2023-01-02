@@ -127,6 +127,18 @@ export default {
     };
   },
 
+  // PRZYKŁAD POBIERANIA PLACÓWEK
+  // TO TRZEBA PRZENIEŚĆ DO ASYNCDATA
+  async mounted() {
+    try {
+      const medicalFacilities = await this.$store.dispatch('medicalFacilities/fetchAll');
+      console.info(`Pobrano listę ${medicalFacilities?.length} placówek z backendu. Pierwsza placówka:`);
+      console.dir(medicalFacilities?.[0]);
+    } catch (error) {
+      console.error(`Error przy pobieraniu placówek: ${error}!`);
+    }
+  },
+
   methods: {
     onPlaceSelected(place) {
       this.selectedPlace = place;

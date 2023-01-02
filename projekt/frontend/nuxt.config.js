@@ -24,11 +24,23 @@ export default {
   styleResources: {
     scss: ['./assets/scss/index.scss'],
   },
+
   plugins: [
     { src: '@/plugins/v-tooltip.js' },
     { src: '@/plugins/vuescroll.js' },
     { src: '@/plugins/vue-notification.js', mode: 'client' },
   ],
+
+  axios: {
+    proxy: true,
+  },
+
+  proxy: {
+    '/api': {
+      target: process.env.AXIOS_API_URL || 'http://127.0.0.1:8080',
+      pathRewrite: { '^/api': '' },
+    },
+  },
 
   build: {
     postcss: null,
