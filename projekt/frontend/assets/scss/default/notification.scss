@@ -1,0 +1,21 @@
+.main-notification {
+  padding: 20px;
+  margin: 20px 20px 0 0;
+
+  font-size: 1em;
+
+  color: #000;
+  background: #44a4fc;
+
+  &.warn {
+    background: #ffb648;
+  }
+
+  &.error {
+    background: #ed4b4b;
+  }
+
+  &.success {
+    background: #68cd86;
+  }
+}

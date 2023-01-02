@@ -1,0 +1,133 @@
+<template>
+  <div class="Rating" :class="{ 'Rating--large': large }">
+    <div class="Rating_container">
+      <div
+        v-if="preview && modelValue !== undefined"
+        class="Rating_value"
+        v-tooltip="showTooltip && ratingTooltip"
+      >
+        {{ ratingValue }}
+      </div>
+      <div class="Rating_stars">
+        <Icon
+          v-for="n in max"
+          :key="`starInput_${n}`"
+          class="stars_item"
+          :class="{
+            'item--clickable': !preview,
+          }"
+          :name="getIconName(n)"
+          @click.native="onInput(n)"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Icon from '@/components/shared/Icon';
+
+export default {
+  components: {
+    Icon,
+  },
+
+  model: {
+    prop: 'modelValue',
+    event: 'change',
+  },
+
+  props: {
+    modelValue: {
+      type: Number,
+      default: null,
+    },
+    max: {
+      type: Number,
+      default: 5,
+    },
+    preview: {
+      type: Boolean,
+      default: true,
+    },
+    large: {
+      type: Boolean,
+      default: false,
+    },
+    showTooltip: {
+      type: Boolean,
+      default: true,
+    },
+  },
+
+  computed: {
+    ratingValue() {
+      return this.modelValue?.toFixed(1) || 'N/A';
+    },
+
+    ratingTooltip() {
+      return this.modelValue
+        ? `Ta placówka uzyskała średnią ocenę ${this.modelValue} gwiazdki.`
+        : 'Ta placówka nie otrzymała jeszcze żadnej oceny.';
+    },
+
+    checkedStars() {
+      return Math.max(this.modelValue, 0);
+    },
+  },
+
+  methods: {
+    onInput(starNumber) {
+      // Don't allow input if preview only
+      if (this.preview) return;
+      this.$emit('change', starNumber);
+    },
+
+    getIconName(starNumber) {
+      return starNumber <= this.checkedStars ? 'star' : 'star_border';
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.Rating {
+  user-select: none;
+  
+  &.Rating--large {
+    .Rating_stars {
+      .stars_item {
+        font-size: 1.3rem !important;
+      }
+    }
+  }
+
+  .Rating_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+
+  .Rating_value {
+    min-width: 24px;
+    margin-right: 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-align: center;
+    color: rgb(var(--color-text));
+  }
+
+  .Rating_stars {
+    line-height: 16px;
+
+    .stars_item {
+      color: #f9c33a !important;
+
+      &.item--clickable:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
+</style>

@@ -1,0 +1,76 @@
+// Default site-wide components
+@import './default/tooltip.scss';
+@import './default/notification.scss';
+
+// Breakpoints
+$tablet_breakpoint: 768px;
+$desktop_breakpoint: 1280px;
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.main-container {
+  min-width: 500px;
+  max-width: 50vh;
+  min-height: 300px;
+  max-height: 65vh;
+}
+
+.centered-page {
+  width: 100vw;
+  height: 100vh !important;
+  background: rgb(162, 190, 223);
+  background: radial-gradient(circle, rgba(162, 190, 223, 1) 44%, rgba(255, 255, 255, 1) 86%);
+  transition: all 0.2s;
+
+  .centered-form {
+    margin: auto;
+    position: relative;
+    top: 20%;
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+a:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
+  color: rgb(var(--color-text));
+  font-weight: 600;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+.d-flex {
+  &-center {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-between {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.mr-1 {
+  margin-right: 10px;
+}
+
+.mt-1 {
+  margin-top: 10px;
+}
+
+.ml-1 {
+  margin-left: 10px;
+}
