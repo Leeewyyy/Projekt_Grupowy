@@ -1,21 +1,22 @@
 package pl.lokalnylekarz.projekt.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.persistence.LocationConverter;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "medical_facilities")
 public class MedicalFacility {
     @Id
@@ -57,21 +58,21 @@ public class MedicalFacility {
     private Timestamp openTo;
 
     @Column
-    private Double lat;
-
-    @Column
-    private Double lng;
+    @Convert(converter = LocationConverter.class)
+    private Location location;
 
     @Column
     @CreationTimestamp
     private Date addedAt;
 
-//    @ManyToOne
-//    @JoinColumn(name = "specialist_id")
-//    private Specialist specialist;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User addedBy;
+    @ManyToMany
+    @JoinColumn(name = "id")
+    private List<Specialist> specialist;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User addedBy;
+
+    @OneToMany(mappedBy = "medicalFacility")
+    private List<Opinion> opinions;
 }

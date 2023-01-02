@@ -3,6 +3,7 @@ package pl.lokalnylekarz.projekt.database.seeder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.FacilityRatings;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
@@ -15,8 +16,8 @@ import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
-
 import java.sql.Timestamp;
+import java.util.List;
 
 @Component
 public class InitSeeder implements CommandLineRunner {
@@ -40,95 +41,172 @@ public class InitSeeder implements CommandLineRunner {
 
     private void loadUserData() {
         if (userRepository.count() == 0) {
-            User user1 = new User("john1", "John1", "Smith", "john.smitch@gmail.com", "cGFzc3dvcmQ=");
-            User user2 = new User("john2", "John2", "Smith2", "john2.smitch@gmail.com", "cGFzc3dvcmQ=");
-            User user3 = new User("john3", "John3", "Smith3", "john3.smitch@gmail.com", "cGFzc3dvcmQ=");
-            User user4 = new User("john4", "John4", "Smith4", "john4.smitch@gmail.com", "cGFzc3dvcmQ=");
+            User user1 = User.builder()
+                    .login("john1")
+                    .firstname("John")
+                    .lastname("Smith")
+                    .email("john.smitch@gmail.com")
+                    .password("cGFzc3dvcmQ=")
+                    .build();
 
-            MedicalFacility medicalFacility1 = new MedicalFacility();
-            medicalFacility1.setName("Politechnika Gdanska");
-            medicalFacility1.setType(MedicalFacilityTypes.ONE);
-            medicalFacility1.setAddress("ul. Politechniczna");
-            medicalFacility1.setImageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479");
-            medicalFacility1.setPhone("+48123123123");
-            medicalFacility1.setWebsiteUrl("https://pg.edu.pl");
-            medicalFacility1.setDescription("Fajna placowka");
-            medicalFacility1.setIsNFZ(true);
-            medicalFacility1.setRating(3);
-            medicalFacility1.setOpenFrom(new Timestamp(12));
-            medicalFacility1.setOpenTo(new Timestamp(12345));
-            medicalFacility1.setLat(54.3739);
-            medicalFacility1.setLng(18.6214);
+            User user2 = User.builder()
+                    .login("john2")
+                    .firstname("John")
+                    .lastname("Smith")
+                    .email("john.smitch@gmail.com")
+                    .password("cGFzc3dvcmQ=")
+                    .build();
 
-            MedicalFacility medicalFacility2 = new MedicalFacility();
-            medicalFacility2.setName("Politechnika Gdanska");
-            medicalFacility2.setType(MedicalFacilityTypes.ONE);
-            medicalFacility2.setAddress("ul. Politechniczna");
-            medicalFacility2.setImageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479");
-            medicalFacility2.setPhone("+48123123123");
-            medicalFacility2.setWebsiteUrl("https://pg.edu.pl");
-            medicalFacility2.setDescription("Fajna placowka");
-            medicalFacility2.setIsNFZ(true);
-            medicalFacility2.setRating(3);
-            medicalFacility2.setOpenFrom(new Timestamp(12));
-            medicalFacility2.setOpenTo(new Timestamp(12345));
-            medicalFacility2.setLat(54.3739);
-            medicalFacility2.setLng(18.6214);
+            User user3 = User.builder()
+                    .login("john3")
+                    .firstname("John")
+                    .lastname("Smith")
+                    .email("john.smitch@gmail.com")
+                    .password("cGFzc3dvcmQ=")
+                    .build();
 
-            MedicalFacility medicalFacility3 = new MedicalFacility();
-            medicalFacility3.setName("Politechnika Gdanska");
-            medicalFacility3.setType(MedicalFacilityTypes.ONE);
-            medicalFacility3.setAddress("ul. Politechniczna");
-            medicalFacility3.setImageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479");
-            medicalFacility3.setPhone("+48123123123");
-            medicalFacility3.setWebsiteUrl("https://pg.edu.pl");
-            medicalFacility3.setDescription("Fajna placowka");
-            medicalFacility3.setIsNFZ(true);
-            medicalFacility3.setRating(3);
-            medicalFacility3.setOpenFrom(new Timestamp(12));
-            medicalFacility3.setOpenTo(new Timestamp(12345));
-            medicalFacility3.setLat(54.3739);
-            medicalFacility3.setLng(18.6214);
-
-            MedicalFacility medicalFacility4 = new MedicalFacility();
-            medicalFacility4.setName("Politechnika Gdanska");
-            medicalFacility4.setType(MedicalFacilityTypes.ONE);
-            medicalFacility4.setAddress("ul. Politechniczna");
-            medicalFacility4.setImageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479");
-            medicalFacility4.setPhone("+48123123123");
-            medicalFacility4.setWebsiteUrl("https://pg.edu.pl");
-            medicalFacility4.setDescription("Fajna placowka");
-            medicalFacility4.setIsNFZ(true);
-            medicalFacility4.setRating(3);
-            medicalFacility4.setOpenFrom(new Timestamp(12));
-            medicalFacility4.setOpenTo(new Timestamp(12345));
-            medicalFacility4.setLat(54.3739);
-            medicalFacility4.setLng(18.6214);
-
-            Specialist specialist1 = new Specialist("Jane", "Doe", Specialization.ONE, medicalFacility1);
-            Specialist specialist2 = new Specialist("Jane2", "Doe", Specialization.TWO, medicalFacility2);
-            Specialist specialist3 = new Specialist("Jane3", "Doe", Specialization.THREE, medicalFacility3);
-            Specialist specialist4 = new Specialist("Jane4", "Doe", Specialization.FOUR, medicalFacility4);
-
-            Opinion opinion1 = new Opinion(user1, FacilityRatings.ONE, "Lorem ipsume dolor sit amend", medicalFacility1);
-            Opinion opinion2 = new Opinion(user2, FacilityRatings.TWO, "Lorem ipsume dolor sit amend", medicalFacility2);
-            Opinion opinion3 = new Opinion(user3, FacilityRatings.THREE, "Lorem ipsume dolor sit amend", medicalFacility3);
-            Opinion opinion4 = new Opinion(user4, FacilityRatings.FOUR, "Lorem ipsume dolor sit amend", medicalFacility4);
+            User user4 = User.builder()
+                    .login("john4")
+                    .firstname("John")
+                    .lastname("Smith")
+                    .email("john.smitch@gmail.com")
+                    .password("cGFzc3dvcmQ=")
+                    .build();
 
             userRepository.save(user1);
             userRepository.save(user2);
             userRepository.save(user3);
             userRepository.save(user4);
 
-            medicalFacilityRepository.save(medicalFacility1);
-            medicalFacilityRepository.save(medicalFacility2);
-            medicalFacilityRepository.save(medicalFacility3);
-            medicalFacilityRepository.save(medicalFacility4);
+            Specialist specialist1 = Specialist.builder()
+                    .firstname("Jane1")
+                    .lastname("Doe")
+                    .specialization(Specialization.ONE)
+                    .build();
+
+            Specialist specialist2 = Specialist.builder()
+                    .firstname("Jane2")
+                    .lastname("Doe")
+                    .specialization(Specialization.TWO)
+                    .build();
+
+            Specialist specialist3 = Specialist.builder()
+                    .firstname("Jane3")
+                    .lastname("Doe")
+                    .specialization(Specialization.THREE)
+                    .build();
+
+            Specialist specialist4 = Specialist.builder()
+                    .firstname("Jane4")
+                    .lastname("Doe")
+                    .specialization(Specialization.FOUR)
+                    .build();
 
             specialistRepository.save(specialist1);
             specialistRepository.save(specialist2);
             specialistRepository.save(specialist3);
             specialistRepository.save(specialist4);
+
+            MedicalFacility medicalFacility1 = MedicalFacility.builder()
+                    .name("Politechnika Gdanska")
+                    .type(MedicalFacilityTypes.ONE)
+                    .address("ul. Politechniczna")
+                    .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479")
+                    .phone("+48123123123")
+                    .websiteUrl("https://pg.edu.pl")
+                    .description("Fajna placowka")
+                    .isNFZ(true)
+                    .rating(3)
+                    .openFrom(new Timestamp(12))
+                    .openTo(new Timestamp(12345))
+                    .location(new Location(54.3739, 18.6214))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user1)
+                    .build();
+
+            MedicalFacility medicalFacility2 = MedicalFacility.builder()
+                    .name("Politechnika Gdanska")
+                    .type(MedicalFacilityTypes.ONE)
+                    .address("ul. Politechniczna")
+                    .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479")
+                    .phone("+48123123123")
+                    .websiteUrl("https://pg.edu.pl")
+                    .description("Fajna placowka")
+                    .isNFZ(true)
+                    .rating(3)
+                    .openFrom(new Timestamp(12))
+                    .openTo(new Timestamp(12345))
+                    .location(new Location(54.3739, 18.6214))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user2)
+                    .build();
+
+            MedicalFacility medicalFacility3 = MedicalFacility.builder()
+                    .name("Politechnika Gdanska")
+                    .type(MedicalFacilityTypes.ONE)
+                    .address("ul. Politechniczna")
+                    .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479")
+                    .phone("+48123123123")
+                    .websiteUrl("https://pg.edu.pl")
+                    .description("Fajna placowka")
+                    .isNFZ(true)
+                    .rating(3)
+                    .openFrom(new Timestamp(12))
+                    .openTo(new Timestamp(12345))
+                    .location(new Location(54.3739, 18.6214))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user3)
+                    .build();
+
+            MedicalFacility medicalFacility4 = MedicalFacility.builder()
+                    .name("Politechnika Gdanska")
+                    .type(MedicalFacilityTypes.ONE)
+                    .address("ul. Politechniczna")
+                    .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479")
+                    .phone("+48123123123")
+                    .websiteUrl("https://pg.edu.pl")
+                    .description("Fajna placowka")
+                    .isNFZ(true)
+                    .rating(3)
+                    .openFrom(new Timestamp(12))
+                    .openTo(new Timestamp(12345))
+                    .location(new Location(54.3739, 18.6214))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user4)
+                    .build();
+
+            medicalFacilityRepository.save(medicalFacility1);
+            medicalFacilityRepository.save(medicalFacility2);
+            medicalFacilityRepository.save(medicalFacility3);
+            medicalFacilityRepository.save(medicalFacility4);
+
+            Opinion opinion1 = Opinion.builder()
+                    .addedBy(user1)
+                    .rating(FacilityRatings.FOUR)
+                    .description("Lorem ipsum dolor sit amend")
+                    .medicalFacility(medicalFacility1)
+                    .build();
+
+            Opinion opinion2 = Opinion.builder()
+                    .addedBy(user2)
+                    .rating(FacilityRatings.FOUR)
+                    .description("Lorem ipsum dolor sit amend")
+                    .medicalFacility(medicalFacility1)
+                    .build();
+
+            Opinion opinion3 = Opinion.builder()
+                    .addedBy(user3)
+                    .rating(FacilityRatings.FOUR)
+                    .description("Lorem ipsum dolor sit amend")
+                    .medicalFacility(medicalFacility2)
+                    .build();
+
+            Opinion opinion4 = Opinion.builder()
+                    .addedBy(user4)
+                    .rating(FacilityRatings.FOUR)
+                    .description("Lorem ipsum dolor sit amend")
+                    .medicalFacility(medicalFacility2)
+                    .build();
 
             opinionRepository.save(opinion1);
             opinionRepository.save(opinion2);
