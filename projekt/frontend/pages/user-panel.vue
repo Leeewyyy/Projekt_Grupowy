@@ -70,12 +70,15 @@ export default {
   background: #fafafa;
 
   .user-panel_container {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     padding: 2rem;
 
     .container_column {
+      width: 100%;
       margin-bottom: 2rem;
 
       .column_avatar-box {
@@ -84,6 +87,16 @@ export default {
 
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $tablet_breakpoint) {
+  .AppPage--user-panel {
+    .user-panel_container {
+      .container_column {
+        max-width: 500px;
       }
     }
   }

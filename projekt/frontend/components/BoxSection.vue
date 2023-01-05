@@ -11,6 +11,7 @@
 
 <style lang="scss">
 .BoxSection {
+  overflow: hidden;
   background: rgb(var(--color-white));
   border-radius: 10px;
   box-shadow: 0px 2px 4px rgba(var(--color-black), 0.125);

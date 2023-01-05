@@ -53,13 +53,18 @@ export default {
   padding: 20px 30px;
 }
 
-.section-element {
-  width: 50%;
+.avatar-section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
 
+.section-element {
   .file-place {
     flex-direction: column;
-    width: 65%;
-
+    // white-space: nowrap;
+    
     span {
       font-weight: 600;
     }
