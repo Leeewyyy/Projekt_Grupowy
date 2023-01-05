@@ -5,10 +5,10 @@
         <AvatarBox class="column_avatar-box" />
         <MyReviews class="column_reviews" />
       </div>
-      <div class="container_column">
+      <div class="container_column column--account-data">
         <AccountData />
       </div>
-      <div class="container_column">
+      <div class="container_column column--favorite-places">
         <PlaceList
           class="container_column"
           customTitle="Ulubione placówki"
@@ -114,6 +114,10 @@ export default {
 
         &:last-child {
           margin-right: 0;
+        }
+
+        &.column--favorite-places {
+          flex-shrink: 0;
         }
       }
     }
