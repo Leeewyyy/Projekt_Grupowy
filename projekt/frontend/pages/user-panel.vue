@@ -1,14 +1,16 @@
 <template>
-  <AppPage name="userPanel">
-    <div class="panel-container">
-      <div class="panel">
-        <div class="panel-element">
-          <AvatarBox />
-          <MyReviews class="my-3" />
-        </div>
-        <AccountData class="panel-element" />
+  <AppPage name="user-panel" class="gray-background">
+    <div class="user-panel_container">
+      <div class="container_column">
+        <AvatarBox class="column_avatar-box" />
+        <MyReviews class="column_reviews" />
+      </div>
+      <div class="container_column">
+        <AccountData />
+      </div>
+      <div class="container_column">
         <PlaceList
-          class="panel-element-wider"
+          class="container_column"
           customTitle="Ulubione placówki"
           :places="favouritePlaces"
           :selectable="false"
@@ -57,35 +59,52 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.panel-container {
-  padding: 30px;
+<style lang="scss">
+.AppPage--user-panel {
+  // Header padding
+  padding-top: 50px;
 
-  .panel {
-    width: 100%;
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background: #fafafa;
 
-    .panel-element {
-      width: 28%;
-      display: block;
-      float: left;
-      margin-right: 3.5%;
-    }
+  .user-panel_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2rem;
 
-    .panel-element-wider {
-      max-width: 35%;
-      display: block;
-      float: left;
+    .container_column {
+      margin-bottom: 2rem;
+
+      .column_avatar-box {
+        margin-bottom: 2rem;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 }
 
-.bg-white {
-  background: #fff;
-}
+@media screen and (min-width: $desktop_breakpoint) {
+  .AppPage--user-panel {
+    .user-panel_container {
+      flex-direction: row;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+      margin-top: 5rem;
 
-.my-3 {
-  margin-top: 30px;
-  margin-bottom: 30px;
+      .container_column {
+        margin-right: 2rem;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
 }
 </style>

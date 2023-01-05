@@ -134,9 +134,8 @@ export default {
     return {
       scrollOptions: {
         mode: 'native',
-        scrollPanel: {
-          maxHeight: 586,
-        },
+        sizeStrategy: 'percent',
+        detectResize: true,
       },
 
       actions: [
@@ -163,9 +162,6 @@ export default {
 
 <style lang="scss">
 .PlaceDetails {
-  // TODO: Fix
-  width: 600px !important;
-
   .PlaceDetails_header {
     display: flex;
     flex-direction: row;
@@ -230,6 +226,7 @@ export default {
   }
 
   .PlaceDetails_container {
+    max-height: 60vh;
     color: #333;
 
     .container_image {

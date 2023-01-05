@@ -1,5 +1,5 @@
 <template>
-  <div :class="['Layout', { 'gray-background': $route.name === 'user-panel' }]">
+  <div class="Layout">
     <Header />
     <nuxt />
     <Authors />
@@ -52,10 +52,6 @@ body {
   --color-side: 138, 169, 206;
   --color-detail-1: 106, 249, 137;
   --color-detail-2: 237, 75, 75;
-
-  .gray-background {
-    background: #fafafa !important;
-  }
 }
 
 html {

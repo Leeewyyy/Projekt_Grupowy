@@ -124,7 +124,7 @@ export default {
   }
 
   .PlaceReviews_load-more {
-    margin: 0.5rem 0;
+    padding-bottom: 1rem;
     text-align: center;
 
     .load-more_button {

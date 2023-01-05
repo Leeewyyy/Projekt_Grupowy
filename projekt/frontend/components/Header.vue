@@ -1,5 +1,5 @@
 <template>
-  <header :class="['Header', { static: $route.name === 'user-panel' }]">
+  <header class="Header">
     <div class="Header_container">
       <div class="container_wrapper">
         <!-- Logo -->

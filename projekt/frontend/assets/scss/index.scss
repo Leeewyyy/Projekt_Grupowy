@@ -11,10 +11,8 @@ $desktop_breakpoint: 1280px;
 }
 
 .main-container {
-  min-width: 500px;
-  max-width: 50vh;
-  min-height: 300px;
-  max-height: 65vh;
+  width: 100%;
+  max-width: 500px;
 }
 
 .centered-page {

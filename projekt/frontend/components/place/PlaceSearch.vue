@@ -1,5 +1,5 @@
 <template>
-  <BoxSection class="PlaceSearch">
+  <BoxSection class="PlaceSearch main-container">
     <template #header>
       <h2 class="PlaceSearch_title">Wyszukaj placówki w okolicy</h2>
     </template>

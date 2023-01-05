@@ -1,6 +1,6 @@
 <template>
   <BoxSection
-    class="PlaceList"
+    class="PlaceList main-container"
     :class="{
       'PlaceList--selectable': selectable,
     }"
@@ -21,12 +21,12 @@
       </div>
     </template>
     <template #body>
-      <div class="PlaceList_container main-container">
+      <div class="PlaceList_container">
         <div v-if="!places.length" class="container_empty">
           Nie znaleziono żadnych miejsc spełniających kryteria.
         </div>
-        <ul v-else class="container_list">
-          <vue-scroll :ops="scrollOptions">
+        <vue-scroll v-else :ops="scrollOptions">
+          <ul class="container_list">
             <li class="list_item" v-for="place in places" :key="place.id">
               <PlaceCard
                 v-bind="place"
@@ -36,8 +36,8 @@
                 @favoriteChanged="updateList"
               />
             </li>
-          </vue-scroll>
-        </ul>
+          </ul>
+        </vue-scroll>
       </div>
     </template>
   </BoxSection>
@@ -78,9 +78,8 @@ export default {
     return {
       scrollOptions: {
         mode: 'native',
-        scrollPanel: {
-          maxHeight: 540,
-        },
+        sizeStrategy: 'percent',
+        detectResize: true,
       },
     };
   },
@@ -145,7 +144,7 @@ export default {
     background: rgb(var(--color-main));
 
     .container_list {
-      max-height: 540px;
+      max-height: 60vh;
       list-style-type: none;
 
       .list_item {
