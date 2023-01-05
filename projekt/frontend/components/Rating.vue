@@ -1,5 +1,11 @@
 <template>
-  <div class="Rating" :class="{ 'Rating--large': large }">
+  <div
+    class="Rating"
+    :class="{
+      'Rating--large': large,
+      'Rating--preview': preview,
+    }"
+  >
     <div class="Rating_container">
       <div
         v-if="preview && modelValue !== undefined"
@@ -126,6 +132,22 @@ export default {
 
       &.item--clickable:hover {
         cursor: pointer;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $tablet_breakpoint) {
+  .Rating {
+    &.Rating--preview {
+      .Rating_stars {
+        .stars_item {
+          display: none;
+
+          &:first-child {
+            display: block;
+          }
+        }
       }
     }
   }

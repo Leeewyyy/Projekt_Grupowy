@@ -59,4 +59,12 @@ export default {
     background: #6af989;
   }
 }
+
+@media screen and (max-width: $tablet_breakpoint) {
+  .NFZMark {
+    .NFZMark_icon {
+      display: none;
+    }
+  }
+}
 </style>

@@ -39,7 +39,7 @@
             :disabled="isButtonDisabled"
             class="w-100"
           >
-            Szukaj
+            Zapisz
           </Button>
         </div>
       </form>

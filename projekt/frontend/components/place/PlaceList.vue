@@ -148,7 +148,6 @@ export default {
       list-style-type: none;
 
       .list_item {
-        padding-right: 1rem; // scroll space
         margin-bottom: 1rem;
 
         &:last-child {
@@ -156,6 +155,14 @@ export default {
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: $tablet_breakpoint) {
+  .PlaceList {
+    .PlaceList_container {
+      padding: 1rem;
+    } 
   }
 }
 </style>

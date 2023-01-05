@@ -141,6 +141,8 @@ export default {
       }
 
       .name_text {
+        margin-right: 0.25rem;
+        
         display: -webkit-box;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -169,6 +171,14 @@ export default {
 
     .details_building-type {
       font-size: 0.8rem;
+    }
+  }
+}
+
+@media screen and (max-width: $tablet_breakpoint) {
+  .PlaceCard {
+    .PlaceCard_photo {
+      max-width: 100px;
     }
   }
 }
