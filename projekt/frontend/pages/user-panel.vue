@@ -62,7 +62,7 @@ export default {
 <style lang="scss">
 .AppPage--user-panel {
   // Header padding
-  padding-top: 50px;
+  padding-top: calc(50px + 2rem);
 
   display: flex;
   flex-direction: row;
@@ -95,7 +95,6 @@ export default {
       flex-direction: row;
       align-items: flex-start;
       flex-wrap: nowrap;
-      margin-top: 5rem;
 
       .container_column {
         margin-right: 2rem;

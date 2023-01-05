@@ -65,7 +65,7 @@ export default {
 .Header {
   width: 100%;
   height: 50px;
-  position: fixed;
+  position: absolute;
   margin: 1rem 0;
   padding: 0 1rem;
   z-index: 10;
@@ -114,17 +114,6 @@ export default {
 
     .Header_navigation {
       margin-left: 1.5rem;
-    }
-  }
-
-  &.static {
-    position: static;
-    margin: 0;
-    height: auto;
-
-    .Header_container {
-      box-sizing: content-box;
-      padding: 1rem 0;
     }
   }
 
