@@ -180,30 +180,41 @@ export default {
 <style lang="scss">
 .AppPage--page {
   position: relative;
-
+  
   .page_map {
     width: 100vw;
     height: 100vh;
+    display: none;
     z-index: 1;
   }
 
   .page_container {
     width: 100%;
     height: 100%;
-    // Draw everything on top of map
-    z-index: 2;
-  }
-
-  .page_place-search,
-  .page_place-list,
-  .page_place-details {
-    position: absolute;
-    top: 15%;
-    left: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    z-index: 2; // draw on map
   }
 
   .page_hovered-place {
     position: absolute;
+  }
+}
+
+@media screen and (min-width: $desktop_breakpoint) {
+  .AppPage--page {
+    .page_map {
+      display: block;
+    }
+
+    .page_place-search,
+    .page_place-list,
+    .page_place-details {
+      position: absolute;
+      top: 15%;
+      left: 100px;
+    }
   }
 }
 </style>
