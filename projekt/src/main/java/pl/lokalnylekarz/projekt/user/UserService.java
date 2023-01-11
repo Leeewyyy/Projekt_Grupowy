@@ -34,7 +34,6 @@ public class UserService {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getRegistrationDate(),
                 user.getOpinions().stream().map(OpinionService::forUser).toList(),
                 user.getAddedMedicalFacilities().stream().map(MedicalFacilityService::toDtoList).toList()
@@ -48,7 +47,6 @@ public class UserService {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getRegistrationDate()
         );
     }

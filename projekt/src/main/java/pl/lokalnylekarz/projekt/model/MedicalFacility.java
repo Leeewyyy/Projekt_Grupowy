@@ -73,6 +73,10 @@ public class MedicalFacility {
     @JoinColumn(name = "user_id")
     private User addedBy;
 
-    @OneToMany(mappedBy = "medicalFacility")
+    @ManyToMany(mappedBy = "medicalFacility")
     private List<Opinion> opinions;
+
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
+    @JoinTable(name = "favorite_facilities_for_users", joinColumns = @JoinColumn(name = "facility_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> favoriteFor;
 }

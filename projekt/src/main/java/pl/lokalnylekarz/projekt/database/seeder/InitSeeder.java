@@ -17,6 +17,7 @@ import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -107,6 +108,10 @@ public class InitSeeder implements CommandLineRunner {
             specialistRepository.save(specialist3);
             specialistRepository.save(specialist4);
 
+            List<User> users = new ArrayList<>();
+            users.add(user1);
+            users.add(user3);
+
             MedicalFacility medicalFacility1 = MedicalFacility.builder()
                     .name("Politechnika Gdanska")
                     .type(MedicalFacilityTypes.ONE)
@@ -122,6 +127,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialist((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .favoriteFor(users)
                     .build();
 
             MedicalFacility medicalFacility2 = MedicalFacility.builder()
@@ -139,6 +145,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialist((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .favoriteFor(users)
                     .build();
 
             MedicalFacility medicalFacility3 = MedicalFacility.builder()
@@ -156,6 +163,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialist((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
+                    .favoriteFor(users)
                     .build();
 
             MedicalFacility medicalFacility4 = MedicalFacility.builder()
@@ -173,6 +181,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialist((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
+                    .favoriteFor(users)
                     .build();
 
             medicalFacilityRepository.save(medicalFacility1);

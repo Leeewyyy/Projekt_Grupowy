@@ -38,9 +38,12 @@ public class User {
     @CreationTimestamp
     private Timestamp registrationDate;
 
-    @OneToMany(mappedBy = "addedBy")
+    @ManyToMany(mappedBy = "addedBy")
     private List<Opinion> opinions;
 
     @OneToMany(mappedBy = "addedBy")
     private List<MedicalFacility> addedMedicalFacilities;
+
+    @ManyToMany(mappedBy = "favoriteFor")
+    private List<MedicalFacility> favoriteFacilities;
 }

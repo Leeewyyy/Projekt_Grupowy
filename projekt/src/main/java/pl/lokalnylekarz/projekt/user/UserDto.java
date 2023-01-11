@@ -18,7 +18,6 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private String email;
-    private String password;
     private Timestamp registrationDate;
     private List<OpinionDto> opinions;
     private List<MedicalFacilityDto> addedMedicalFacilities;
@@ -38,23 +37,4 @@ public class UserDto {
         this.email = email;
         this.registrationDate = registrationDate;
     }
-
-    public UserDto(
-            Long id,
-            String login,
-            String firstname,
-            String lastname,
-            String email,
-            String password,
-            Timestamp registrationDate
-    ) {
-        this.id = id;
-        this.login = login;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.email = email;
-        this.password = password;
-        this.registrationDate = registrationDate;
-    }
-
 }

@@ -46,7 +46,8 @@ public class MedicalFacilityService {
                 medicalFacility.getAddedAt(),
                 medicalFacility.getSpecialist().stream().map(SpecialistService::fromEntityToDto).toList(),
                 UserService.forMedicalDto(medicalFacility.getAddedBy()),
-                medicalFacility.getOpinions().stream().map(OpinionService::fromEntityToDto).toList()
+                medicalFacility.getOpinions().stream().map(OpinionService::fromEntityToDto).toList(),
+                medicalFacility.getFavoriteFor().stream().map(UserService::fromEntityToDto).toList()
         );
     }
 
@@ -63,7 +64,8 @@ public class MedicalFacilityService {
                 medicalFacility.getOpenFrom(),
                 medicalFacility.getOpenTo(),
                 medicalFacility.getLocation(),
-                medicalFacility.getAddedAt()
+                medicalFacility.getAddedAt(),
+                medicalFacility.getFavoriteFor().stream().map(UserService::fromEntityToDto).toList()
         );
     }
 }
