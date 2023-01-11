@@ -61,9 +61,6 @@ export default {
 
 <style lang="scss">
 .AppPage--user-panel {
-  // Header padding
-  padding-top: calc(50px + 2rem);
-
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -104,6 +101,8 @@ export default {
 
 @media screen and (min-width: $desktop_breakpoint) {
   .AppPage--user-panel {
+    padding-top: calc(50px + 2rem); // header padding
+
     .user-panel_container {
       flex-direction: row;
       align-items: flex-start;
