@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
-import pl.lokalnylekarz.projekt.enumeration.FacilityRatings;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
@@ -46,7 +45,7 @@ public class InitSeeder implements CommandLineRunner {
                     .login("john1")
                     .firstname("John")
                     .lastname("Smith")
-                    .email("john.smitch@gmail.com")
+                    .email("john.smitch1@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
@@ -54,7 +53,7 @@ public class InitSeeder implements CommandLineRunner {
                     .login("john2")
                     .firstname("John")
                     .lastname("Smith")
-                    .email("john.smitch@gmail.com")
+                    .email("john.smitch2@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
@@ -62,7 +61,7 @@ public class InitSeeder implements CommandLineRunner {
                     .login("john3")
                     .firstname("John")
                     .lastname("Smith")
-                    .email("john.smitch@gmail.com")
+                    .email("john.smitch3@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
@@ -70,7 +69,7 @@ public class InitSeeder implements CommandLineRunner {
                     .login("john4")
                     .firstname("John")
                     .lastname("Smith")
-                    .email("john.smitch@gmail.com")
+                    .email("john.smitch4@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
@@ -145,7 +144,6 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialist((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
-                    .favoriteFor(users)
                     .build();
 
             MedicalFacility medicalFacility3 = MedicalFacility.builder()
@@ -181,7 +179,6 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialist((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
-                    .favoriteFor(users)
                     .build();
 
             medicalFacilityRepository.save(medicalFacility1);
@@ -191,28 +188,28 @@ public class InitSeeder implements CommandLineRunner {
 
             Opinion opinion1 = Opinion.builder()
                     .addedBy(user1)
-                    .rating(FacilityRatings.FOUR)
+                    .rating(4)
                     .description("Lorem ipsum dolor sit amend")
                     .medicalFacility(medicalFacility1)
                     .build();
 
             Opinion opinion2 = Opinion.builder()
                     .addedBy(user2)
-                    .rating(FacilityRatings.FOUR)
+                    .rating(4)
                     .description("Lorem ipsum dolor sit amend")
                     .medicalFacility(medicalFacility1)
                     .build();
 
             Opinion opinion3 = Opinion.builder()
                     .addedBy(user3)
-                    .rating(FacilityRatings.FOUR)
+                    .rating(4)
                     .description("Lorem ipsum dolor sit amend")
                     .medicalFacility(medicalFacility2)
                     .build();
 
             Opinion opinion4 = Opinion.builder()
                     .addedBy(user4)
-                    .rating(FacilityRatings.FOUR)
+                    .rating(4)
                     .description("Lorem ipsum dolor sit amend")
                     .medicalFacility(medicalFacility2)
                     .build();

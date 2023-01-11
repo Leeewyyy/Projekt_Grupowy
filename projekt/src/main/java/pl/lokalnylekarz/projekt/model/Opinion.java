@@ -1,9 +1,9 @@
 package pl.lokalnylekarz.projekt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import pl.lokalnylekarz.projekt.enumeration.FacilityRatings;
 
 import java.sql.Timestamp;
 
@@ -23,14 +23,15 @@ public class Opinion {
     @JoinColumn(name = "user_id")
     private User addedBy;
 
-    @Enumerated(EnumType.ORDINAL)
-    private FacilityRatings rating;
+    @Column
+    private Integer rating;
 
     @Column
     private String description;
 
     @ManyToOne
     @JoinColumn(name = "medical_facilities_id")
+    @JsonIgnore
     private MedicalFacility medicalFacility;
 
     @Column

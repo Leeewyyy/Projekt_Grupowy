@@ -1,5 +1,6 @@
 package pl.lokalnylekarz.projekt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -67,16 +68,20 @@ public class MedicalFacility {
 
     @ManyToMany
     @JoinColumn(name = "id")
+    @JsonIgnore
     private List<Specialist> specialist;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User addedBy;
 
-    @ManyToMany(mappedBy = "medicalFacility")
+    @OneToMany(mappedBy = "medicalFacility")
+    @JsonIgnore
     private List<Opinion> opinions;
 
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(name = "favorite_facilities_for_users", joinColumns = @JoinColumn(name = "facility_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonIgnore
     private List<User> favoriteFor;
 }
