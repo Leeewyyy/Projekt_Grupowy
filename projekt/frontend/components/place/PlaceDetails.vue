@@ -147,7 +147,6 @@ export default {
         mode: 'native',
         sizeStrategy: 'percent',
         detectResize: true,
-        isFavorite: false,
       },
 
       actions: [
@@ -158,6 +157,7 @@ export default {
           method: this.addToFavorites,
         },
       ],
+      isFavorite: false,
     };
   },
 
