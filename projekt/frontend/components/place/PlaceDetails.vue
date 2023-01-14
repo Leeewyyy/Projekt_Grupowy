@@ -25,7 +25,7 @@
           </div>
         </div>
         <button class="header_close-button" @click.prevent="onClose">
-          <Icon name="close" :size="24" />
+          <Icon name="keyboard_backspace" :size="24" />
         </button>
         <NFZMark class="header_nfz-mark" :value="place.isNFZ" />
       </div>
@@ -263,6 +263,10 @@ export default {
           }
         }
       }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      max-height: unset;
     }
   }
 }

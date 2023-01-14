@@ -16,7 +16,7 @@
           </span>
         </h2>
         <button class="header_close-button" v-if="closable" @click.prevent="onClose">
-          <Icon name="close" />
+          <Icon name="keyboard_backspace" />
         </button>
       </div>
     </template>
@@ -102,6 +102,11 @@ export default {
 
 <style lang="scss">
 .PlaceList {
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #FDFDFD;
+    box-shadow: unset;
+  }
+
   &.PlaceList--selectable {
     .item_place-card {
       cursor: pointer;
@@ -110,7 +115,7 @@ export default {
 
   .PlaceList_header {
     height: 55px;
-
+    font-size: .8rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -119,10 +124,7 @@ export default {
     padding: 0 1rem;
 
     .header_title {
-      height: 55px;
-      line-height: 55px;
       text-indent: 1rem;
-      font-size: 1.2rem;
       font-weight: 600;
     }
 
@@ -137,6 +139,33 @@ export default {
         font-size: 1.5rem !important;
       }
     }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      font-size: .9em;
+      text-indent: unset;
+      height: 140px;
+      line-height: .9em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: transparent;
+      position: relative;
+
+      .header_close-button {
+        position: absolute;
+        bottom: 10px;
+        left: 17px;
+
+        .material-icons {
+          font-size: 2rem !important;
+        }
+      }
+
+      .header_title {
+        text-indent: unset;
+      }
+    }
   }
 
   .PlaceList_container {
@@ -146,6 +175,7 @@ export default {
     .container_list {
       max-height: 60vh;
       list-style-type: none;
+      padding-bottom: 2em;
 
       .list_item {
         margin-bottom: 1rem;
@@ -154,6 +184,15 @@ export default {
           margin-bottom: 0;
         }
       }
+
+      @media screen and (max-width: $desktop_breakpoint) {
+        max-height: unset;
+      }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      background: transparent;
+      padding: 0 1em;
     }
   }
 }

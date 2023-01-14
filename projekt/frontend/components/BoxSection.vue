@@ -22,5 +22,9 @@
     font-size: 1.3rem;
     color: rgb(var(--color-text));
   }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    border-radius: 0 0 10px 10px;
+  }
 }
 </style>

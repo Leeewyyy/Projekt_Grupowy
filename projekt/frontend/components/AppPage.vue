@@ -19,5 +19,9 @@ export default {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      min-height: auto;
+    }
   }
 </style>

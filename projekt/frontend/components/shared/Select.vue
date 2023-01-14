@@ -75,6 +75,10 @@ export default {
   font-size: 1em;
   border-radius: 10px;
   padding: 8px 40px 0 20px;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    font-size: 15px;
+  }
 }
 
 .multiselect__content-wrapper {

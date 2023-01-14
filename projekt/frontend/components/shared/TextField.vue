@@ -130,6 +130,10 @@ export default {
     border-radius: unset;
     border-bottom: 1px solid #dddddd;
   }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    padding: 10px 25px;
+  }
 }
 
 textarea {
@@ -146,6 +150,10 @@ textarea {
 input,
 textarea {
   font-size: 1em;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    font-size: 15px;
+  }
 }
 
 .toggle-password-icon {

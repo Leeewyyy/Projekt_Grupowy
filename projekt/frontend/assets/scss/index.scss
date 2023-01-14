@@ -13,6 +13,10 @@ $desktop_breakpoint: 1280px;
 .main-container {
   width: 100%;
   max-width: 500px;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    max-width: unset;
+  }
 }
 
 .centered-page {

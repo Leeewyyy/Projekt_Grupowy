@@ -1,7 +1,10 @@
 <template>
   <BoxSection class="PlaceSearch main-container">
     <template #header>
-      <h2 class="PlaceSearch_title">Wyszukaj placówki w okolicy</h2>
+      <h2 class="PlaceSearch_title">
+        <span class="title-desktop">Wyszukaj placówki w okolicy</span>
+        <span class="title-mobile">Znajdź placówki <br />medyczne w oklicy</span>
+      </h2>
     </template>
     <template #body>
       <form class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
@@ -225,11 +228,57 @@ export default {
 
 <style lang="scss">
 .PlaceSearch {
+  
+  @media screen and (max-width: $desktop_breakpoint) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: rgb(var(--color-main));
+    min-height: 80vh;
+
+    .BoxSection_body, .BoxSection_header {
+      width: 100%;
+    }
+  }
+
   .PlaceSearch_title {
     height: 55px;
     line-height: 55px;
     text-indent: 2rem;
     font-size: 1.2rem;
+
+    .title {
+      &-desktop {
+        display: block;
+      }
+      
+      &-mobile {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      font-size: 1.2em;
+      text-indent: unset;
+      height: 140px;
+      line-height: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: transparent;
+
+      .title {
+        &-desktop {
+          display: none;
+        }
+        
+        &-mobile {
+          display: block;
+        }
+      }
+    }
   }
 
   .PlaceSearch_container {
@@ -253,6 +302,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
 
         .select-outer:first-of-type {
           width: 55%;
@@ -261,7 +311,25 @@ export default {
         .select-outer:last-of-type {
           width: 40%;
         }
+
+        @media screen and (max-width: $desktop_breakpoint) {
+          .select-outer:first-of-type, .select-outer:last-of-type {
+            width: 100%;
+          }
+
+          .select-outer:last-of-type {
+            margin-top: 1em;
+          }
+        }
       }
+
+      @media screen and (max-width: $desktop_breakpoint) {
+        //padding-top: 2em;
+      }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      padding: 0 1em 3em 1em;
     }
   }
 
@@ -280,6 +348,16 @@ export default {
       padding-left: 9px;
       padding-right: 9px;
     }
+
+     @media screen and (max-width: $desktop_breakpoint) {
+      button[name='clear-button'] {
+        display: none;
+      }
+      
+      button[name='submit-button'] {
+        width: 100%;
+      }
+     }
   }
 
   .outer-input {
@@ -290,6 +368,11 @@ export default {
     .text-field-outer,
     .select-outer {
       width: 87%;
+
+      @media screen and (max-width: $desktop_breakpoint) {
+        width: 100%;
+        padding-right: 20px;
+      }
     }
 
     .icon-button {
@@ -321,6 +404,11 @@ export default {
 
     .material-icons {
       margin-left: 5px;
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      margin: 15px auto 0 auto;
+      font-size: 1em;
     }
   }
 }
