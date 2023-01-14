@@ -79,6 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-form-outer {
+
   .login-form-title {
     height: 55px;
     line-height: 55px;
@@ -117,6 +118,22 @@ export default {
 
     button[name='submit-button'] {
       width: 100%;
+    }
+  }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #FDFDFD;
+    box-shadow: unset;
+
+    .login-form {
+      background: transparent;
+      padding: 2em 0;
+    }
+
+    .login-form-title {
+      text-align: center;
+      font-size: 1.1em;
+      text-indent: unset; 
     }
   }
 }

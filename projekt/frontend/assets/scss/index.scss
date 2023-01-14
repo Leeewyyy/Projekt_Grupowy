@@ -31,6 +31,19 @@ $desktop_breakpoint: 1280px;
     position: relative;
     top: 20%;
   }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #fdfdfd;
+    width: auto;
+    height: calc(100vh - 60px) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .centered-form {
+      position: static;
+    }
+  }
 }
 
 .w-100 {

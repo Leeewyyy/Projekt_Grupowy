@@ -133,6 +133,10 @@ export default {
 
   @media screen and (max-width: $desktop_breakpoint) {
     padding: 10px 25px;
+
+    &.flat {
+      background: transparent;
+    }
   }
 }
 
