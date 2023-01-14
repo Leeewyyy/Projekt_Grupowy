@@ -26,12 +26,14 @@
               :tab-index="2"
             />
 
-            <Checkbox v-model="agreement" :tab-index="4" class="margin-top">
-              Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
-              zgodnie z
-              <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie zawarte
-              w tym formularzu i dalszą korespondencję elektroniczą.
-            </Checkbox>
+            <div class="checkbox-label">
+              <Checkbox v-model="agreement" :tab-index="4" class="margin-top">
+                Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
+                zgodnie z
+                <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie 
+                zawarte w tym formularzu i dalszą korespondencję elektroniczą.
+              </Checkbox>
+            </div>
           </div>
           <div class="section">
             <TextField
@@ -43,6 +45,15 @@
               :is-textarea="true"
               :tab-index="3"
             />
+
+            <div class="checkbox-label mobile">
+              <Checkbox v-model="agreement" :tab-index="4" class="margin-top">
+                Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
+                zgodnie z
+                <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie 
+                zawarte w tym formularzu i dalszą korespondencję elektroniczą.
+              </Checkbox>
+            </div>
 
             <div class="buttons">
               <Button tabindex="6" name="submit-button" type="submit" variant="dark">
@@ -127,9 +138,20 @@ code {
 .main-container.wider {
   max-width: 66vw !important;
   max-height: unset !important;
+  
+  @media screen and (max-width: $desktop_breakpoint) {
+    max-width: unset !important;
+  }
 }
 
 .info-box-outer {
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #FDFDFD;
+    box-shadow: unset;
+    padding-top: 20px;
+  }
+  
   .info-box-title {
     height: 55px;
     line-height: 55px;
@@ -154,6 +176,39 @@ code {
         width: 50%;
         box-sizing: border-box;
         padding-right: 20px;
+        display: flex;
+        flex-wrap: wrap;
+
+        .checkbox-label.mobile {
+          display: none;
+        }
+
+        .text-field-outer, .buttons {
+          width: 100%;
+          padding-right: 0;
+        }
+      }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      background: transparent;  
+
+      .info-box-container-inner {
+        padding-left: 0;
+        padding-right: 0;
+
+        .section {
+          width: 100%;
+          padding: 0;
+
+          .checkbox-label {
+            display: none;
+
+            &.mobile {
+              display: block;
+            }
+          }
+        }
       }
     }
 

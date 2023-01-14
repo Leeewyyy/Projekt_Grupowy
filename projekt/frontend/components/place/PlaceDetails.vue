@@ -5,7 +5,16 @@
         <div class="header_actions">
           <ul class="actions_list">
             <li class="list_item" v-for="(action, idx) in actions" :key="idx">
-              <button class="item_button" @click.prevent="action.method">
+              <IconToggleButton
+                v-if="action.type === 'favorite'"
+                :icon-name="isFavorite ? 'favorite' : 'favorite_border'"
+                :size="24"
+                variant="dark"
+                class="favourite"
+                @click="addToFavorites"
+                style="margin-top: 5px;"
+              />
+              <button v-else class="item_button" @click.prevent="action.method">
                 <Icon class="button_icon" :name="action.icon" :size="24" />
               </button>
             </li>
@@ -86,6 +95,7 @@ import ImageSlider from '@/components/ImageSlider';
 import Rating from '@/components/Rating';
 import NFZMark from '@/components/NFZMark';
 import Icon from '@/components/shared/Icon';
+import IconToggleButton from '@/components/shared/IconToggleButton';
 
 export default {
   components: {
@@ -96,6 +106,7 @@ export default {
     Rating,
     NFZMark,
     Icon,
+    IconToggleButton,
   },
 
   props: {
@@ -136,10 +147,12 @@ export default {
         mode: 'native',
         sizeStrategy: 'percent',
         detectResize: true,
+        isFavorite: false,
       },
 
       actions: [
         {
+          type: 'favorite',
           name: 'Dodaj do ulubionych',
           icon: 'favorite_border',
           method: this.addToFavorites,
@@ -149,8 +162,14 @@ export default {
   },
 
   methods: {
-    addToFavorites() {
-      alert('Dodaje do ulubionych!');
+    addToFavorites(isFavorite) {
+      // some ajax here and getData after
+      console.log(isFavorite);
+      if (!isFavorite) {
+        this.$notify({ text: 'Placówka została usunięta z ulubionych pomyślnie', type: 'success' });
+      } else {
+        this.$notify({ text: 'Placówka została dodana do ulubionych pomyślnie', type: 'success' });
+      }
     },
 
     onClose() {

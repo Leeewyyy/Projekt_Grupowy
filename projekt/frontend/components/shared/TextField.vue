@@ -103,6 +103,7 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
 
   label {
     font-size: 0.9em;
