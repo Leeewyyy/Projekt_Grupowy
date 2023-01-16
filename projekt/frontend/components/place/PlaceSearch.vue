@@ -42,7 +42,10 @@
                 </li>
               </ul>
             </vue-scroll>
-            <div v-else-if="form.search && form.search.length"><span>Pisz dalej...</span></div>
+            <div 
+              v-else-if="form.search && form.search.length"
+              class="write-more"
+            ><span>Pisz dalej...</span></div>
           </div>
 
           <div class="outer-input">
@@ -397,6 +400,11 @@ export default {
         @media screen and (max-width: $tablet_breakpoint) {
           width: 85% !important;
         }
+      }
+
+      .write-more {
+        font-size: .9em;
+        margin-top: 5px;
       }
     }
 
