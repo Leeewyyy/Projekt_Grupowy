@@ -1,6 +1,6 @@
 <template>
   <AppPage name="page">
-    <Map ref="map" class="page_map" :center="mapPosition" :zoom="mapZoom">
+    <Map :key="mapKey" ref="map" class="page_map" :center="mapPosition" :zoom="mapZoom">
       <!-- Test marker - Gdańsk Politechnika -->
       <l-marker
         v-for="place in places"
@@ -9,7 +9,22 @@
         @click="onPlaceSelected(place)"
         @mouseenter="showPlaceCard(place, $event.containerPoint)"
         @mouseleave="hidePlaceCard"
-      ></l-marker>
+      >
+      </l-marker>
+
+      <l-marker 
+        v-if="coords"
+        :lat-lng="[this.coords.latitude, this.coords.longitude]"
+        class="my-position-marker"
+      >
+        <l-icon 
+          :icon-size="[44, 57]"
+          :icon-anchor="[30, 94]"
+         >
+          <img src="/images/my_position3.svg" class="my-position-icon">
+          <div class="headline">Tu jestem</div>
+         </l-icon>
+      </l-marker>
     </Map>
 
     <!-- Put all elements to draw on top of map here -->
@@ -18,7 +33,7 @@
         v-show="currentView === 'placeSearch'"
         id="placeSearch"
         class="page_place-search"
-        @getCoords="coords = $event"
+        @getCoords="setCoords"
         @onSearch="onPlaceSearch"
       />
       <PlaceList
@@ -80,10 +95,21 @@ export default {
   data() {
     return {
       coords: null,
+      lastCoords: {
+        latitude: 54.3739,
+        longitude: 18.6214,
+      },
       selectedPlace: null,
+      mapKey: 1,
     };
   },
-
+  watch: {
+    coords(coords) {
+      if (coords) {
+        this.lastCoords = { ...coords };
+      }
+    },
+  },
   computed: {
     hoveredPlaceCardStyle() {
       const { x, y } = this.hoveredPlacePoint;
@@ -108,7 +134,7 @@ export default {
     mapPosition() {
       return this.coords
         ? [this.coords.latitude, this.coords.longitude - 0.03]
-        : [54.3739, 18.6214];
+        : [this.lastCoords?.latitude, this.lastCoords?.longitude - 0.03];
     },
   },
 
@@ -173,6 +199,11 @@ export default {
       // some ajax get
       // this.places = new Array()
     },
+
+    setCoords(coords) {
+      this.coords = coords;
+      if (coords) this.mapKey++;
+    },
   },
 };
 </script>
@@ -200,6 +231,15 @@ export default {
   .page_hovered-place {
     position: absolute;
   }
+}
+
+.headline {
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  width: 60px;
+  position: relative;
+  left: -10px;
 }
 
 @media screen and (min-width: $desktop_breakpoint) {

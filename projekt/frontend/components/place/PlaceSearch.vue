@@ -219,7 +219,7 @@ export default {
     iconLocationON(val) {
       if (val) {
         this.getCurrentPosition();
-      }
+      } else this.$emit('getCoords', null);
     },
   },
 
