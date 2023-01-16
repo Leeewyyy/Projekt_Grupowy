@@ -47,7 +47,7 @@ body {
   --color-black: 0, 0, 0;
 
   // Layout colors:
-  --color-text: 51, 0, 0;
+  --color-text: 51, 51, 51;
   --color-main: 162, 190, 223;
   --color-side: 138, 169, 206;
   --color-detail-1: 106, 249, 137;

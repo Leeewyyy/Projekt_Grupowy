@@ -83,6 +83,7 @@ export default {
   data() {
     return {
       isPasswordActive: false,
+      delayedValue: '',
     };
   },
   computed: {

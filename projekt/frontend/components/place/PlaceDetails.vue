@@ -154,7 +154,6 @@ export default {
           type: 'favorite',
           name: 'Dodaj do ulubionych',
           icon: 'favorite_border',
-          method: this.addToFavorites,
         },
       ],
       isFavorite: false,

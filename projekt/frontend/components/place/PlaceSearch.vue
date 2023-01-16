@@ -16,6 +16,7 @@
               placeholder="np. Gdańsk, al. Zwycięstwa"
               label="Adres"
               :tab-index="1"
+              @input="getPossibleResults"
             />
             <IconToggleButton
               @click="iconLocationON = $event"
@@ -24,6 +25,24 @@
               icon-name="location_on"
               tabindex="2"
             />
+
+            <vue-scroll 
+              v-if="possibleResults && possibleResults.length"
+              class="choose-result"
+              :ops="scrollOptions"
+            >
+              <ul>
+                <li
+                  v-for="(result, index) in possibleResults"
+                  :key="index"
+                  :class="{ active: result.isClicked }"
+                  @click="setAddress(result)"
+                >
+                  {{ result.city }}, {{ result.road }}
+                </li>
+              </ul>
+            </vue-scroll>
+            <div v-else-if="form.search && form.search.length"><span>Pisz dalej...</span></div>
           </div>
 
           <div class="outer-input">
@@ -99,6 +118,7 @@
 </template>
 
 <script>
+/* globals _ */
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
 import Select from '@/components/shared/Select';
@@ -128,12 +148,16 @@ export default {
 
       moreFiltersOn: false,
       iconLocationON: false,
-
+      scrollOptions: {
+        mode: 'native',
+        sizeStrategy: 'percent',
+        detectResize: true,
+      },
       coords: {
         longitude: null,
         latitude: null,
       },
-
+      possibleResults: [],
       doctorsList: [
         {
           id: 1,
@@ -181,6 +205,7 @@ export default {
           val: 50,
         },
       ],
+      delayTimer: null,
     };
   },
 
@@ -221,6 +246,19 @@ export default {
       };
 
       navigator.geolocation.getCurrentPosition(onSuccess, onError);
+    },
+
+    setAddress(address) {
+      // set coords
+    },
+    getPossibleResults(inputVal) {
+      clearTimeout(this.delayTimer);
+      this.delayTimer = setTimeout(() => {
+        this.possibleResults = inputVal ? [{
+          city: 'Gdańsk',
+          road: 'Opolska',
+        }] : [];
+      }, 700);
     },
   },
 };
@@ -323,8 +361,42 @@ export default {
         }
       }
 
-      @media screen and (max-width: $desktop_breakpoint) {
-        //padding-top: 2em;
+      .choose-result {
+        background: #fff;
+        padding: 7px 0 !important;
+        width: 87% !important;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+
+        ul {
+          max-height: 110px;
+          list-style-type: none;
+          padding: 0 7px;
+        }
+
+        li {
+          color: rgb(var(--color-text));
+          padding: 8px 10px;
+          border-radius: 10px;
+          box-sizing: border-box;
+          transition: all .1s;
+          font-size: 0.9em;
+
+          &:hover, &:focus, &.active {
+            background: rgba(51, 51, 51, .3);
+            cursor: pointer;
+            font-weight: bold;
+          }
+        }
+
+        @media screen and (max-width: $desktop_breakpoint) {
+          width: 95% !important;
+        }
+
+        @media screen and (max-width: $tablet_breakpoint) {
+          width: 85% !important;
+        }
       }
     }
 
@@ -364,14 +436,22 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    flex-wrap: wrap;
 
     .text-field-outer,
     .select-outer {
       width: 87%;
 
       @media screen and (max-width: $desktop_breakpoint) {
-        width: 100%;
-        padding-right: 20px;
+        width: 95%;
+      }
+
+      @media screen and (max-width: $tablet_breakpoint) {
+        width: 85%;
+
+        .text-field, .multiselect__tags {
+          padding-left: 20px !important;
+        }
       }
     }
 
