@@ -6,6 +6,8 @@ import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.User;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
+import pl.lokalnylekarz.projekt.pojo.FavouriteMedicalFacilityPOJO;
+import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
@@ -18,55 +20,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final MedicalFacilityRepository medicalFacilityRepository;
 
-    public List<UserDto> getAll() {
-        List<User> users = (List<User>) userRepository.findAll();
-
-        return users.stream().map(UserService::fromEntityToDto).toList();
-    }
-
-    public UserDto get(long id) {
-        User user = userRepository.findById(id).orElseThrow();
-
-        return forDetails(user);
-    }
-
-    public User save(UserDtoForRegister userDtoForRegister) {
-        return userRepository.save(fromRegisterDtoToEntity(userDtoForRegister));
-    }
-
-    public Boolean checkUser(String email, String password) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) return false;
-        return user.getPassword().equals(password);
-    }
-
-    public User update(UserDtoForRegister userDtoForRegister, Long id) { //IFY DO ZMIANY JAK BĘDZIE CZAS
-        if (userRepository.findById(id).isEmpty()) throw new IllegalStateException("No user with id " + id);
-        User user = userRepository.findById(id).get();
-        if (userDtoForRegister.getLogin() != null) user.setLogin(userDtoForRegister.getLogin());
-        if (userDtoForRegister.getFirstName() != null) user.setFirstname(userDtoForRegister.getFirstName());
-        if (userDtoForRegister.getLastName() != null) user.setLastname(userDtoForRegister.getLastName());
-        if (userDtoForRegister.getEmail() != null) user.setEmail(userDtoForRegister.getEmail());
-        if (userDtoForRegister.getPassword() != null) user.setPassword(userDtoForRegister.getPassword());
-        return userRepository.save(user);
-    }
-
-    public User changeFavorite(Long userId, Long facilityId) { //NIE DZIAŁA JAK POWINNO
-        if (userRepository.findById(userId).isEmpty()) throw new IllegalStateException("No user with id " + userId);
-        if (medicalFacilityRepository.findById(facilityId).isEmpty()) throw new IllegalStateException("No facility with id " + facilityId);
-        List<MedicalFacility> favoriteFacilites = userRepository.findById(userId).get().getFavoriteFacilities();
-        MedicalFacility facility = medicalFacilityRepository.findById(facilityId).get();
-        if (favoriteFacilites.contains(facility)) favoriteFacilites.remove(facility);
-        else favoriteFacilites.add(facility);
-        User user = userRepository.findById(userId).get();
-        user.setFavoriteFacilities(favoriteFacilites);
-        return userRepository.save(user);
-    }
-
-    public List<MedicalFacility> findFavoriteFacilitiesForUser(Long userId) {
-        return userRepository.findById(userId).get().getFavoriteFacilities();
-    }
-
     private static UserDto forDetails(User user) {
         return new UserDto(
                 user.getId(),
@@ -76,7 +29,8 @@ public class UserService {
                 user.getEmail(),
                 user.getRegistrationDate(),
                 user.getOpinions().stream().map(OpinionService::forUser).toList(),
-                user.getAddedMedicalFacilities().stream().map(MedicalFacilityService::toDtoList).toList()
+                user.getAddedMedicalFacilities().stream().map(MedicalFacilityService::toDtoList).toList(),
+                user.getFavoriteFacilities().stream().map(MedicalFacilityService::toDtoList).toList()
         );
     }
 
@@ -102,7 +56,7 @@ public class UserService {
         );
     }
 
-    public static User fromRegisterDtoToEntity(UserDtoForRegister userDtoForRegister){
+    public static User fromRegisterDtoToEntity(UserDtoForRegister userDtoForRegister) {
         return new User(
                 userDtoForRegister.getLogin(),
                 userDtoForRegister.getFirstName(),
@@ -110,5 +64,110 @@ public class UserService {
                 userDtoForRegister.getEmail(),
                 userDtoForRegister.getPassword()
         );
+    }
+
+    public List<UserDto> getAll() {
+        List<User> users = (List<User>) userRepository.findAll();
+
+        return users.stream().map(UserService::fromEntityToDto).toList();
+    }
+
+    public UserDto get(long id) {
+        User user = userRepository.findById(id).orElseThrow();
+
+        return forDetails(user);
+    }
+
+    public User save(UserDtoForRegister userDtoForRegister) {
+        return userRepository.save(fromRegisterDtoToEntity(userDtoForRegister));
+    }
+
+    public Boolean checkUser(UserLoginPOJO userLoginPOJO) {
+        User user = userRepository.findByEmailAndPassword(
+                userLoginPOJO.email,
+                userLoginPOJO.password
+        ).orElse(new User());
+
+        return user.getId() != null;
+    }
+
+    public User update(UserDtoForRegister userDtoForRegister, Long id) { //IFY DO ZMIANY JAK BĘDZIE CZAS
+        if (userRepository.findById(id).isEmpty()) throw new IllegalStateException("No user with id " + id);
+        User user = userRepository.findById(id).get();
+        if (userDtoForRegister.getLogin() != null) user.setLogin(userDtoForRegister.getLogin());
+        if (userDtoForRegister.getFirstName() != null) user.setFirstname(userDtoForRegister.getFirstName());
+        if (userDtoForRegister.getLastName() != null) user.setLastname(userDtoForRegister.getLastName());
+        if (userDtoForRegister.getEmail() != null) user.setEmail(userDtoForRegister.getEmail());
+        if (userDtoForRegister.getPassword() != null) user.setPassword(userDtoForRegister.getPassword());
+        return userRepository.save(user);
+    }
+
+    public int addFavorite(Long userId, FavouriteMedicalFacilityPOJO facilityPOJO) {
+        int added = 0;
+
+        User user = userRepository.findById(userId).orElse(new User());
+
+        if (user.getId() == null) {
+            return added;
+        }
+
+        List<MedicalFacility> favoriteFacilities = user.getFavoriteFacilities();
+
+        for (Long medId : facilityPOJO.getFacilitiesId()) {
+            if (!medicalFacilityRepository.existsById(medId)) {
+                continue;
+            }
+
+            MedicalFacility medicalFacility = (MedicalFacility) medicalFacilityRepository.findById(medId).orElse(new MedicalFacility());
+
+            if (medicalFacility.getId() == null || favoriteFacilities.contains(medicalFacility)) {
+                continue;
+            }
+
+            favoriteFacilities.add(medicalFacility);
+            ++added;
+        }
+
+        user.setFavoriteFacilities(favoriteFacilities);
+
+        userRepository.save(user);
+
+        return added;
+    }
+
+    public int removeFavorite(Long userId, FavouriteMedicalFacilityPOJO facilityPOJO) {
+        int removed = 0;
+
+        User user = userRepository.findById(userId).orElse(new User());
+
+        if (user.getId() == null) {
+            return removed;
+        }
+
+        List<MedicalFacility> favoriteFacilities = user.getFavoriteFacilities();
+
+        for (Long medId : facilityPOJO.getFacilitiesId()) {
+            if (!medicalFacilityRepository.existsById(medId)) {
+                continue;
+            }
+
+            MedicalFacility medicalFacility = (MedicalFacility) medicalFacilityRepository.findById(medId).orElse(new MedicalFacility());
+
+            if (medicalFacility.getId() == null || !favoriteFacilities.contains(medicalFacility)) {
+                continue;
+            }
+
+            favoriteFacilities.remove(medicalFacility);
+            ++removed;
+        }
+
+        user.setFavoriteFacilities(favoriteFacilities);
+        userRepository.save(user);
+
+        return removed;
+    }
+
+    public List<MedicalFacility> findFavoriteFacilitiesForUser(Long userId) {
+        return userRepository.findById(userId).get().getFavoriteFacilities();
     }
 }

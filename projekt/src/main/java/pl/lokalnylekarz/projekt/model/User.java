@@ -41,7 +41,7 @@ public class User {
     @CreationTimestamp
     private Timestamp registrationDate;
 
-    @ManyToMany(mappedBy = "addedBy")
+    @OneToMany(mappedBy = "addedBy")
     @JsonIgnore
     private List<Opinion> opinions;
 
@@ -49,7 +49,7 @@ public class User {
     @JsonIgnore
     private List<MedicalFacility> addedMedicalFacilities;
 
-    @ManyToMany(mappedBy = "favoriteFor")
+    @ManyToMany
     @JsonIgnore
     private List<MedicalFacility> favoriteFacilities;
 
