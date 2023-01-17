@@ -34,7 +34,7 @@ public class MedicalFacilityDto {
     private List<SpecialistDto> specialist;
     private UserDto addedBy;
     private List<OpinionDto> opinions;
-    private List<UserDto> favoriteFor;
+//    private List<UserDto> favoriteFor;
 
     public MedicalFacilityDto(
             Long id,
@@ -48,8 +48,9 @@ public class MedicalFacilityDto {
             Timestamp openFrom,
             Timestamp openTo,
             Location location,
-            Date addedAt,
-            List<UserDto> favoriteFor) {
+            Date addedAt
+            /*List<UserDto> favoriteFor*/
+    ) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -62,6 +63,6 @@ public class MedicalFacilityDto {
         this.openTo = openTo;
         this.location = location;
         this.addedAt = addedAt;
-        this.favoriteFor = favoriteFor;
+        //this.favoriteFor = favoriteFor;
     }
 }

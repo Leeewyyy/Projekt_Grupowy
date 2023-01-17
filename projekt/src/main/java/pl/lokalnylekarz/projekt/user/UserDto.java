@@ -21,6 +21,7 @@ public class UserDto {
     private Timestamp registrationDate;
     private List<OpinionDto> opinions;
     private List<MedicalFacilityDto> addedMedicalFacilities;
+    private List<MedicalFacilityDto> favoriteMedicalFacilities;
 
     public UserDto(
             Long id,
