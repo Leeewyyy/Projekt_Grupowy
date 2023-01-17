@@ -80,8 +80,7 @@ public class MedicalFacility {
     @JsonIgnore
     private List<Opinion> opinions;
 
-    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
-    @JoinTable(name = "favorite_facilities_for_users", joinColumns = @JoinColumn(name = "facility_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany
     @JsonIgnore
     private List<User> favoriteFor;
 }

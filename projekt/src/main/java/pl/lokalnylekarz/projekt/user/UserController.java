@@ -11,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.User;
+import pl.lokalnylekarz.projekt.pojo.FavouriteMedicalFacilityPOJO;
+import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,10 +46,9 @@ public class UserController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login/{email}/{password}")
-    public ResponseEntity<User> login(@PathVariable("email") String email, @PathVariable("password") String password) {
-        if (userService.checkUser(email, password)) return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody UserLoginPOJO userLoginPOJO) {
+        return (userService.checkUser(userLoginPOJO)) ? new ResponseEntity<>(HttpStatus.ACCEPTED) : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PatchMapping("/edit/{id}")
@@ -56,13 +57,26 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
     }
 
-    @PostMapping("/changeFavorite/{userId}/{facilityId}") //ŹLE ZROBIONA METODA W SERVICE
-    public ResponseEntity<List<MedicalFacility>> changeFavorite(
-            @PathVariable Long userId,
-            @PathVariable Long facilityId
-    ) {
-        User user = userService.changeFavorite(userId, facilityId);
-        return new ResponseEntity<>(user.getFavoriteFacilities(), HttpStatus.CREATED);
+    @PostMapping("/{userId}/add-favourite")
+    public ResponseEntity<List<MedicalFacility>> addFavorite(@PathVariable Long userId, @RequestBody FavouriteMedicalFacilityPOJO facilityPOJO) {
+        int added = userService.addFavorite(userId, facilityPOJO);
+
+        if (added > 0) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/{userId}/remove-favourite")
+    public ResponseEntity<List<MedicalFacility>> removeFavorite(@PathVariable Long userId, @RequestBody FavouriteMedicalFacilityPOJO facilityPOJO) {
+        int removed = userService.removeFavorite(userId, facilityPOJO);
+
+        if (removed > 0) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/favoriteFacilities/{userId}")
