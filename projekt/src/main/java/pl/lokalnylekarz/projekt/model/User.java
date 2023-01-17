@@ -34,6 +34,9 @@ public class User {
     private String email;
 
     @Column
+    private String image;
+
+    @Column
     @JsonIgnore
     private String password;
 
