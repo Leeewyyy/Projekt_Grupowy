@@ -163,5 +163,21 @@ export default {
       width: 100%;
     }
   }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #FDFDFD;
+    box-shadow: unset;
+
+    .register-form {
+      background: transparent;
+      padding: 2em 0;
+    }
+
+    .register-form-title {
+      text-align: center;
+      font-size: 1.1em;
+      text-indent: unset; 
+    }
+  }
 }
 </style>

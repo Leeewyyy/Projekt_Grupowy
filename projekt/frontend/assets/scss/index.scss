@@ -13,6 +13,10 @@ $desktop_breakpoint: 1280px;
 .main-container {
   width: 100%;
   max-width: 500px;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    max-width: unset;
+  }
 }
 
 .centered-page {
@@ -26,6 +30,19 @@ $desktop_breakpoint: 1280px;
     margin: auto;
     position: relative;
     top: 20%;
+  }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #fdfdfd;
+    width: auto;
+    height: calc(100vh - 60px) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .centered-form {
+      position: static;
+    }
   }
 }
 

@@ -1,7 +1,10 @@
 <template>
   <BoxSection class="PlaceSearch main-container">
     <template #header>
-      <h2 class="PlaceSearch_title">Wyszukaj placówki w okolicy</h2>
+      <h2 class="PlaceSearch_title">
+        <span class="title-desktop">Wyszukaj placówki w okolicy</span>
+        <span class="title-mobile">Znajdź placówki <br />medyczne w oklicy</span>
+      </h2>
     </template>
     <template #body>
       <form class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
@@ -13,6 +16,7 @@
               placeholder="np. Gdańsk, al. Zwycięstwa"
               label="Adres"
               :tab-index="1"
+              @input="getPossibleResults"
             />
             <IconToggleButton
               @click="iconLocationON = $event"
@@ -21,6 +25,27 @@
               icon-name="location_on"
               tabindex="2"
             />
+
+            <vue-scroll 
+              v-if="possibleResults && possibleResults.length"
+              class="choose-result"
+              :ops="scrollOptions"
+            >
+              <ul>
+                <li
+                  v-for="(result, index) in possibleResults"
+                  :key="index"
+                  :class="{ active: result.isClicked }"
+                  @click="setAddress(result)"
+                >
+                  {{ result.city }}, {{ result.road }}
+                </li>
+              </ul>
+            </vue-scroll>
+            <div 
+              v-else-if="form.search && form.search.length"
+              class="write-more"
+            ><span>Pisz dalej...</span></div>
           </div>
 
           <div class="outer-input">
@@ -96,6 +121,7 @@
 </template>
 
 <script>
+/* globals _ */
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
 import Select from '@/components/shared/Select';
@@ -125,12 +151,16 @@ export default {
 
       moreFiltersOn: false,
       iconLocationON: false,
-
+      scrollOptions: {
+        mode: 'native',
+        sizeStrategy: 'percent',
+        detectResize: true,
+      },
       coords: {
         longitude: null,
         latitude: null,
       },
-
+      possibleResults: [],
       doctorsList: [
         {
           id: 1,
@@ -178,6 +208,7 @@ export default {
           val: 50,
         },
       ],
+      delayTimer: null,
     };
   },
 
@@ -188,7 +219,7 @@ export default {
     iconLocationON(val) {
       if (val) {
         this.getCurrentPosition();
-      }
+      } else this.$emit('getCoords', null);
     },
   },
 
@@ -219,17 +250,76 @@ export default {
 
       navigator.geolocation.getCurrentPosition(onSuccess, onError);
     },
+
+    setAddress(address) {
+      // set coords
+    },
+    getPossibleResults(inputVal) {
+      clearTimeout(this.delayTimer);
+      this.delayTimer = setTimeout(() => {
+        this.possibleResults = inputVal ? [{
+          city: 'Gdańsk',
+          road: 'Opolska',
+        }] : [];
+      }, 700);
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .PlaceSearch {
+  
+  @media screen and (max-width: $desktop_breakpoint) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: rgb(var(--color-main));
+    min-height: 80vh;
+
+    .BoxSection_body, .BoxSection_header {
+      width: 100%;
+    }
+  }
+
   .PlaceSearch_title {
     height: 55px;
     line-height: 55px;
     text-indent: 2rem;
     font-size: 1.2rem;
+
+    .title {
+      &-desktop {
+        display: block;
+      }
+      
+      &-mobile {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      font-size: 1.2em;
+      text-indent: unset;
+      height: 140px;
+      line-height: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: transparent;
+
+      .title {
+        &-desktop {
+          display: none;
+        }
+        
+        &-mobile {
+          display: block;
+        }
+      }
+    }
   }
 
   .PlaceSearch_container {
@@ -253,6 +343,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
 
         .select-outer:first-of-type {
           width: 55%;
@@ -261,7 +352,64 @@ export default {
         .select-outer:last-of-type {
           width: 40%;
         }
+
+        @media screen and (max-width: $desktop_breakpoint) {
+          .select-outer:first-of-type, .select-outer:last-of-type {
+            width: 100%;
+          }
+
+          .select-outer:last-of-type {
+            margin-top: 1em;
+          }
+        }
       }
+
+      .choose-result {
+        background: #fff;
+        padding: 7px 0 !important;
+        width: 87% !important;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+
+        ul {
+          max-height: 110px;
+          list-style-type: none;
+          padding: 0 7px;
+        }
+
+        li {
+          color: rgb(var(--color-text));
+          padding: 8px 10px;
+          border-radius: 10px;
+          box-sizing: border-box;
+          transition: all .1s;
+          font-size: 0.9em;
+
+          &:hover, &:focus, &.active {
+            background: rgba(51, 51, 51, .3);
+            cursor: pointer;
+            font-weight: bold;
+          }
+        }
+
+        @media screen and (max-width: $desktop_breakpoint) {
+          width: 95% !important;
+        }
+
+        @media screen and (max-width: $tablet_breakpoint) {
+          width: 85% !important;
+        }
+      }
+
+      .write-more {
+        font-size: .9em;
+        margin-top: 5px;
+      }
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      padding: 0 1em 3em 1em;
     }
   }
 
@@ -280,16 +428,39 @@ export default {
       padding-left: 9px;
       padding-right: 9px;
     }
+
+     @media screen and (max-width: $desktop_breakpoint) {
+      button[name='clear-button'] {
+        display: none;
+      }
+      
+      button[name='submit-button'] {
+        width: 100%;
+      }
+     }
   }
 
   .outer-input {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    flex-wrap: wrap;
 
     .text-field-outer,
     .select-outer {
       width: 87%;
+
+      @media screen and (max-width: $desktop_breakpoint) {
+        width: 95%;
+      }
+
+      @media screen and (max-width: $tablet_breakpoint) {
+        width: 85%;
+
+        .text-field, .multiselect__tags {
+          padding-left: 20px !important;
+        }
+      }
     }
 
     .icon-button {
@@ -321,6 +492,11 @@ export default {
 
     .material-icons {
       margin-left: 5px;
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      margin: 15px auto 0 auto;
+      font-size: 1em;
     }
   }
 }

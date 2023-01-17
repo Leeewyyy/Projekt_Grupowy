@@ -195,7 +195,7 @@ export default {
     .Header_navigation {
       display: none;
       width: 100%;
-      height: 100vh;
+      height: calc(100vh - 60px);
       background: rgb(var(--color-main));
       overflow: hidden;
       z-index: 10;

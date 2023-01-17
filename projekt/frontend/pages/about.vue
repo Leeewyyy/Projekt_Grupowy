@@ -3,6 +3,8 @@
     <div class="centered-page">
       <InfoBoxAbout id="info-box-about" class="centered-form" />
     </div>
+    
+    <InfoBoxAbout id="info-box-about" class="centered-form mobile" />
   </AppPage>
 </template>
 
@@ -17,3 +19,19 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.mobile {
+  display: none;
+}
+
+@media screen and (max-width: $desktop_breakpoint) {
+  .centered-page {
+    display: none;
+  }
+
+  .mobile {
+    display: block;
+  }
+}
+</style>

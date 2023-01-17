@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,8 +18,8 @@ public class MedicalFacilityController {
     @GetMapping()
     @ResponseBody
     @JsonIgnoreProperties("specialist")
-    public List<MedicalFacilityDto> getMedicalFacilities() {
-        return service.getAll();
+    public List<MedicalFacilityDto> getMedicalFacilities(@RequestParam Map<String, String> filters) {
+        return filters.isEmpty() ? service.getAll() : service.getAll(filters);
     }
 
     @GetMapping("/{id}")

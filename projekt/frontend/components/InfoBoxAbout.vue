@@ -71,9 +71,20 @@ code {
 .main-container.wider {
   max-width: 66vw !important;
   max-height: unset !important;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    max-width: unset !important;
+  }
 }
 
 .info-box-outer {
+  padding-top: 20px;
+  
+  @media screen and (max-width: $desktop_breakpoint) {
+    background: #FDFDFD;
+    box-shadow: unset;
+  }
+
   .info-box-title {
     height: 55px;
     line-height: 55px;
@@ -91,6 +102,14 @@ code {
       padding: 20px 20px 15px 20px;
       padding-top: 0;
       border-radius: 10px;
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      background: transparent;  
+
+      .info-box-container-inner {
+        padding-left: 0;
+      }
     }
   }
 

@@ -83,6 +83,7 @@ export default {
   data() {
     return {
       isPasswordActive: false,
+      delayedValue: '',
     };
   },
   computed: {
@@ -103,6 +104,7 @@ export default {
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
 
   label {
     font-size: 0.9em;
@@ -130,6 +132,14 @@ export default {
     border-radius: unset;
     border-bottom: 1px solid #dddddd;
   }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    padding: 10px 25px;
+
+    &.flat {
+      background: transparent;
+    }
+  }
 }
 
 textarea {
@@ -146,6 +156,10 @@ textarea {
 input,
 textarea {
   font-size: 1em;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    font-size: 15px;
+  }
 }
 
 .toggle-password-icon {
