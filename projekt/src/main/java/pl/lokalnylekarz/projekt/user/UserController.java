@@ -79,7 +79,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/favoriteFacilities/{userId}")
+    @GetMapping("{userId}/favorite-facilities")
     public ResponseEntity<List<MedicalFacility>> favoriteFacilities(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.findFavoriteFacilitiesForUser(userId), HttpStatus.OK);
     }
