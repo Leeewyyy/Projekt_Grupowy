@@ -1,24 +1,9 @@
 <template>
   <BoxSection class="PlaceDetails main-container">
     <template #header>
-      <div class="PlaceDetails_header">
+      <div class="PlaceDetails_header" v-if="!isLoading">
         <div class="header_actions">
-          <ul class="actions_list">
-            <li class="list_item" v-for="(action, idx) in actions" :key="idx">
-              <IconToggleButton
-                v-if="action.type === 'favorite'"
-                :icon-name="isFavorite ? 'favorite' : 'favorite_border'"
-                :size="24"
-                variant="dark"
-                class="favourite"
-                @click="addToFavorites"
-                style="margin-top: 5px;"
-              />
-              <button v-else class="item_button" @click.prevent="action.method">
-                <Icon class="button_icon" :name="action.icon" :size="24" />
-              </button>
-            </li>
-          </ul>
+          <FavouriteButton :placeId="placeId" />
         </div>
         <div class="header_info">
           <div class="info_title">
@@ -41,7 +26,7 @@
     </template>
     <template #body>
       <vue-scroll :ops="scrollOptions">
-        <div class="PlaceDetails_container">
+        <div class="PlaceDetails_container" v-if="!isLoading">
           <div class="container_image">
             <ImageSlider
               v-if="place.images && place.images.length"
@@ -70,6 +55,7 @@
               </li>
             </ul>
           </div>
+
           <!-- Place description from Markdown -->
           <PlaceDescription id="placeDescription" :text="place.description" />
 
@@ -79,8 +65,11 @@
             class="container_reviews"
             title="Opinie użytkowników"
             :placeId="place.id"
-            :reviews="place.reviews"
+            :reviews="place.opinions"
           />
+        </div>
+        <div v-else class="PlaceDetails_loading">
+          Trwa wczytywanie szczegółów placówki...
         </div>
       </vue-scroll>
     </template>
@@ -89,29 +78,29 @@
 
 <script>
 import BoxSection from '@/components/BoxSection';
+import FavouriteButton from '@/components/place/FavouriteButton';
 import PlaceDescription from '@/components/place/PlaceDescription';
 import PlaceReviews from '@/components/place/PlaceReviews';
 import ImageSlider from '@/components/ImageSlider';
 import Rating from '@/components/Rating';
 import NFZMark from '@/components/NFZMark';
 import Icon from '@/components/shared/Icon';
-import IconToggleButton from '@/components/shared/IconToggleButton';
 
 export default {
   components: {
     BoxSection,
+    FavouriteButton,
     PlaceDescription,
     PlaceReviews,
     ImageSlider,
     Rating,
     NFZMark,
     Icon,
-    IconToggleButton,
   },
 
   props: {
-    place: {
-      type: Object,
+    placeId: {
+      type: Number,
       required: true,
     },
   },
@@ -141,6 +130,17 @@ export default {
     },
   },
 
+  async fetch() {
+    this.isLoading = true;
+    try {
+      this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
+    } catch (error) {
+      this.$notify({ text: 'Wystąpił problem przy pobieraniu szczegółów placówki.', type: 'error' });
+      console.error(error);
+    }
+    this.isLoading = false;
+  },
+
   data() {
     return {
       scrollOptions: {
@@ -149,28 +149,12 @@ export default {
         detectResize: true,
       },
 
-      actions: [
-        {
-          type: 'favorite',
-          name: 'Dodaj do ulubionych',
-          icon: 'favorite_border',
-        },
-      ],
-      isFavorite: false,
+      place: {},
+      isLoading: false,
     };
   },
 
   methods: {
-    addToFavorites(isFavorite) {
-      // some ajax here and getData after
-      console.log(isFavorite);
-      if (!isFavorite) {
-        this.$notify({ text: 'Placówka została usunięta z ulubionych pomyślnie', type: 'success' });
-      } else {
-        this.$notify({ text: 'Placówka została dodana do ulubionych pomyślnie', type: 'success' });
-      }
-    },
-
     onClose() {
       this.$emit('onClose');
     },
@@ -180,6 +164,11 @@ export default {
 
 <style lang="scss">
 .PlaceDetails {
+  .PlaceDetails_loading {
+    padding: 2rem 0;
+    text-align: center;
+  }
+
   .PlaceDetails_header {
     display: flex;
     flex-direction: row;
@@ -281,6 +270,10 @@ export default {
           }
         }
       }
+    }
+
+    .container_reviews {
+      padding-bottom: 1rem;
     }
 
     @media screen and (max-width: $desktop_breakpoint) {

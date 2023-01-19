@@ -50,7 +50,9 @@ export default {
 
   data() {
     return {
-      form: {
+      form: {},
+
+      defaultForm: {
         text: null,
         rating: 5,
       },
@@ -58,9 +60,41 @@ export default {
   },
 
   methods: {
-    addReview() {
-      alert('Dodaj opinię!');
+    async addReview() {
+      const userId = this.$store.getters['user/getUserId'];
+
+      if (!userId) {
+        this.$notify({ text: 'Nie jesteś zalogowany!', type: 'error' });
+        return;
+      }
+
+      // Form not filled
+      if (!this.form?.text || !this.form?.rating) return;
+
+      const payload = {
+        facilityId: this.placeId,
+        userId,
+        ...this.form,
+      };
+
+      try {
+        const review = await this.$store.dispatch('opinion/addOpinion', payload);
+        this.resetForm();
+        this.$emit('reviewAdded', review);
+        this.$notify({ text: 'Dodano opinię!', type: 'success' });
+      } catch (error) {
+        this.$notify({ text: 'Wystąpił błąd przy dodawaniu opinii!', type: 'error' });
+        console.error(error);
+      }
     },
+
+    resetForm() {
+      this.form = { ...this.defaultForm };
+    },
+  },
+
+  created() {
+    this.resetForm();
   },
 };
 </script>

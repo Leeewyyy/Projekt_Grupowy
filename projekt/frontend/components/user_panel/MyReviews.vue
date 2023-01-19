@@ -14,11 +14,11 @@
             <Avatar
               class="item_avatar"
               placeholderIcon="place"
-              :imageUrl="review.facility.imageUrl"
+              :imageUrl="review.medicalFacility.imageUrl"
             />
             <div class="item_details">
               <div class="details_name">
-                {{ review.facility.name }}
+                {{ review.medicalFacility.name }}
               </div>
               <div class="details_rating">
                 <Rating v-model="review.rating" :showTooltip="false" />
@@ -38,7 +38,6 @@
 import BoxSection from '@/components/BoxSection';
 import Avatar from '@/components/shared/Avatar';
 import Rating from '@/components/Rating';
-import MyReviewsTestList from '~/assets/my-reviews.js';
 
 export default {
   components: {
@@ -47,9 +46,16 @@ export default {
     Rating,
   },
 
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data() {
     return {
-      reviews: MyReviewsTestList,
+      reviews: [],
 
       scrollOptions: {
         mode: 'native',
@@ -60,17 +66,13 @@ export default {
     };
   },
 
-  methods: {
-    uploadImage({ target: { files } }) {
-      const [file] = files;
-
-      if (!['image/png', 'image/png', 'image/jpeg'].includes(file.type)) {
-        this.$notify({ text: 'Dodaj plik o poprawnym typie: png, jpg lub jpeg', type: 'error' });
-      } else {
-        this.file = file;
-        this.$notify({ text: `Plik o nazwie: ${files[0].name} został dodany`, type: 'success' });
-      }
-    },
+  async fetch() {
+    try {
+      this.reviews = await this.$store.dispatch('user/fetchOpinions', this.user.id);
+    } catch (error) {
+      this.$notify({ text: 'Nie udało się pobrać listy Twoich opinii.', type: 'error' });
+      console.error(error);
+    }
   },
 };
 </script>

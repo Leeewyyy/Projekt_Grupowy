@@ -1,10 +1,21 @@
 <template>
-  <BoxSection class="inner-padding">
-    <template #header> Witaj, {{ username }} :) </template>
+  <BoxSection class="inner-padding" v-if="user">
+    <template #header> Witaj, {{ user.firstname }} :) </template>
     <template #body>
       <div class="avatar-section d-flex-between margin-top">
         <div class="avatar d-flex-center section-element">
-          <Icon name="account_circle" :size="150" color="#8AA9CE" />
+          <img
+            v-if="user.imageUrl"
+            class="account_avatar"
+            :src="user.imageUrl"
+            alt=""
+          />
+          <Icon
+            v-else
+            name="account_circle"
+            :size="150"
+            color="#8AA9CE"
+          />
         </div>
         <div class="upload-file d-flex-center section-element">
           <div class="d-flex-center file-place">
@@ -25,22 +36,49 @@ import Icon from '@/components/shared/Icon';
 import InputFile from '@/components/shared/InputFile';
 
 export default {
-  components: { BoxSection, Icon, InputFile },
+  components: {
+    BoxSection,
+    Icon,
+    InputFile,
+  },
+
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data() {
     return {
       file: null,
-      username: 'Marek',
     };
   },
-  methods: {
-    uploadImage({ target: { files } }) {
-      const [file] = files;
 
-      if (!['image/png', 'image/png', 'image/jpeg'].includes(file.type)) {
-        this.$notify({ text: 'Dodaj plik o poprawnym typie: png, jpg lub jpeg', type: 'error' });
-      } else {
-        this.file = file;
-        this.$notify({ text: `Plik o nazwie: ${files[0].name} został dodany`, type: 'success' });
+  methods: {
+    async uploadImage({ target: { files } }) {
+      const [avatarFile] = files;
+
+      if (!['image/png', 'image/png', 'image/jpeg'].includes(avatarFile.type)) {
+        this.$notify({ text: 'Wybrano nieprawidłowy plik (dopuszczalne rozszerzenia: png, jpg, jpeg).', type: 'error' });
+        return; // eslint-disable-line
+      }
+
+      const payload = {
+        userId: this.user?.id,
+        avatarFile,
+      };
+
+      try {
+        await this.$store.dispatch('user/uploadAndSetAvatar', payload);
+
+        // Set new user image
+        const localImageUrl = URL.createObjectURL(avatarFile);
+        this.$notify({ text: 'Pomyślnie zmieniono awatar!', type: 'success' });
+        this.$emit('avatarUpdated', localImageUrl);
+      } catch (error) {
+        this.$notify({ text: 'Nie udało się wgrać obrazka.', type: 'error' });
+        console.error(error);
       }
     },
   },
@@ -58,6 +96,12 @@ export default {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
+
+  .account_avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+  }
 }
 
 .section-element {

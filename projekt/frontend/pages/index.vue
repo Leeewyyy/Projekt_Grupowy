@@ -3,9 +3,9 @@
     <Map :key="mapKey" ref="map" class="page_map" :center="mapPosition" :zoom="mapZoom">
       <!-- Test marker - Gdańsk Politechnika -->
       <l-marker
-        v-for="place in places"
+        v-for="place in allPlaces"
         :key="place.id"
-        :lat-lng="[place.lat, place.lng]"
+        :lat-lng="[place.location.latitude, place.location.longitude]"
         @click="onPlaceSelected(place)"
         @mouseenter="showPlaceCard(place, $event.containerPoint)"
         @mouseleave="hidePlaceCard"
@@ -40,16 +40,16 @@
         v-show="currentView === 'placeList'"
         class="page_place-list"
         id="placeList"
-        :places="places"
+        :places="allPlaces"
         @onPlaceSelected="onPlaceSelected"
         @onClose="onPlaceListClose"
         @updateList="getPlaces()"
       />
       <PlaceDetails
-        v-if="currentView === 'placeDetails' && selectedPlace"
+        v-if="currentView === 'placeDetails' && selectedPlaceId"
         class="page_place-details"
         id="placeDetails"
-        :place="selectedPlace"
+        :placeId="selectedPlaceId"
         @onClose="onPlaceDetailsClose"
       />
 
@@ -72,7 +72,6 @@ import PlaceSearch from '@/components/place/PlaceSearch';
 import PlaceList from '@/components/place/PlaceList';
 import PlaceDetails from '@/components/place/PlaceDetails';
 import PlaceCard from '@/components/place/PlaceCard';
-import TestPlaces from '~/assets/test-places.js';
 
 export default {
   components: {
@@ -95,22 +94,28 @@ export default {
   data() {
     return {
       coords: null,
+
       lastCoords: {
         latitude: 54.3739,
         longitude: 18.6214,
       },
-      selectedPlace: null,
+
       mapKey: 1,
+      selectedPlaceId: null,
     };
   },
+
   watch: {
     coords(coords) {
-      if (coords) {
-        this.lastCoords = { ...coords };
-      }
+      if (coords) this.lastCoords = { ...coords };
     },
   },
+
   computed: {
+    allPlaces() {
+      return this.$store.getters['facility/getFacilities'];
+    },
+
     hoveredPlaceCardStyle() {
       const { x, y } = this.hoveredPlacePoint;
       const { innerWidth, innerHeight } = window;
@@ -143,9 +148,6 @@ export default {
       currentView: 'placeSearch',
       mapZoom: 13,
 
-      // Test places from assets file
-      places: TestPlaces,
-
       // Hovered card
       hoveredPlace: null,
       hoveredPlacePoint: null,
@@ -153,21 +155,9 @@ export default {
     };
   },
 
-  // PRZYKŁAD POBIERANIA PLACÓWEK
-  // TO TRZEBA PRZENIEŚĆ DO ASYNCDATA
-  async mounted() {
-    try {
-      const medicalFacilities = await this.$store.dispatch('medicalFacilities/fetchAll');
-      console.info(`Pobrano listę ${medicalFacilities?.length} placówek z backendu. Pierwsza placówka:`);
-      console.dir(medicalFacilities?.[0]);
-    } catch (error) {
-      console.error(`Error przy pobieraniu placówek: ${error}!`);
-    }
-  },
-
   methods: {
-    onPlaceSelected(place) {
-      this.selectedPlace = place;
+    onPlaceSelected({ id }) {
+      this.selectedPlaceId = id;
       this.currentView = 'placeDetails';
     },
 

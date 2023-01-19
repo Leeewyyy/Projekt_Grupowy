@@ -8,6 +8,7 @@
       v-if="isCanAddReview"
       :placeId="placeId"
       class="PlaceReviews_add-review"
+      @reviewAdded="onReviewAdded"
     />
     
     <ul class="PlaceReviews_list">
@@ -19,7 +20,7 @@
         <Avatar
           class="item_avatar"
           placeholderIcon="person"
-          :imageUrl="review.addedBy.avatarUrl"
+          :imageUrl="review.addedBy.imageUrl"
         />
         <div class="item_details">
           <div class="details_name">
@@ -71,12 +72,18 @@ export default {
 
   computed: {
     isShowMore() {
-      return true;
+      return false;
     },
   
     isCanAddReview() {
-      // return is user logged in
-      return true;
+      return this.$store.getters['user/isLoggedIn'];
+    },
+  },
+
+  methods: {
+    async onReviewAdded(review) {
+      // Add review locally without refreshing page
+      this.reviews.unshift(review);
     },
   },
 };

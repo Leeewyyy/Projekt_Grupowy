@@ -2,8 +2,12 @@
   <AppPage name="user-panel" class="gray-background">
     <div class="user-panel_container">
       <div class="container_column">
-        <AvatarBox class="column_avatar-box" />
-        <MyReviews class="column_reviews" />
+        <AvatarBox
+          :user="user"
+          class="column_avatar-box"
+          @avatarUpdated="onAvatarUpdated"
+        />
+        <MyReviews :user="user" class="column_reviews" />
       </div>
       <div class="container_column column--account-data">
         <AccountData />
@@ -15,7 +19,6 @@
           :places="favouritePlaces"
           :selectable="false"
           :closable="false"
-          @updateList="getPlaces()"
         />
       </div>
     </div>
@@ -27,7 +30,6 @@ import AppPage from '@/components/AppPage';
 import MyReviews from '@/components/user_panel/MyReviews';
 import AvatarBox from '@/components/user_panel/AvatarBox';
 import PlaceList from '@/components/place/PlaceList';
-import FavoritePlacesTestList from '~/assets/favorite-places.js';
 import AccountData from '@/components/user_panel/AccountData';
 
 export default {
@@ -45,15 +47,30 @@ export default {
     };
   },
 
-  data() {
+  computed: {
+    favouritePlaces() {
+      return this.$store.getters['favouriteFacility/getFacilities'];
+    },
+  },
+
+  async asyncData({ store, error }) {
+    const currentUser = store.getters['user/getUser'];
+
+    // User not logged in - redirect to error page
+    if (!currentUser) {
+      return error({ statusCode: 401 });
+    }
+
+    const user = { ...currentUser };
+
     return {
-      favouritePlaces: FavoritePlacesTestList,
+      user,
     };
   },
+
   methods: {
-    getPlaces() {
-      // some ajax get
-      // this.favouritePlaces = new Array()
+    onAvatarUpdated(newUrl) {
+      this.user.imageUrl = newUrl;
     },
   },
 };

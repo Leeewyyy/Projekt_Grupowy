@@ -12,13 +12,7 @@
             </div>
             <div class="side_buttons">
               <NFZMark :value="isNFZ" />
-              <IconToggleButton
-                :icon-name="isFavoriteActive ? 'favorite' : 'favorite_border'"
-                :size="25"
-                variant="dark"
-                class="favourite"
-                @click="toggleFavoriteStatus"
-              />
+              <FavouriteButton :placeId="id" />
             </div>
           </div>
           <div class="details_address">
@@ -40,16 +34,16 @@
 import PlacePhoto from '@/components/place/PlacePhoto';
 import Rating from '@/components/Rating';
 import NFZMark from '@/components/NFZMark';
-import IconToggleButton from '@/components/shared/IconToggleButton';
+import FavouriteButton from '@/components/place/FavouriteButton';
 
 export default {
   components: {
     PlacePhoto,
     Rating,
     NFZMark,
-    IconToggleButton,
+    FavouriteButton,
   },
-
+  
   inheritAttrs: false,
 
   props: {
