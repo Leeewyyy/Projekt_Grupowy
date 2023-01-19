@@ -11,11 +11,15 @@ import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
+    public static final String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/upload/images/user-profile";
 
     private final UserRepository userRepository;
     private final MedicalFacilityRepository medicalFacilityRepository;
@@ -169,5 +173,38 @@ public class UserService {
 
     public List<MedicalFacility> findFavoriteFacilitiesForUser(Long userId) {
         return userRepository.findById(userId).get().getFavoriteFacilities();
+    }
+
+    public InputStream getUserImage(Long userId) {
+        User user = userRepository.findById(userId).orElse(new User());
+
+        if (user.getId() == null) {
+            return null;
+        }
+
+        String userImageName = user.getImage();
+
+        try {
+            return new FileInputStream(UPLOAD_DIRECTORY + "/" + userImageName);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    public boolean setUserImage(Long userId, String imageName) {
+        User user = userRepository.findById(userId).orElse(new User());
+
+        if (user.getId() == null) {
+            return false;
+        }
+
+        user.setImage(imageName);
+        userRepository.save(user);
+
+        return true;
+    }
+
+    public boolean userExists(Long userId) {
+        return userRepository.existsById(userId);
     }
 }
