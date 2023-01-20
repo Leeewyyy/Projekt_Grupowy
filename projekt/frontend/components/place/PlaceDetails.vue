@@ -159,6 +159,16 @@ export default {
       this.$emit('onClose');
     },
   },
+
+  watch: {
+    placeId: {
+      // eslint-disable-next-line
+      handler: async function (newValue, oldValue) {
+        if (newValue === oldValue) return;
+        await this.$fetch();
+      },
+    },
+  },
 };
 </script>
 
