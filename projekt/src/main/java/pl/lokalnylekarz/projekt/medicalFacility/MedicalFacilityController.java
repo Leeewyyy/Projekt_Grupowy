@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import pl.lokalnylekarz.projekt.api.Endpoint;
+import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 
 import java.util.List;
 import java.util.Map;
@@ -26,5 +27,11 @@ public class MedicalFacilityController {
     @ResponseBody
     public MedicalFacilityDto getMedicalFacilityDetails(@PathVariable(value = "id") Long id) {
         return service.get(id);
+    }
+
+    @GetMapping("/types")
+    @ResponseBody
+    public List<MedicalFacilityTypes> getMedicalFacilityTypes() {
+        return List.of(MedicalFacilityTypes.values());
     }
 }
