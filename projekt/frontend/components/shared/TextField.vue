@@ -8,6 +8,7 @@
         :id="name"
         :placeholder="placeholder"
         :tabindex="tabIndex"
+        :required="required"
         :class="['text-field', { 'box-shadow': withShadow, flat: isFlat }]"
       />
       <div v-else>
@@ -17,6 +18,7 @@
           :id="name"
           :placeholder="placeholder"
           :tabindex="tabIndex"
+          :required="required"
           :class="['text-field', { 'box-shadow': withShadow, flat: isFlat }]"
         />
         <IconToggleButton
@@ -63,6 +65,10 @@ export default {
       default: false,
     },
     isFlat: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
       type: Boolean,
       default: false,
     },

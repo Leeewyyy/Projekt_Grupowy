@@ -27,6 +27,10 @@ export const actions = {
     /* logowanie */
   },
 
+  async register({}, payload) {
+    return this.$axios.$post('/api/users/register', payload);
+  },
+
   async fetchOpinions({}, userId) {
     return this.$axios.$get(`/api/users/${userId}/opinions`);
   },
