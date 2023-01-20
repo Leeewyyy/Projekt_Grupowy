@@ -14,7 +14,7 @@
 
       <l-marker 
         v-if="coords"
-        :lat-lng="[this.coords.latitude, this.coords.longitude]"
+        :lat-lng="[coords.latitude, coords.longitude]"
         class="my-position-marker"
       >
         <l-icon 
