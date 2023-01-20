@@ -38,7 +38,7 @@
                   :class="{ active: isActive(result) }"
                   @click="toggleAddress(result)"
                 >
-                  {{ result.address.city }}, {{ result.address.road }}
+                  {{ buildAddress(result) }}
                 </li>
               </ul>
             </vue-scroll>
@@ -52,8 +52,7 @@
             <Select
               name="doctors-select"
               v-model="form.doctor"
-              :options="doctorsList"
-              label="name"
+              :options="specialistsTypes"
               description="Lekarz"
               style="margin-top: 10px"
               :tab-index="3"
@@ -75,12 +74,21 @@
               name="clear-button"
               type="button"
               variant="light"
+              :disabled="!coords"
               @click="actionOnButton()"
             >
               Wyczyść
             </Button>
 
-            <Button tabindex="6" name="submit-button" type="submit" variant="dark"> Szukaj </Button>
+            <Button 
+              tabindex="6"
+              name="submit-button"
+              type="submit"
+              variant="dark"
+              :disabled="!coords"
+            >
+              Szukaj 
+            </Button>
           </div>
         </div>
 
@@ -99,7 +107,7 @@
             <Select
               name="places-select"
               v-model="form.placeType"
-              :options="placesTypes"
+              :options="facilitiesTypes"
               label="name"
               description="Typ placówki"
               :tab-index="8"
@@ -159,41 +167,8 @@ export default {
         sizeStrategy: 'percent',
         detectResize: true,
       },
-      coords: {
-        longitude: null,
-        latitude: null,
-      },
+      coords: null,
       activeAddress: null,
-      doctorsList: [
-        {
-          id: 1,
-          name: 'Dentysta',
-        },
-        {
-          id: 2,
-          name: 'Kardiolog',
-        },
-        {
-          id: 3,
-          name: 'Urolog',
-        },
-      ],
-
-      placesTypes: [
-        {
-          id: 1,
-          name: 'Przychodnia',
-        },
-        {
-          id: 2,
-          name: 'Szpital',
-        },
-        {
-          id: 3,
-          name: 'Prywatny lokal',
-        },
-      ],
-
       distanceOptions: [
         {
           id: 1,
@@ -214,22 +189,23 @@ export default {
       delayTimer: null,
     };
   },
+  mounted() {
+    this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
+    this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
+  },
   computed: {
     ...mapGetters('facilitiesSearch', {
       possibleAddresses: 'getPossibleAddresses',
+      facilitiesTypes: 'getFacilitiesTypes',
+      specialistsTypes: 'getSpecialistsTypes',
     }),
   },
   watch: {
-    iconNfzOn(val) {
-      alert(`NFZ filtering ${val ? 'on' : 'off'}`);
-    },
     iconLocationON(val) {
       if (val) {
         this.getCurrentPosition();
-      } else {
-        this.tmpPlaceholder = '';
-        if (!this.activeAddress) this.$emit('getCoords', null);
-      }
+      } else if (!this.activeAddress) this.$emit('getCoords', null);
+      else this.tmpPlaceholder = '';
     },
     activeAddress: {
       deep: true,
@@ -238,7 +214,6 @@ export default {
       },
     },
   },
-
   methods: {
     actionOnButton() {
       this.form = {};
@@ -280,7 +255,7 @@ export default {
       } else {
         this.activeAddress = address;
         this.coords = address.location;
-        this.form.search = `${address.address.city}, ${address.address.road}`;
+        this.form.search = this.buildAddress(address);
       }
 
       this.$emit('getCoords', this.coords);
@@ -300,6 +275,11 @@ export default {
     isActive(address) {
       return address.location.longitude === this.coords?.longitude 
       && address.location.latitude === this.coords?.latitude;
+    },
+
+    /* eslint-disable-next-line */
+    buildAddress({ address: { city, road, neighbourhood, postcode }}) {
+      return [city, road, neighbourhood, postcode].filter((el) => !!el).join(', ');
     },
   },
 };

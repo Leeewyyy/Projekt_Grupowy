@@ -4,45 +4,52 @@
       <h2 class="register-form-title">Wpisz swoje dane</h2>
     </template>
     <template #body>
-      <form class="register-form" @submit.prevent="submitSearch()">
+      <form class="register-form" @submit.prevent="registerAccount">
         <div class="register-form-container-inner">
           <TextField
             id="full-name"
             name="fullname-input"
-            v-model="inputFullName"
+            v-model="form.fullName"
             label="Imię i nazwisko"
             :is-flat="true"
+            required
           />
 
           <TextField
             id="email"
             name="email-input"
-            v-model="inputEmail"
+            v-model="form.email"
+            type="email"
             label="Adres e-mail"
             :is-flat="true"
             placeholder="np. jan@kowalski.pl"
+            required
           />
 
           <TextField
             id="password"
             name="password-input"
-            v-model="inputPassword"
+            v-model="form.password"
             label="Hasło"
             :is-flat="true"
             type="password"
+            required
           />
 
           <TextField
             id="password-repeat"
             name="password-input-repeat"
-            v-model="inputPasswordRepeated"
+            v-model="form.passwordConfirm"
             label="Powtórz hasło"
             :is-flat="true"
             type="password"
+            required
           />
 
           <div class="buttons">
-            <Button name="submit-button" type="submit" variant="dark"> Zarejestruj </Button>
+            <Button name="submit-button" type="submit" variant="dark">
+              Zarejestruj
+            </Button>
           </div>
         </div>
       </form>
@@ -68,51 +75,62 @@ export default {
     Icon,
   },
 
-  data() {
+  head() {
     return {
-      inputEmail: '',
-      inputPassword: '',
-      inputPasswordRepeated: '',
-      inputFullName: '',
+      title: 'Rejestracja',
     };
   },
+
+  data() {
+    return {
+      form: {
+        fullName: null,
+        email: null,
+        password: null,
+        passwordConfirm: null,
+      },
+    };
+  },
+
   methods: {
-    submitSearch() {
-      if (this.validate()) {
-        this.$notify({
-          text: 'Zostałeś zarejestrowany pomyślnie! Teraz możesz się zalogować.',
-          type: 'success',
-        });
-        this.$router.push({ name: 'login' });
-      }
-    },
     validate() {
-      if (!/[A-Za-z0-9]*@[A-Za-z0-9]*\.[A-Za-z]*/.test(this.inputEmail)) {
-        this.$notify({ text: 'Podaj prawidłowy adres e-mail', type: 'error' });
+      // Validate full name
+      if (!this.form.fullName?.length) {
+        this.$notify({ text: 'Podaj imię i nazwisko.', type: 'error' });
         return false;
       }
 
-      if (!this.inputPassword.length) {
-        this.$notify({ text: 'Hasło nie może być puste', type: 'error' });
-        return false;
-      }
-
-      if (this.inputPassword.length < 8) {
-        this.$notify({ text: 'Hasło powinno zawierać minimum 8 znaków', type: 'error' });
-        return false;
-      }
-
-      if (this.inputPassword !== this.inputPasswordRepeated) {
-        this.$notify({ text: 'Hasła muszą być takie same', type: 'error' });
-        return false;
-      }
-
-      if (!this.inputFullName.length) {
-        this.$notify({ text: 'Podaj imię i nazwisko', type: 'error' });
+      // Validate password
+      if (!this.form.password
+      || this.form.password.length < 8
+      || this.form.password !== this.form.passwordConfirm) {
+        this.$notify({ text: 'Wprowadzone hasła muszą być takie same i mieć co najmniej 8 znaków.', type: 'error' });
         return false;
       }
 
       return true;
+    },
+
+    async registerAccount() {
+      if (!this.validate()) return;
+      
+      const [firstName, ...lastNameParts] = this.form.fullName.split(' ');
+      const lastName = lastNameParts?.join(' ') || null;
+
+      const payload = {
+        firstName,
+        lastName,
+        ...this.form,
+      };
+
+      try {
+        await this.$store.dispatch('user/register', payload);
+        this.$notify({ text: 'Konto założone. Możesz się teraz zalogować.', type: 'success' });
+        this.$router.push('/login');
+      } catch (error) {
+        this.$notify({ text: 'Wystąpił problem przy tworzeniu konta.', type: 'error' });
+        console.error(error);
+      }
     },
   },
 };
