@@ -81,25 +81,25 @@ public class InitSeeder implements CommandLineRunner {
             Specialist specialist1 = Specialist.builder()
                     .firstname("Jane1")
                     .lastname("Doe")
-                    .specialization(Specialization.ONE)
+                    .specialization(Specialization.CHIRURG)
                     .build();
 
             Specialist specialist2 = Specialist.builder()
                     .firstname("Jane2")
                     .lastname("Doe")
-                    .specialization(Specialization.TWO)
+                    .specialization(Specialization.DERMATOLOG)
                     .build();
 
             Specialist specialist3 = Specialist.builder()
                     .firstname("Jane3")
                     .lastname("Doe")
-                    .specialization(Specialization.THREE)
+                    .specialization(Specialization.KARDIOLOG)
                     .build();
 
             Specialist specialist4 = Specialist.builder()
                     .firstname("Jane4")
                     .lastname("Doe")
-                    .specialization(Specialization.FOUR)
+                    .specialization(Specialization.STOMATOLOG)
                     .build();
 
             specialistRepository.save(specialist1);
@@ -120,7 +120,7 @@ public class InitSeeder implements CommandLineRunner {
 
             MedicalFacility medicalFacility1 = MedicalFacility.builder()
                     .name("CM LUX MED")
-                    .type(MedicalFacilityTypes.ONE)
+                    .type(MedicalFacilityTypes.SZPITAL)
                     .address("Aleja Zwycięstwa 49")
                     .imageUrl("https://renoma-wroclaw.pl/wp-content/uploads/2017/08/DSC3780.jpg")
                     .images(images)
@@ -145,7 +145,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.365000, 18.635410))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(List.of(specialistRepository.findById(1L).orElse(null)))
                     .addedBy(user1)
                     .favoriteFor(users)
                     .build();
@@ -159,7 +159,7 @@ public class InitSeeder implements CommandLineRunner {
 
             MedicalFacility medicalFacility2 = MedicalFacility.builder()
                     .name("POLMED Gdańsk Grunwaldzka - Centrum Medyczne")
-                    .type(MedicalFacilityTypes.ONE)
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
                     .address("Aleja Grunwaldzka 82")
                     .imageUrl("https://polmed.pl/wp-content/uploads/2021/11/Poznan_20200219_095803-1024x768.jpg")
                     .images(images)
@@ -184,7 +184,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.377320, 18.608100))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(List.of(specialistRepository.findById(2L).orElse(null)))
                     .addedBy(user2)
                     .build();
 
@@ -197,7 +197,7 @@ public class InitSeeder implements CommandLineRunner {
 
             MedicalFacility medicalFacility3 = MedicalFacility.builder()
                     .name("Uniwersyteckie Centrum Kliniczne")
-                    .type(MedicalFacilityTypes.ONE)
+                    .type(MedicalFacilityTypes.SZPITAL)
                     .address("Dębinki 7")
                     .imageUrl("https://www.onkonet.pl/images_news/cmn_nowa_czesc.jpg")
                     .images(images)
@@ -229,7 +229,7 @@ public class InitSeeder implements CommandLineRunner {
 
             MedicalFacility medicalFacility4 = MedicalFacility.builder()
                     .name("Politechnika Gdanska")
-                    .type(MedicalFacilityTypes.ONE)
+                    .type(MedicalFacilityTypes.APTEKA)
                     .address("ul. Politechniczna")
                     .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479;")
                     .images(images)

@@ -76,7 +76,6 @@ public class MedicalFacility {
 
     @ManyToMany
     @JoinColumn(name = "id")
-    @JsonIgnore
     private List<Specialist> specialist;
 
     @ManyToOne
