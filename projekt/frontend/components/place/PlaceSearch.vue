@@ -13,7 +13,7 @@
             <TextField
               name="address-input"
               v-model="form.search"
-              placeholder="np. Gdańsk, al. Zwycięstwa"
+              :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
               label="Adres"
               :tab-index="1"
               @input="getPossibleResults"
@@ -27,18 +27,18 @@
             />
 
             <vue-scroll 
-              v-if="possibleResults && possibleResults.length"
+              v-if="possibleAddresses && possibleAddresses.length"
               class="choose-result"
               :ops="scrollOptions"
             >
               <ul>
                 <li
-                  v-for="(result, index) in possibleResults"
+                  v-for="(result, index) in possibleAddresses"
                   :key="index"
-                  :class="{ active: result.isClicked }"
-                  @click="setAddress(result)"
+                  :class="{ active: isActive(result) }"
+                  @click="toggleAddress(result)"
                 >
-                  {{ result.city }}, {{ result.road }}
+                  {{ result.address.city }}, {{ result.address.road }}
                 </li>
               </ul>
             </vue-scroll>
@@ -122,6 +122,8 @@
 
 <script>
 /* globals _ */
+/*eslint-disable-next-line*/
+import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
 import Select from '@/components/shared/Select';
@@ -151,6 +153,7 @@ export default {
 
       moreFiltersOn: false,
       iconLocationON: false,
+      tmpPlaceholder: '',
       scrollOptions: {
         mode: 'native',
         sizeStrategy: 'percent',
@@ -160,7 +163,7 @@ export default {
         longitude: null,
         latitude: null,
       },
-      possibleResults: [],
+      activeAddress: null,
       doctorsList: [
         {
           id: 1,
@@ -211,7 +214,11 @@ export default {
       delayTimer: null,
     };
   },
-
+  computed: {
+    ...mapGetters('facilitiesSearch', {
+      possibleAddresses: 'getPossibleAddresses',
+    }),
+  },
   watch: {
     iconNfzOn(val) {
       alert(`NFZ filtering ${val ? 'on' : 'off'}`);
@@ -219,7 +226,16 @@ export default {
     iconLocationON(val) {
       if (val) {
         this.getCurrentPosition();
-      } else this.$emit('getCoords', null);
+      } else {
+        this.tmpPlaceholder = '';
+        if (!this.activeAddress) this.$emit('getCoords', null);
+      }
+    },
+    activeAddress: {
+      deep: true,
+      handler() {
+        this.iconLocationON = false;
+      },
     },
   },
 
@@ -235,9 +251,14 @@ export default {
     getCurrentPosition() {
       const onSuccess = ({ coords }) => {
         const { latitude, longitude } = coords;
-        this.coords.latitude = latitude;
-        this.coords.longitude = longitude;
+        this.coords = { 
+          latitude,
+          longitude,
+        };
+        this.form.search = '';
+        this.tmpPlaceholder = 'Twoja lokalizacja';
         this.iconLocationON = true;
+        this.activeAddress = null;
         this.$emit('getCoords', null);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
@@ -251,17 +272,34 @@ export default {
       navigator.geolocation.getCurrentPosition(onSuccess, onError);
     },
 
-    setAddress(address) {
-      // set coords
+    toggleAddress(address) {
+      if (this.isActive(address)) {
+        this.coords = null;
+        this.activeAddress = null;
+        this.form.search = '';
+      } else {
+        this.activeAddress = address;
+        this.coords = address.location;
+        this.form.search = `${address.address.city}, ${address.address.road}`;
+      }
+
+      this.$emit('getCoords', this.coords);
     },
-    getPossibleResults(inputVal) {
-      clearTimeout(this.delayTimer);
-      this.delayTimer = setTimeout(() => {
-        this.possibleResults = inputVal ? [{
-          city: 'Gdańsk',
-          road: 'Opolska',
-        }] : [];
-      }, 700);
+
+    async getPossibleResults(inputVal) {
+      try {
+        clearTimeout(this.delayTimer);
+        this.delayTimer = setTimeout(() => {
+          this.$store.dispatch('facilitiesSearch/getAddresses', inputVal);
+        }, 700);
+      } catch (error) {
+        this.$notify({ text: 'Błąd pobierania możliwych adresów' });
+      }
+    },
+
+    isActive(address) {
+      return address.location.longitude === this.coords?.longitude 
+      && address.location.latitude === this.coords?.latitude;
     },
   },
 };
@@ -386,10 +424,17 @@ export default {
           transition: all .1s;
           font-size: 0.9em;
 
-          &:hover, &:focus, &.active {
+          &.active {
             background: rgba(51, 51, 51, .3);
-            cursor: pointer;
             font-weight: bold;
+            font-size: 1em;
+            margin-top: 5px;
+            margin-bottom: 5px;
+          }
+
+          &:hover, &:focus {
+            background: rgba(51, 51, 51, .1);
+            cursor: pointer;
           }
         }
 
