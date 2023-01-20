@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.User;
+import pl.lokalnylekarz.projekt.opinion.OpinionWithMedicalFacilityDTO;
 import pl.lokalnylekarz.projekt.pojo.FavouriteMedicalFacilityPOJO;
 import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
 
@@ -116,6 +117,11 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{userId}/opinions")
+    public ResponseEntity<List<OpinionWithMedicalFacilityDTO>> userOpinions(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getUserOpinions(userId), HttpStatus.OK);
     }
 
     protected String saveImage(MultipartFile file) throws IOException {

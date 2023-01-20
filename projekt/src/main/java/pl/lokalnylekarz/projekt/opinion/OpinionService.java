@@ -2,6 +2,7 @@ package pl.lokalnylekarz.projekt.opinion;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.User;
@@ -9,8 +10,6 @@ import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 import pl.lokalnylekarz.projekt.user.UserService;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -52,5 +51,15 @@ public class OpinionService {
                 .description(opinionFromFrontDto.getText())
                 .medicalFacility(medicalFacility)
                 .build();
+    }
+
+    public static OpinionWithMedicalFacilityDTO fromOpinionToOpinionWithMedicalFacilityDTO(Opinion opinion) {
+        return new OpinionWithMedicalFacilityDTO(
+                opinion.getId(),
+                opinion.getRating(),
+                opinion.getDescription(),
+                MedicalFacilityService.toDtoList(opinion.getMedicalFacility()),
+                opinion.getAddedAt()
+        );
     }
 }

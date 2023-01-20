@@ -6,11 +6,13 @@ import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
+import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.specialist.SpecialistService;
 import pl.lokalnylekarz.projekt.user.UserService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ public class MedicalFacilityService {
                 medicalFacility.getType(),
                 medicalFacility.getAddress(),
                 medicalFacility.getImageUrl(),
+                medicalFacility.getImages(),
                 medicalFacility.getPhone(),
                 medicalFacility.getWebsiteUrl(),
                 medicalFacility.getDescription(),
@@ -38,8 +41,12 @@ public class MedicalFacilityService {
                 medicalFacility.getAddedAt(),
                 medicalFacility.getSpecialist().stream().map(SpecialistService::fromEntityToDto).toList(),
                 UserService.forMedicalDto(medicalFacility.getAddedBy()),
-                medicalFacility.getOpinions().stream().map(OpinionService::fromEntityToDto).toList()
-                ///medicalFacility.getFavoriteFor().stream().map(UserService::fromEntityToDto).toList()
+                medicalFacility.getOpinions().stream().sorted(new Comparator<Opinion>() {
+                    @Override
+                    public int compare(Opinion o1, Opinion o2) {
+                        return -o1.getAddedAt().compareTo(o2.getAddedAt());
+                    }
+                }).map(OpinionService::fromEntityToDto).toList()
         );
     }
 
@@ -49,6 +56,7 @@ public class MedicalFacilityService {
                 medicalFacility.getName(),
                 medicalFacility.getType(),
                 medicalFacility.getAddress(),
+                medicalFacility.getImageUrl(),
                 medicalFacility.getPhone(),
                 medicalFacility.getWebsiteUrl(),
                 medicalFacility.getIsNFZ(),
@@ -57,7 +65,6 @@ public class MedicalFacilityService {
                 medicalFacility.getOpenTo(),
                 medicalFacility.getLocation(),
                 medicalFacility.getAddedAt()
-                ///medicalFacility.getFavoriteFor().stream().map(UserService::fromEntityToDto).toList()
         );
     }
 

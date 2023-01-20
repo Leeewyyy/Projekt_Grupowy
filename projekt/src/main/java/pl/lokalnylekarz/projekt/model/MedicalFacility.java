@@ -4,13 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.web.SortDefault;
+import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.persistence.ImagesConverter;
 import pl.lokalnylekarz.projekt.persistence.LocationConverter;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @AllArgsConstructor
@@ -34,8 +38,12 @@ public class MedicalFacility {
     @Column
     private String address;
 
-    @Column
+    @Column(length = 1024)
     private String imageUrl;
+
+    @Column(length = 1024)
+    @Convert(converter = ImagesConverter.class)
+    private List<Image> images;
 
     @Column
     private String phone;
@@ -43,7 +51,7 @@ public class MedicalFacility {
     @Column
     private String websiteUrl;
 
-    @Column
+    @Column(length = 1024)
     private String description;
 
     @Column
