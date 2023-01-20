@@ -44,12 +44,15 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> saveUser(@RequestBody UserDtoForRegister userDtoForRegister) {
         User dto = userService.save(userDtoForRegister);
+        if (dto==null) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody UserLoginPOJO userLoginPOJO) {
-        return (userService.checkUser(userLoginPOJO)) ? new ResponseEntity<>(HttpStatus.ACCEPTED) : new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<UserDto> login(@RequestBody UserLoginPOJO userLoginPOJO) {
+        UserDto userDto = userService.loggInUser(userLoginPOJO);
+        if (userDto!=null) return new ResponseEntity<>(userDto, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PatchMapping("/edit/{id}")

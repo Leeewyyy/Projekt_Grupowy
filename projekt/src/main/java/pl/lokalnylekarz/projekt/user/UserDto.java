@@ -15,7 +15,6 @@ import java.util.List;
 @Builder
 public class UserDto {
     private Long id;
-    private String login;
     private String firstname;
     private String lastname;
     private String email;
@@ -27,7 +26,6 @@ public class UserDto {
 
     public UserDto(
             Long id,
-            String login,
             String firstname,
             String lastname,
             String email,
@@ -36,7 +34,6 @@ public class UserDto {
             Timestamp registrationDate
     ) {
         this.id = id;
-        this.login = login;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;

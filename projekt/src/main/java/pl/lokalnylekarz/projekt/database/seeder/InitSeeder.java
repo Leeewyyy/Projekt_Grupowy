@@ -42,7 +42,6 @@ public class InitSeeder implements CommandLineRunner {
     private void loadUserData() {
         if (userRepository.count() == 0) {
             User user1 = User.builder()
-                    .login("john1")
                     .firstname("John")
                     .lastname("Smith")
                     .email("john.smitch1@gmail.com")
@@ -50,7 +49,6 @@ public class InitSeeder implements CommandLineRunner {
                     .build();
 
             User user2 = User.builder()
-                    .login("john2")
                     .firstname("John")
                     .lastname("Smith")
                     .email("john.smitch2@gmail.com")
@@ -58,7 +56,6 @@ public class InitSeeder implements CommandLineRunner {
                     .build();
 
             User user3 = User.builder()
-                    .login("john3")
                     .firstname("John")
                     .lastname("Smith")
                     .email("john.smitch3@gmail.com")
@@ -66,7 +63,6 @@ public class InitSeeder implements CommandLineRunner {
                     .build();
 
             User user4 = User.builder()
-                    .login("john4")
                     .firstname("John")
                     .lastname("Smith")
                     .email("john.smitch4@gmail.com")
@@ -116,7 +112,7 @@ public class InitSeeder implements CommandLineRunner {
             images.add(new Image(UUID.randomUUID().toString(), "https://www.luxmed.pl/assets/media/placowka-luxmed.jpg%3Ffm=webp&q=90&lossless=0"));
             images.add(new Image(UUID.randomUUID().toString(), "https://ocdn.eu/pulscms-transforms/1/9rFktkqTURBXy81ZGY0MWU4MDBkZjZjOTFjNDRkNWMyYTFkNGQxMDdiYi5qcGVnkpUDABHNAyDNAcKTBc0EsM0DWQ"));
             images.add(new Image(UUID.randomUUID().toString(), "https://www.kliniki.pl/photos/177/przychodnia-wielospecjalistyczna-lux-med-gliwice_176441_800x500fc.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://www.luxmed.pl/assets/media/f8b48e5b2fad9ec4ecea51f910acf5a2_800_600_u_aaf09fc5.jpeg%3Ffm=webp&q=90&lossless=0"));
+//            images.add(new Image(UUID.randomUUID().toString(), "https://www.luxmed.pl/assets/media/f8b48e5b2fad9ec4ecea51f910acf5a2_800_600_u_aaf09fc5.jpeg%3Ffm=webp&q=90&lossless=0"));
 
             MedicalFacility medicalFacility1 = MedicalFacility.builder()
                     .name("CM LUX MED")
