@@ -4,17 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
+import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.User;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
+import pl.lokalnylekarz.projekt.opinion.OpinionWithMedicalFacilityDTO;
 import pl.lokalnylekarz.projekt.pojo.FavouriteMedicalFacilityPOJO;
 import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
+import pl.lokalnylekarz.projekt.services.ServerInfo;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Service
@@ -31,8 +36,14 @@ public class UserService {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
+                (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
                 user.getRegistrationDate(),
-                user.getOpinions().stream().map(OpinionService::forUser).toList(),
+                user.getOpinions().stream().sorted(new Comparator<Opinion>() {
+                    @Override
+                    public int compare(Opinion o1, Opinion o2) {
+                        return -o1.getAddedAt().compareTo(o2.getAddedAt());
+                    }
+                }).map(OpinionService::forUser).toList(),
                 user.getAddedMedicalFacilities().stream().map(MedicalFacilityService::toDtoList).toList(),
                 user.getFavoriteFacilities().stream().map(MedicalFacilityService::toDtoList).toList()
         );
@@ -45,6 +56,13 @@ public class UserService {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
+                (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
+                user.getOpinions().stream().sorted(new Comparator<Opinion>() {
+                    @Override
+                    public int compare(Opinion o1, Opinion o2) {
+                        return -o1.getAddedAt().compareTo(o2.getAddedAt());
+                    }
+                }).map(OpinionService::forUser).toList(),
                 user.getRegistrationDate()
         );
     }
@@ -56,6 +74,8 @@ public class UserService {
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
+                (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
+                user.getOpinions().stream().map(OpinionService::forUser).toList(),
                 user.getRegistrationDate()
         );
     }
@@ -206,5 +226,20 @@ public class UserService {
 
     public boolean userExists(Long userId) {
         return userRepository.existsById(userId);
+    }
+
+    public List<OpinionWithMedicalFacilityDTO> getUserOpinions(Long userId) {
+        User user = userRepository.findById(userId).orElse(new User());
+
+        if (user.getId() == null) {
+            return null;
+        }
+
+         return user.getOpinions().stream().sorted(new Comparator<Opinion>() {
+             @Override
+             public int compare(Opinion o1, Opinion o2) {
+                 return -o1.getAddedAt().compareTo(o2.getAddedAt());
+             }
+         }).map(OpinionService::fromOpinionToOpinionWithMedicalFacilityDTO).toList();
     }
 }

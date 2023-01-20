@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityDto;
+import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.opinion.OpinionDto;
 
 import java.sql.Timestamp;
@@ -18,6 +19,7 @@ public class UserDto {
     private String firstname;
     private String lastname;
     private String email;
+    private String imageUrl;
     private Timestamp registrationDate;
     private List<OpinionDto> opinions;
     private List<MedicalFacilityDto> addedMedicalFacilities;
@@ -29,6 +31,8 @@ public class UserDto {
             String firstname,
             String lastname,
             String email,
+            String imageUrl,
+            List<OpinionDto> opinions,
             Timestamp registrationDate
     ) {
         this.id = id;
@@ -36,6 +40,8 @@ public class UserDto {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.imageUrl = imageUrl;
+        this.opinions = opinions;
         this.registrationDate = registrationDate;
     }
 }
