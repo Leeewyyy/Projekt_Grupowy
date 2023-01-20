@@ -34,13 +34,13 @@
         id="placeSearch"
         class="page_place-search"
         @getCoords="setCoords"
-        @onSearch="onPlaceSearch"
+        @onSearch="searchPlaces"
       />
       <PlaceList
         v-show="currentView === 'placeList'"
         class="page_place-list"
         id="placeList"
-        :places="allPlaces"
+        :places="facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces"
         @onPlaceSelected="onPlaceSelected"
         @onClose="onPlaceListClose"
         @updateList="getPlaces()"
@@ -66,6 +66,8 @@
 </template>
 
 <script>
+/*eslint-disable-next-line*/
+import { mapGetters } from 'vuex';
 import AppPage from '@/components/AppPage';
 import Map from '@/components/Map';
 import PlaceSearch from '@/components/place/PlaceSearch';
@@ -112,6 +114,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters('facilitiesSearch', {
+      facilitiesOnSearch: 'getFacilities',
+    }),
+
     allPlaces() {
       return this.$store.getters['facility/getFacilities'];
     },
@@ -179,10 +185,17 @@ export default {
       this.isHoveredPlaceCardVisible = false;
     },
 
-    async onPlaceSearch(query) {
-      console.log('Searching for places:');
-      console.dir(query);
-      this.currentView = 'placeList';
+    async searchPlaces(form) {
+      try {
+        this.$store.dispatch('facilitiesSearch/searchFacilities', { ...form, ...this.coords });
+        if (this.facilitiesOnSearch.length) {
+          this.currentView = 'placeList';
+        } else {
+          this.$notify({ text: 'Brak placówek. Rozważ zmianę kryteriów wyszukiwania.', type: 'error' });
+        }
+      } catch (error) {
+        this.$notify({ text: 'Nie udało się pobrać placówek', type: 'error' });
+      }
     },
 
     getPlaces() {
