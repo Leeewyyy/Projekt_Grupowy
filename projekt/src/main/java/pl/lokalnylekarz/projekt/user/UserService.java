@@ -32,7 +32,6 @@ public class UserService {
     private static UserDto forDetails(User user) {
         return new UserDto(
                 user.getId(),
-                user.getLogin(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
@@ -52,7 +51,6 @@ public class UserService {
     public static UserDto fromEntityToDto(User user) {
         return new UserDto(
                 user.getId(),
-                user.getLogin(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
@@ -70,7 +68,6 @@ public class UserService {
     public static UserDto forMedicalDto(User user) {
         return new UserDto(
                 user.getId(),
-                user.getLogin(),
                 user.getFirstname(),
                 user.getLastname(),
                 user.getEmail(),
@@ -82,7 +79,6 @@ public class UserService {
 
     public static User fromRegisterDtoToEntity(UserDtoForRegister userDtoForRegister) {
         return new User(
-                userDtoForRegister.getLogin(),
                 userDtoForRegister.getFirstName(),
                 userDtoForRegister.getLastName(),
                 userDtoForRegister.getEmail(),
@@ -103,22 +99,23 @@ public class UserService {
     }
 
     public User save(UserDtoForRegister userDtoForRegister) {
+        if (userRepository.findByEmail(userDtoForRegister.getEmail()).isPresent()) return null;
         return userRepository.save(fromRegisterDtoToEntity(userDtoForRegister));
     }
 
-    public Boolean checkUser(UserLoginPOJO userLoginPOJO) {
+    public UserDto loggInUser(UserLoginPOJO userLoginPOJO) {
         User user = userRepository.findByEmailAndPassword(
                 userLoginPOJO.email,
                 userLoginPOJO.password
         ).orElse(new User());
 
-        return user.getId() != null;
+        if (user.getId()!=null) return fromEntityToDto(user);
+        return null;
     }
 
     public User update(UserDtoForRegister userDtoForRegister, Long id) { //IFY DO ZMIANY JAK BĘDZIE CZAS
         if (userRepository.findById(id).isEmpty()) throw new IllegalStateException("No user with id " + id);
         User user = userRepository.findById(id).get();
-        if (userDtoForRegister.getLogin() != null) user.setLogin(userDtoForRegister.getLogin());
         if (userDtoForRegister.getFirstName() != null) user.setFirstname(userDtoForRegister.getFirstName());
         if (userDtoForRegister.getLastName() != null) user.setLastname(userDtoForRegister.getLastName());
         if (userDtoForRegister.getEmail() != null) user.setEmail(userDtoForRegister.getEmail());

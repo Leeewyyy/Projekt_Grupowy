@@ -22,9 +22,6 @@ public class User {
     private Long id;
 
     @Column
-    private String login;
-
-    @Column
     private String firstname;
 
     @Column
@@ -57,8 +54,7 @@ public class User {
     private List<MedicalFacility> favoriteFacilities;
 
 
-    public User(String login, String firstName, String lastName, String email, String password) {
-        this.login = login;
+    public User(String firstName, String lastName, String email, String password) {
         this.firstname = firstName;
         this.lastname = lastName;
         this.email = email;
