@@ -36,9 +36,20 @@ export const mutations = {
 };
 
 export const actions = {
-  async getAddresses({ commit }, inputVal) {
-    const results = inputVal.length ? await this.$axios.$get(`/api/ajax/locations?address=${inputVal}`) : [];
-    commit('setPossibleAddresses', results);
+  async getAddresses({ commit }, address) {
+    if (!address?.length) return null;
+
+    const results = await this.$axios.$get('/api/ajax/locations', {
+      params: { address, limit: 3 }, // TODO: remove limit
+    });
+
+    const filteredResults = results.filter((result) => {
+      const requiredKeys = ['city', 'road', 'neighbourhood', 'postcode'];
+      return requiredKeys.some((key) => !!result.address[key]);
+    });
+
+    commit('setPossibleAddresses', filteredResults);
+    return filteredResults;
   },
 
   /* eslint-disable-next-line */

@@ -5,8 +5,18 @@
     </template>
     <template #body>
       <form class="account-data-container" @submit.prevent="submitSearch">
-        <TextField name="fullname-input" v-model="form.fullName" label="Imię i nazwisko" />
-        <TextField name="email-input" v-model="form.email" label="Adres e-mail" class="mt-1" />
+        <TextField 
+          name="fullname-input"
+          v-model="form.fullName"
+          label="Imię i nazwisko"
+        />
+
+        <TextField 
+          name="email-input"
+          v-model="form.email"
+          label="Adres e-mail"
+          class="mt-1"
+        />
 
         <div class="account-data-container-inner">
           <TextField
@@ -48,6 +58,8 @@
 </template>
 
 <script>
+/*eslint-disable-next-line*/
+import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
 import Button from '@/components/shared/Button';
@@ -62,14 +74,18 @@ export default {
   data() {
     return {
       form: {
-        fullName: 'Marek Niewiestny',
-        email: 'marek.niewiestny@gmail.com',
+        fullName: '',
+        email: '',
         currentPassword: '',
         newPassword: '',
         newPasswordConfirmed: '',
       },
       isButtonDisabled: true,
     };
+  },
+  mounted() {
+    this.form.fullName = `${this.user.firstname} ${this.user.lastname}`;
+    this.form.email = this.user.email;
   },
   watch: {
     form: {
@@ -79,13 +95,34 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapGetters('user', {
+      user: 'getUser',
+    }),
+  },
   methods: {
-    submitSearch() {
+    async submitSearch() {
       if (this.validate()) {
-        this.$notify({
-          text: 'Dane zostały zmienione pomyślnie!',
-          type: 'success',
-        });
+        try {
+          await this.$store.dispatch('user/changeUserData', { 
+            data: {
+              firstName: this.form.fullName.split(' ')[0],
+              lastName: this.form.fullName.split(' ').slice(1).join(' '),
+              email: this.form.email,
+              password: this.form.newPassword,
+            }, 
+            userId: this.user.id,
+          });
+          this.$notify({
+            text: 'Dane zostały zmienione pomyślnie!',
+            type: 'success',
+          });
+        } catch (err) {
+          this.$notify({
+            text: 'Wystąpił błąd podczas edycji danych.',
+            type: 'error',
+          });
+        }
       }
     },
     validate() {

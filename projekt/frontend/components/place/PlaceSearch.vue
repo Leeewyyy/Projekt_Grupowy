@@ -26,26 +26,26 @@
               tabindex="2"
             />
 
-            <vue-scroll 
-              v-if="possibleAddresses && possibleAddresses.length"
-              class="choose-result"
-              :ops="scrollOptions"
-            >
-              <ul>
-                <li
-                  v-for="(result, index) in possibleAddresses"
-                  :key="index"
-                  :class="{ active: isActive(result) }"
-                  @click="toggleAddress(result)"
-                >
-                  {{ buildAddress(result) }}
-                </li>
-              </ul>
-            </vue-scroll>
-            <div 
-              v-else-if="form.search && form.search.length"
-              class="write-more"
-            ><span>Pisz dalej...</span></div>
+              <vue-scroll 
+                v-if="!moreFiltersOn && possibleAddresses && possibleAddresses.length"
+                class="choose-result"
+                :ops="scrollOptions"
+              >
+                <ul>
+                  <li
+                    v-for="(result, index) in possibleAddresses"
+                    :key="index"
+                    :class="{ active: isActive(result) }"
+                    @click="toggleAddress(result)"
+                  >
+                    {{ buildAddress(result) }}
+                  </li>
+                </ul>
+              </vue-scroll>
+              <div 
+                v-else-if="!moreFiltersOn && form.search && form.search.length"
+                class="write-more"
+              ><span>Pisz dalej...</span></div>
           </div>
 
           <div class="outer-input">
@@ -98,7 +98,9 @@
           class="filters-label"
           @click="moreFiltersOn = !moreFiltersOn"
         >
-          <span class="label">Pokaż więcej opcji filtrowania</span>
+          <span class="label">
+            {{ `Pokaż ${ moreFiltersOn ? 'mniej' : 'więcej' } opcji filtrowania` }}
+          </span>
           <Icon :name="`${moreFiltersOn ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}`" />
         </button>
 
@@ -129,8 +131,7 @@
 </template>
 
 <script>
-/* globals _ */
-/*eslint-disable-next-line*/
+// eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
@@ -190,8 +191,12 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
-    this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
+    try {
+      this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
+      this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
+    } catch (e) {
+      this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
+    }
   },
   computed: {
     ...mapGetters('facilitiesSearch', {
@@ -212,6 +217,10 @@ export default {
       handler() {
         this.iconLocationON = false;
       },
+    },
+    /* eslint-disable-next-line */
+    'form.search'() {
+      this.moreFiltersOn = false;
     },
   },
   methods: {
@@ -279,7 +288,9 @@ export default {
 
     /* eslint-disable-next-line */
     buildAddress({ address: { city, road, neighbourhood, postcode }}) {
-      return [city, road, neighbourhood, postcode].filter((el) => !!el).join(', ');
+      return [city, road, neighbourhood, postcode]
+        .filter((el) => !!el)
+        .join(', ');
     },
   },
 };

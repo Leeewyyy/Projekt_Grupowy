@@ -2,11 +2,16 @@
 export const actions = {
   // Fetch all facilities & favourite facilities
   // because they are being used globally on the site
+
   async nuxtServerInit({ rootGetters, dispatch }) {
     try {
-      await dispatch('user/temporaryFakeLogin');
+      const cookieUserId = await dispatch('cookie/getCookie', 'userId');
+      if (cookieUserId) {
+        const data = await dispatch('user/getData', cookieUserId);
+        if (data) this.$notify({ text: 'Przywrócono dane zalogowanego użytkownika', type: 'success' });
+      }
     } catch (error) {
-      console.error('FakeLoginError!');
+      console.error('LoginError!');
     }
     
     const userId = rootGetters['user/getUserId'];
