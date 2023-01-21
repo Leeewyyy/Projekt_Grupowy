@@ -1,12 +1,14 @@
 <template>
   <div class="MenuLink">
-    <component
-      class="MenuLink_link"
-      :is="element"
-      :to="href"
-    >
-      <slot></slot>
-    </component>
+    <div class="MenuLink_link">
+      <slot name="before" />
+      <component
+        :is="element"
+        :to="href"
+      >
+        <slot></slot>
+      </component>
+    </div>
   </div>
 </template>
 
@@ -30,7 +32,9 @@ export default {
   .MenuLink_link {
     width: 100%;
     height: 45px;
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0 1rem;
 
     font-family: 'Montserrat', sans-serif;

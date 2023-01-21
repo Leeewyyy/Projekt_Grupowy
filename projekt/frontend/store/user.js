@@ -23,8 +23,14 @@ export const mutations = {
 };
 
 export const actions = {
-  async login({}) {
-    /* logowanie */
+  async login({ commit }, payload) {
+    const userData = await this.$axios.$post('/api/users/login', payload);
+    if (userData) commit('setUser', userData);
+  },
+
+  async logout({ commit }) {
+    await this.$cookies.remove('userId');
+    commit('setUser', null);
   },
 
   async register({}, payload) {
@@ -41,12 +47,14 @@ export const actions = {
     formData.append('file', avatarFile);
     await this.$axios.$post(`/api/users/${userId}/image/update`, formData, { headers });
   },
-  
-  // TO DO USUNIĘCIA
-  // Dałem to tymczasowo abym mógł kontynuować pracę z podpinaniem
-  // Wywoływane w pliku store/index.js
-  async temporaryFakeLogin({ commit }) {
-    const user = await this.$axios.$get('/api/users/1');
+
+  async getData({ commit }, userId) {
+    const user = await this.$axios.$get(`/api/users/${userId}`);
     commit('setUser', user);
+  },
+
+  async changeUserData({ dispatch }, { data, userId }) {
+    await this.$axios.patch(`/api/users/edit/${userId}`, data);
+    dispatch('getData', userId);
   },
 };

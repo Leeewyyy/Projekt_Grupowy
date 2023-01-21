@@ -34,6 +34,8 @@
 </template>
 
 <script>
+/*eslint-disable-next-line*/
+import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
 import Select from '@/components/shared/Select';
@@ -57,13 +59,33 @@ export default {
       inputPassword: '',
     };
   },
+  computed: {
+    ...mapGetters('user', {
+      isLoggedIn: 'isLoggedIn',
+      user: 'getUser',
+    }),
+  },
   methods: {
-    submitSearch() {
+    async submitSearch() {
       if (this.validate()) {
-        this.$notify({ text: 'Zalogowano pomyślnie', type: 'success' });
-        this.$router.push({ name: 'user-panel' });
+        this.$store.dispatch('user/login', {
+          email: this.inputLogin,
+          password: this.inputPassword,
+        })
+          .then(() => {
+            if (this.isLoggedIn) {
+              this.$notify({ text: 'Zalogowano pomyślnie', type: 'success' });
+              this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id });
+              this.$router.push({ name: 'user-panel' });
+            } else {
+              this.$notify({ text: 'Coś poszło nie tak. Spróbuj ponownie.', type: 'error' });
+            }
+          })
+          .catch(() => {
+            this.$notify({ text: 'Wstąpił błąd logowania. Spóbuj ponownie.', type: 'error' });
+          });
       } else {
-        this.$notify({ text: 'Błędne dane logowania. Spóbuj ponownie.', type: 'error' });
+        this.$notify({ text: 'Wypełnij pola zanim spróbujesz się zalogować.', type: 'error' });
       }
     },
     validate() {
