@@ -32,6 +32,7 @@ public class Geocoder {
     }
 
     protected ArrayList<GeocoderLocation> get(String address, int limit) throws IOException, ParseException {
+//        address = address + ", poland";
         String nominatimUrl = "https://nominatim.openstreetmap.org/search?q=${address}&format=json&addressdetails=1";
         URL url = new URL(nominatimUrl.replace("${address}", URLEncoder.encode(address, StandardCharsets.UTF_8)));
 
@@ -44,9 +45,7 @@ public class Geocoder {
             return null;
         }
 
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(connection.getInputStream())
-        );
+        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.UTF_8));
 
         String inputLine;
         StringBuilder response = new StringBuilder();
@@ -69,7 +68,7 @@ public class Geocoder {
             return null;
         }
 
-        return this.toGeocoderLocationDto(json, limit);
+        return this.toGeocoderLocationDto(json, json.size());
     }
 
     protected ArrayList<GeocoderLocation> toGeocoderLocationDto(JSONArray json, int limit) {

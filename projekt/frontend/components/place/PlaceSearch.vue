@@ -131,8 +131,7 @@
 </template>
 
 <script>
-/* globals _ */
-/*eslint-disable-next-line*/
+// eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
@@ -289,7 +288,9 @@ export default {
 
     /* eslint-disable-next-line */
     buildAddress({ address: { city, road, neighbourhood, postcode }}) {
-      return [city, road, neighbourhood, postcode].filter((el) => !!el).join(', ');
+      return [city, road, neighbourhood, postcode]
+        .filter((el) => !!el)
+        .join(', ');
     },
   },
 };
