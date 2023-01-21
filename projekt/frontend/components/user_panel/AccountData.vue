@@ -107,7 +107,7 @@ export default {
           await this.$store.dispatch('user/changeUserData', { 
             data: {
               firstName: this.form.fullName.split(' ')[0],
-              lastName: this.form.fullName.slice(1),
+              lastName: this.form.fullName.split(' ').slice(1).join(' '),
               email: this.form.email,
               password: this.form.newPassword,
             }, 
