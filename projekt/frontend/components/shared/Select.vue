@@ -11,6 +11,7 @@
         :label="label"
         :show-labels="false"
         :tabindex="tabIndex"
+        :max-height="140"
       />
     </div>
   </div>
