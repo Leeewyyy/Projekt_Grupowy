@@ -58,7 +58,7 @@
 </template>
 
 <script>
-/*eslint-disable-next-line*/
+// eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';
@@ -83,10 +83,12 @@ export default {
       isButtonDisabled: true,
     };
   },
+
   mounted() {
-    this.form.fullName = `${this.user.firstname} ${this.user.lastname}`;
-    this.form.email = this.user.email;
+    const { fullName, email } = this.user;
+    this.form = { fullName, email };
   },
+
   watch: {
     form: {
       deep: true,
@@ -95,38 +97,43 @@ export default {
       },
     },
   },
+
   computed: {
     ...mapGetters('user', {
       user: 'getUser',
     }),
   },
+
   methods: {
     async submitSearch() {
-      if (this.validate()) {
-        try {
-          await this.$store.dispatch('user/changeUserData', { 
-            data: {
-              firstName: this.form.fullName.split(' ')[0],
-              lastName: this.form.fullName.split(' ').slice(1).join(' '),
-              email: this.form.email,
-              password: this.form.newPassword,
-            }, 
-            userId: this.user.id,
-          });
-          this.$notify({
-            text: 'Dane zostały zmienione pomyślnie!',
-            type: 'success',
-          });
-        } catch (err) {
-          this.$notify({
-            text: 'Wystąpił błąd podczas edycji danych.',
-            type: 'error',
-          });
-        }
+      if (!this.validate()) return;
+
+      const data = {
+        fullName: this.form.fullName,
+        email: this.form.email,
+        password: this.form.newPassword,
+      };
+
+      try {
+        await this.$store.dispatch('user/changeUserData', { 
+          userId: this.user.id,
+          data,
+        });
+
+        this.$notify({
+          text: 'Dane zostały zmienione pomyślnie!',
+          type: 'success',
+        });
+      } catch (err) {
+        this.$notify({
+          text: 'Wystąpił błąd podczas edycji danych.',
+          type: 'error',
+        });
       }
     },
+
     validate() {
-      if (!this.form.fullName.length) {
+      if (!this.form.fullName?.length) {
         this.$notify({ text: 'Podaj imię i nazwisko', type: 'error' });
         return false;
       }
@@ -136,7 +143,7 @@ export default {
         return false;
       }
 
-      if (!!this.form.newPassword.length && this.form.newPassword.length < 8) {
+      if (!!this.form.newPassword?.length && this.form.newPassword.length < 8) {
         this.$notify({ text: 'Nowe hasło powinno zawierać minimum 8 znaków', type: 'error' });
         return false;
       }
@@ -147,9 +154,9 @@ export default {
       }
 
       if (
-        !this.form.currentPassword.length
-        && this.form.newPassword.length
-        && this.form.newPasswordConfirmed.length
+        !this.form.currentPassword?.length
+        && this.form.newPassword?.length 
+        && this.form.newPasswordConfirmed?.length
       ) {
         this.$notify({ text: 'Podaj obecne hasło', type: 'error' });
         return false;

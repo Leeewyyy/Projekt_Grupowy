@@ -218,7 +218,7 @@ export default {
         this.iconLocationON = false;
       },
     },
-    /* eslint-disable-next-line */
+    // eslint-disable-next-line
     'form.search'() {
       this.moreFiltersOn = false;
     },
@@ -286,7 +286,7 @@ export default {
       && address.location.latitude === this.coords?.latitude;
     },
 
-    /* eslint-disable-next-line */
+    // eslint-disable-next-line
     buildAddress({ address: { city, road, neighbourhood, postcode }}) {
       return [city, road, neighbourhood, postcode]
         .filter((el) => !!el)

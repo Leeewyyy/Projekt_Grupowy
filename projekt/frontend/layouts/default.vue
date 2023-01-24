@@ -5,7 +5,7 @@
     <Authors class="autors-component"/>
 
     <client-only>
-      <notifications classes="main-notification" width="370px" />
+      <notifications classes="main-notification" position="bottom left" width="370px" />
     </client-only>
   </div>
 </template>

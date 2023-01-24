@@ -118,6 +118,7 @@ export default {
 
       .item_avatar {
         margin-right: 1rem;
+        flex-shrink: 0;
       }
 
       .item_details {

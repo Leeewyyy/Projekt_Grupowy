@@ -1,6 +1,8 @@
 <template>
   <BoxSection class="inner-padding" v-if="user">
-    <template #header> Witaj, {{ user.firstname }} :) </template>
+    <template #header>
+      Witaj, {{ user.fullName }}!
+    </template>
     <template #body>
       <div class="avatar-section d-flex-between margin-top">
         <div class="avatar d-flex-center section-element">

@@ -1,11 +1,11 @@
 .main-notification {
-  padding: 20px;
-  margin: 20px 20px 0 0;
-
-  font-size: 1em;
-
-  color: #000;
+  padding: 1rem;
+  margin: 0 0 1rem 1rem;
+  font-size: 1rem;
+  text-indent: 0.5rem;
+  color: rgb(var(--color-text));
   background: #44a4fc;
+  border-radius: 1rem;
 
   &.warn {
     background: #ffb648;

@@ -50,7 +50,7 @@
 </template>
 
 <script>
-/*eslint-disable-next-line*/
+// eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import Icon from '@/components/shared/Icon';
 import MenuLink from '@/components/MenuLink';

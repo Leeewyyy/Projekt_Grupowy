@@ -34,7 +34,7 @@
 </template>
 
 <script>
-/*eslint-disable-next-line*/
+// eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import TextField from '@/components/shared/TextField';

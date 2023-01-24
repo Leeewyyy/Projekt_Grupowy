@@ -114,12 +114,7 @@ export default {
     async registerAccount() {
       if (!this.validate()) return;
       
-      const [firstName, ...lastNameParts] = this.form.fullName.split(' ');
-      const lastName = lastNameParts?.join(' ') || null;
-
       const payload = {
-        firstName,
-        lastName,
         ...this.form,
       };
 

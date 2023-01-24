@@ -24,7 +24,7 @@
         />
         <div class="item_details">
           <div class="details_name">
-            {{ review.addedBy.firstname }} {{ review.addedBy.lastname }}
+            {{ review.addedBy.fullName }}
           </div>
           <div class="details_rating">
             <Rating v-model="review.rating" :showTooltip="false" />

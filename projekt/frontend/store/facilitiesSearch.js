@@ -52,7 +52,7 @@ export const actions = {
     return filteredResults;
   },
 
-  /* eslint-disable-next-line */
+  // eslint-disable-next-line
   async searchFacilities({ commit }, { doctor, isNFZ, maxDistance, placeType, longitude, latitude }) {
     const params = {
       type: placeType?.name || null,

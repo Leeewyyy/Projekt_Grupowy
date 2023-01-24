@@ -66,7 +66,7 @@
 </template>
 
 <script>
-/*eslint-disable-next-line*/
+// eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import AppPage from '@/components/AppPage';
 import Map from '@/components/Map';
