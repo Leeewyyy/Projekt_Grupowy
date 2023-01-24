@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.dataTransferObjects.GeocoderLocation;
 import pl.lokalnylekarz.projekt.dataTypes.Address;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
+import pl.lokalnylekarz.projekt.user.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -32,9 +33,12 @@ public class Geocoder {
     }
 
     protected ArrayList<GeocoderLocation> get(String address, int limit) throws IOException, ParseException {
-//        address = address + ", poland";
-        String nominatimUrl = "https://nominatim.openstreetmap.org/search?q=${address}&format=json&addressdetails=1";
-        URL url = new URL(nominatimUrl.replace("${address}", URLEncoder.encode(address, StandardCharsets.UTF_8)));
+        String nominatimUrl = "https://nominatim.openstreetmap.org/search?q=${address}&format=json&addressdetails=1&countrycodes=pl&limit=${limit}";
+
+        URL url = new URL(nominatimUrl
+                                  .replace("${address}", URLEncoder.encode(address, StandardCharsets.UTF_8))
+                                  .replace("${limit}", URLEncoder.encode(String.valueOf(limit), StandardCharsets.UTF_8))
+        );
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -56,10 +60,10 @@ public class Geocoder {
 
         in.close();
 
-        return this.formatResponse(response, limit);
+        return this.formatResponse(response);
     }
 
-    protected ArrayList<GeocoderLocation> formatResponse(StringBuilder responseBuilder, int limit) throws ParseException {
+    protected ArrayList<GeocoderLocation> formatResponse(StringBuilder responseBuilder) throws ParseException {
         JSONParser parser = new JSONParser();
 
         JSONArray json = (JSONArray) parser.parse(responseBuilder.toString());
@@ -68,14 +72,14 @@ public class Geocoder {
             return null;
         }
 
-        return this.toGeocoderLocationDto(json, json.size());
+        return this.toGeocoderLocationDto(json);
     }
 
-    protected ArrayList<GeocoderLocation> toGeocoderLocationDto(JSONArray json, int limit) {
+    protected ArrayList<GeocoderLocation> toGeocoderLocationDto(JSONArray json) {
         ArrayList<GeocoderLocation> locations = new ArrayList<>();
 
-        for (int i = 0; i < limit; i++) {
-            JSONObject jsonObject = (JSONObject) json.get(i);
+        for (Object obj : json) {
+            JSONObject jsonObject = (JSONObject) obj;
 
             JSONObject address = (JSONObject) jsonObject.get("address");
 

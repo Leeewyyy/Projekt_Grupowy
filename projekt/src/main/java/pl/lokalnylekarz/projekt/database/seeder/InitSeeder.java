@@ -17,7 +17,9 @@ import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 public class InitSeeder implements CommandLineRunner {
@@ -42,29 +44,25 @@ public class InitSeeder implements CommandLineRunner {
     private void loadUserData() {
         if (userRepository.count() == 0) {
             User user1 = User.builder()
-                    .firstname("John")
-                    .lastname("Smith")
+                    .fullName("John Smith")
                     .email("john.smitch1@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
             User user2 = User.builder()
-                    .firstname("John")
-                    .lastname("Smith")
+                    .fullName("John Smith")
                     .email("john.smitch2@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
             User user3 = User.builder()
-                    .firstname("John")
-                    .lastname("Smith")
+                    .fullName("John Smith")
                     .email("john.smitch3@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
 
             User user4 = User.builder()
-                    .firstname("John")
-                    .lastname("Smith")
+                    .fullName("John Smith")
                     .email("john.smitch4@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .build();
@@ -109,9 +107,18 @@ public class InitSeeder implements CommandLineRunner {
 
             List<Image> images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://www.luxmed.pl/assets/media/placowka-luxmed.jpg%3Ffm=webp&q=90&lossless=0"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://ocdn.eu/pulscms-transforms/1/9rFktkqTURBXy81ZGY0MWU4MDBkZjZjOTFjNDRkNWMyYTFkNGQxMDdiYi5qcGVnkpUDABHNAyDNAcKTBc0EsM0DWQ"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://www.kliniki.pl/photos/177/przychodnia-wielospecjalistyczna-lux-med-gliwice_176441_800x500fc.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.luxmed.pl/assets/media/placowka-luxmed.jpg%3Ffm=webp&q=90&lossless=0"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://ocdn.eu/pulscms-transforms/1/9rFktkqTURBXy81ZGY0MWU4MDBkZjZjOTFjNDRkNWMyYTFkNGQxMDdiYi5qcGVnkpUDABHNAyDNAcKTBc0EsM0DWQ"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.kliniki.pl/photos/177/przychodnia-wielospecjalistyczna-lux-med-gliwice_176441_800x500fc.jpg"
+            ));
 //            images.add(new Image(UUID.randomUUID().toString(), "https://www.luxmed.pl/assets/media/f8b48e5b2fad9ec4ecea51f910acf5a2_800_600_u_aaf09fc5.jpeg%3Ffm=webp&q=90&lossless=0"));
 
             MedicalFacility medicalFacility1 = MedicalFacility.builder()
@@ -148,10 +155,22 @@ public class InitSeeder implements CommandLineRunner {
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://polmed.pl/wp-content/uploads/2021/11/Tczew_IMG_1630-1024x768.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://polmed.pl/wp-content/uploads/2021/11/Grzybowska_IMG_6307.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://polmed.pl/wp-content/uploads/2021/11/Wwa-Grzybowska-4_opt.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://polmed.pl/wp-content/uploads/2021/11/Wwa-Grzybowska-3_opt.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://polmed.pl/wp-content/uploads/2021/11/Tczew_IMG_1630-1024x768.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://polmed.pl/wp-content/uploads/2021/11/Grzybowska_IMG_6307.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://polmed.pl/wp-content/uploads/2021/11/Wwa-Grzybowska-4_opt.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://polmed.pl/wp-content/uploads/2021/11/Wwa-Grzybowska-3_opt.jpg"
+            ));
 
             MedicalFacility medicalFacility2 = MedicalFacility.builder()
                     .name("POLMED Gdańsk Grunwaldzka - Centrum Medyczne")
@@ -186,9 +205,15 @@ public class InitSeeder implements CommandLineRunner {
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://download.cloudgdansk.pl/gdansk-pl/t/202112182016.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://download.cloudgdansk.pl/gdansk-pl/t/202112182016.jpg"
+            ));
             images.add(new Image(UUID.randomUUID().toString(), "https://uckwum.pl/wp-content/uploads/2020/06/12.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://pliki.rynekzdrowia.pl/i/15/76/96/157696_r2_940.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pliki.rynekzdrowia.pl/i/15/76/96/157696_r2_940.jpg"
+            ));
             images.add(new Image(UUID.randomUUID().toString(), "https://uck.pl/gallery/557/UCK_CMN_17.jpg"));
 
             MedicalFacility medicalFacility3 = MedicalFacility.builder()

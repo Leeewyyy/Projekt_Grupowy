@@ -44,8 +44,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> saveUser(@RequestBody UserDtoForRegister userDtoForRegister) throws IllegalAccessException {
 
-        if (userDtoForRegister.getFirstName() == null || userDtoForRegister.getFirstName().equals("")) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-        if (userDtoForRegister.getLastName() == null || userDtoForRegister.getLastName().equals("")) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        if (userDtoForRegister.getFullName() == null || userDtoForRegister.getFullName().equals("")) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         if (userDtoForRegister.getEmail() == null || userDtoForRegister.getEmail().equals("")) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         if (userDtoForRegister.getPassword() == null || userDtoForRegister.getPassword().equals("")) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 

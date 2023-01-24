@@ -15,8 +15,7 @@ import java.util.List;
 @Builder
 public class UserDto {
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String fullName;
     private String email;
     private String imageUrl;
     private Timestamp registrationDate;
@@ -26,16 +25,14 @@ public class UserDto {
 
     public UserDto(
             Long id,
-            String firstname,
-            String lastname,
+            String fullName,
             String email,
             String imageUrl,
             List<OpinionDto> opinions,
             Timestamp registrationDate
     ) {
         this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.fullName = fullName;
         this.email = email;
         this.imageUrl = imageUrl;
         this.opinions = opinions;

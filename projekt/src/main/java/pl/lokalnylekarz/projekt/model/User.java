@@ -22,10 +22,7 @@ public class User {
     private Long id;
 
     @Column
-    private String firstname;
-
-    @Column
-    private String lastname;
+    private String fullName;
 
     @Column
     private String email;
@@ -54,9 +51,8 @@ public class User {
     private List<MedicalFacility> favoriteFacilities;
 
 
-    public User(String firstName, String lastName, String email, String password) {
-        this.firstname = firstName;
-        this.lastname = lastName;
+    public User(String fullName, String email, String password) {
+        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.registrationDate = Timestamp.valueOf(LocalDateTime.now());

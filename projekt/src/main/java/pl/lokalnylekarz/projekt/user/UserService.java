@@ -32,8 +32,7 @@ public class UserService {
     private static UserDto forDetails(User user) {
         return new UserDto(
                 user.getId(),
-                user.getFirstname(),
-                user.getLastname(),
+                user.getFullName(),
                 user.getEmail(),
                 (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
                 user.getRegistrationDate(),
@@ -51,8 +50,7 @@ public class UserService {
     public static UserDto fromEntityToDto(User user) {
         return new UserDto(
                 user.getId(),
-                user.getFirstname(),
-                user.getLastname(),
+                user.getFullName(),
                 user.getEmail(),
                 (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
                 user.getOpinions().stream().sorted(new Comparator<Opinion>() {
@@ -68,8 +66,7 @@ public class UserService {
     public static UserDto forMedicalDto(User user) {
         return new UserDto(
                 user.getId(),
-                user.getFirstname(),
-                user.getLastname(),
+                user.getFullName(),
                 user.getEmail(),
                 (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
                 user.getOpinions().stream().map(OpinionService::forUser).toList(),
@@ -79,8 +76,7 @@ public class UserService {
 
     public static User fromRegisterDtoToEntity(UserDtoForRegister userDtoForRegister) {
         return new User(
-                userDtoForRegister.getFirstName(),
-                userDtoForRegister.getLastName(),
+                userDtoForRegister.getFullName(),
                 userDtoForRegister.getEmail(),
                 userDtoForRegister.getPassword()
         );
@@ -116,8 +112,7 @@ public class UserService {
     public User update(UserDtoForRegister userDtoForRegister, Long id) { //IFY DO ZMIANY JAK BĘDZIE CZAS
         if (userRepository.findById(id).isEmpty()) throw new IllegalStateException("No user with id " + id);
         User user = userRepository.findById(id).get();
-        if (userDtoForRegister.getFirstName() != null) user.setFirstname(userDtoForRegister.getFirstName());
-        if (userDtoForRegister.getLastName() != null) user.setLastname(userDtoForRegister.getLastName());
+        if (userDtoForRegister.getFullName() != null) user.setFullName(userDtoForRegister.getFullName());
         if (userDtoForRegister.getEmail() != null) user.setEmail(userDtoForRegister.getEmail());
         if (userDtoForRegister.getPassword() != null) user.setPassword(userDtoForRegister.getPassword());
         return userRepository.save(user);
