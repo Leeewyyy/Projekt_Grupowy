@@ -12,7 +12,7 @@
             </div>
             <div class="side_buttons">
               <NFZMark :value="isNFZ" />
-              <FavouriteButton :placeId="id" />
+              <FavouriteButton v-if="isLogged" :placeId="id" />
             </div>
           </div>
           <div class="details_address">
@@ -43,9 +43,7 @@ export default {
     NFZMark,
     FavouriteButton,
   },
-  
   inheritAttrs: false,
-
   props: {
     id: Number,
     name: String,
@@ -58,29 +56,8 @@ export default {
     isFavorite: Boolean,
   },
   computed: {
-    isFavoriteActive: {
-      get() {
-        return this.isFavorite ?? false;
-      },
-      set(isFavorite) {
-        this.toggleFavourite(isFavorite);
-      },
-    },
-  },
-  methods: {
-    toggleFavourite(isFavorite) {
-      // here some ajax requests
-      if (!isFavorite) {
-        this.$notify({ text: 'Placówka została usunięta z ulubionych pomyślnie', type: 'success' });
-      } else {
-        this.$notify({ text: 'Placówka została dodana do ulubionych pomyślnie', type: 'success' });
-      }
-
-      this.$emit('favoriteChanged');
-    },
-    toggleFavoriteStatus(ev) {
-      console.log(ev);
-      this.isFavoriteActive = !this.isFavoriteActive;
+    isLogged() {
+      return this.$store.getters['user/isLoggedIn'];
     },
   },
 };

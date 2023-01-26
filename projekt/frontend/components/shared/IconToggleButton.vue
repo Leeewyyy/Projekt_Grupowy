@@ -13,7 +13,13 @@
       :src="require(`@/assets/images/${iconName}.svg`)"
       :alt="customIconDescription"
     />
-    <Icon v-else :name="iconName" :size="size" :color="variant === 'light' ? '#DDD' : '#000'" />
+    <Icon 
+      v-else 
+      v-tooltip="tooltipText" 
+      :name="iconName"
+      :size="size"
+      :color="variant === 'light' ? '#DDD' : '#000'"
+    />
   </button>
 </template>
 
@@ -50,6 +56,10 @@ export default {
       type: String,
       default: 'light',
     },
+    tooltipText: {
+      type: String,
+      default: '',
+    },
   },
   components: {
     Icon,
@@ -62,6 +72,8 @@ button {
   background: transparent;
   z-index: 1;
   position: relative;
+  display: flex;
+  align-items: center;
 
   &.with-shadow:after {
     content: '';

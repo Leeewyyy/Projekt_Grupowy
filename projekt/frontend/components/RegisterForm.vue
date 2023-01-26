@@ -39,7 +39,7 @@
           <TextField
             id="password-repeat"
             name="password-input-repeat"
-            v-model="form.passwordConfirm"
+            v-model="passwordConfirm"
             label="Powtórz hasło"
             :is-flat="true"
             type="password"
@@ -87,8 +87,8 @@ export default {
         fullName: null,
         email: null,
         password: null,
-        passwordConfirm: null,
       },
+      passwordConfirm: null,
     };
   },
 
@@ -103,7 +103,7 @@ export default {
       // Validate password
       if (!this.form.password
       || this.form.password.length < 8
-      || this.form.password !== this.form.passwordConfirm) {
+      || this.form.password !== this.passwordConfirm) {
         this.$notify({ text: 'Wprowadzone hasła muszą być takie same i mieć co najmniej 8 znaków.', type: 'error' });
         return false;
       }

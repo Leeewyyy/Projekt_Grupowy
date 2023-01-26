@@ -3,11 +3,12 @@ export const actions = {
   // Fetch all facilities & favourite facilities
   // because they are being used globally on the site
 
-  async nuxtServerInit({ rootGetters, dispatch }) {
+  async nuxtServerInit({ rootGetters, dispatch, getters }) {
     try {
-      const cookieUserId = await dispatch('cookie/getCookie', 'userId');
-      if (cookieUserId) {
-        const data = await dispatch('user/getData', cookieUserId);
+      dispatch('cookie/getCookie', 'userId');
+      const userId = getters['cookie/getUserIdCookie'];
+      if (userId) {
+        const data = await dispatch('user/getData', userId);
         if (data) this.$notify({ text: 'Przywrócono dane zalogowanego użytkownika', type: 'success' });
       }
     } catch (error) {

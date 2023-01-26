@@ -7,17 +7,26 @@
   >
     <template #header>
       <div class="PlaceList_header">
-        <h2 class="header_title">
-          <span v-if="customTitle">
-            {{ customTitle }}
-          </span>
-          <span v-else>
-            Znaleziono <strong class="title_count">{{ places.length }}</strong> wyników
-          </span>
-        </h2>
-        <button class="header_close-button" v-if="closable" @click.prevent="onClose">
-          <Icon name="keyboard_backspace" />
-        </button>
+        <div class="text-with-button d-flex-center">
+          <button class="header_close-button" v-if="closable" @click.prevent="onClose">
+            <Icon name="keyboard_backspace" />
+          </button>
+          <h2 class="header_title">
+            <span v-if="customTitle">
+              {{ customTitle }}
+            </span>
+            <span v-else>
+              Znaleziono <strong class="title_count">{{ places.length }}</strong> wyników
+            </span>
+          </h2>
+        </div>
+        <IconToggleButton
+          v-if="!customTitle && welcomeCookie"
+          tooltip-text="Zwiń okno wyszukiwania"
+          class="icon-hide"
+          @click="$emit('hideBox')"
+          icon-name="keyboard_double_arrow_left"
+        />
       </div>
     </template>
     <template #body>
@@ -47,12 +56,14 @@
 import BoxSection from '@/components/BoxSection';
 import PlaceCard from '@/components/place/PlaceCard';
 import Icon from '@/components/shared/Icon';
+import IconToggleButton from '@/components/shared/IconToggleButton';
 
 export default {
   components: {
     BoxSection,
     PlaceCard,
     Icon,
+    IconToggleButton,
   },
 
   props: {
@@ -82,6 +93,12 @@ export default {
         detectResize: true,
       },
     };
+  },
+
+  computed: {
+    welcomeCookie() {
+      return this.$store.getters['cookie/getShowWelcomeBoxCookie'];
+    },
   },
 
   methods: {
@@ -120,12 +137,27 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
     padding: 0 1rem;
 
     .header_title {
       text-indent: 1rem;
       font-weight: 600;
+    }
+
+    .text-with-button {
+      padding-left: 10px;
+    }
+
+    .icon-hide {
+      padding-right: 15px;
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      justify-content: center;
+
+      .icon-hide {
+        display: none;
+      }
     }
 
     .header_close-button {

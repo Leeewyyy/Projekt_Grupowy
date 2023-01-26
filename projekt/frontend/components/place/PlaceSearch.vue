@@ -1,20 +1,30 @@
 <template>
   <BoxSection class="PlaceSearch main-container">
     <template #header>
-      <h2 class="PlaceSearch_title">
-        <span class="title-desktop">Wyszukaj placówki w okolicy</span>
-        <span class="title-mobile">Znajdź placówki <br />medyczne w oklicy</span>
-      </h2>
+      <div class="place-search-header">
+        <h2 class="PlaceSearch_title">
+          <span class="title-desktop">Wyszukaj placówki w okolicy</span>
+          <span class="title-mobile">Znajdź placówki <br />medyczne w oklicy</span>
+        </h2>
+        <IconToggleButton
+          v-if="welcomeCookie"
+          tooltip-text="Zwiń okno wyszukiwania"
+          class="icon-hide"
+          @click="$emit('hideBox')"
+          icon-name="keyboard_double_arrow_left"
+        />
+      </div>
     </template>
     <template #body>
-      <form class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
+      <WelcomeBox v-if="!welcomeCookie"/>
+      <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
         <div class="PlaceSearch_container_inner">
           <div class="outer-input">
             <TextField
               name="address-input"
               v-model="form.search"
               :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
-              label="Adres"
+              label="Adres [ wymagane ]"
               :tab-index="1"
               @input="getPossibleResults"
             />
@@ -139,6 +149,7 @@ import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
 import Icon from '@/components/shared/Icon';
+import WelcomeBox from '@/components/WelcomeBox';
 
 export default {
   components: {
@@ -148,6 +159,7 @@ export default {
     Button,
     IconToggleButton,
     Icon,
+    WelcomeBox,
   },
 
   data() {
@@ -194,6 +206,7 @@ export default {
     try {
       this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
       this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
+      this.$store.dispatch('cookie/getCookie', 'showWelcomeBox');
     } catch (e) {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
     }
@@ -204,6 +217,9 @@ export default {
       facilitiesTypes: 'getFacilitiesTypes',
       specialistsTypes: 'getSpecialistsTypes',
     }),
+    welcomeCookie() {
+      return this.$store.getters['cookie/getShowWelcomeBoxCookie'];
+    },
   },
   watch: {
     iconLocationON(val) {
@@ -309,6 +325,24 @@ export default {
 
     .BoxSection_body, .BoxSection_header {
       width: 100%;
+    }
+  }
+
+  .place-search-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .icon-hide {
+      padding-right: 31px;
+    }
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      justify-content: center;
+
+      .icon-hide {
+        display: none;
+      }
     }
   }
 

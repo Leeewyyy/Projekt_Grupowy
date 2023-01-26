@@ -3,7 +3,7 @@
     <template #header>
       <div class="PlaceDetails_header" v-if="!isLoading">
         <div class="header_actions">
-          <FavouriteButton :placeId="placeId" />
+          <FavouriteButton v-if="isLogged" :placeId="placeId" />
         </div>
         <div class="header_info">
           <div class="info_title">
@@ -127,6 +127,9 @@ export default {
       }
 
       return list;
+    },
+    isLogged() {
+      return this.$store.getters['user/isLoggedIn'];
     },
   },
 

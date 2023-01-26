@@ -29,38 +29,50 @@
 
     <!-- Put all elements to draw on top of map here -->
     <div class="page_container">
-      <PlaceSearch
-        v-show="currentView === 'placeSearch'"
-        id="placeSearch"
-        class="page_place-search"
-        @getCoords="setCoords"
-        @onSearch="searchPlaces"
-      />
-      <PlaceList
-        v-show="currentView === 'placeList'"
-        class="page_place-list"
-        id="placeList"
-        :places="facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces"
-        @onPlaceSelected="onPlaceSelected"
-        @onClose="onPlaceListClose"
-        @updateList="getPlaces()"
-      />
-      <PlaceDetails
-        v-if="currentView === 'placeDetails' && selectedPlaceId"
-        class="page_place-details"
-        id="placeDetails"
-        :placeId="selectedPlaceId"
-        @onClose="onPlaceDetailsClose"
-      />
-
       <!-- Hovered card -->
       <PlaceCard
-        class="page_hovered-place"
-        ref="hoveredPlaceCard"
-        v-if="isHoveredPlaceCardVisible"
-        :style="hoveredPlaceCardStyle"
-        v-bind="hoveredPlace"
+          class="page_hovered-place"
+          ref="hoveredPlaceCard"
+          v-if="isHoveredPlaceCardVisible"
+          :style="hoveredPlaceCardStyle"
+          v-bind="hoveredPlace"
       />
+      <div v-if="!boxVisible" class="expand-box">
+        <IconToggleButton
+          tooltip-text="Pokaż okno wyszukiwania"
+          class="icon-hide"
+          icon-name="keyboard_double_arrow_right"
+          :size="32"
+          @click="boxVisible = true"
+        />
+      </div>
+      <div :class="['w-100', { 'views-invisible': !boxVisible }]">
+        <PlaceSearch
+          v-show="currentView === 'placeSearch'"
+          id="placeSearch"
+          class="page_place-search"
+          @getCoords="setCoords"
+          @onSearch="searchPlaces"
+          @hideBox="boxVisible = false"
+        />
+        <PlaceList
+          v-show="currentView === 'placeList'"
+          class="page_place-list"
+          id="placeList"
+          :places="facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces"
+          @onPlaceSelected="onPlaceSelected"
+          @onClose="onPlaceListClose"
+          @updateList="getPlaces()"
+          @hideBox="boxVisible = false"
+        />
+        <PlaceDetails
+          v-if="currentView === 'placeDetails' && selectedPlaceId"
+          class="page_place-details"
+          id="placeDetails"
+          :placeId="selectedPlaceId"
+          @onClose="onPlaceDetailsClose"
+        />
+      </div>
     </div>
   </AppPage>
 </template>
@@ -74,6 +86,7 @@ import PlaceSearch from '@/components/place/PlaceSearch';
 import PlaceList from '@/components/place/PlaceList';
 import PlaceDetails from '@/components/place/PlaceDetails';
 import PlaceCard from '@/components/place/PlaceCard';
+import IconToggleButton from '@/components/shared/IconToggleButton';
 
 export default {
   components: {
@@ -83,6 +96,7 @@ export default {
     PlaceList,
     PlaceDetails,
     PlaceCard,
+    IconToggleButton,
   },
 
   layout: 'page',
@@ -104,6 +118,7 @@ export default {
 
       mapKey: 1,
       selectedPlaceId: null,
+      boxVisible: true,
     };
   },
 
@@ -147,11 +162,14 @@ export default {
         ? [this.coords.latitude, this.coords.longitude - 0.03]
         : [this.lastCoords?.latitude, this.lastCoords?.longitude - 0.03];
     },
+
+    currentView() {
+      return this.$store.getters['views/getView'];
+    },
   },
 
   async asyncData() {
     return {
-      currentView: 'placeSearch',
       mapZoom: 13,
 
       // Hovered card
@@ -164,15 +182,16 @@ export default {
   methods: {
     onPlaceSelected({ id }) {
       this.selectedPlaceId = id;
-      this.currentView = 'placeDetails';
+      this.$store.commit('views/setView', 'placeDetails');
+      this.boxVisible = true;
     },
 
     onPlaceListClose() {
-      this.currentView = 'placeSearch';
+      this.$store.commit('views/setView', 'placeSearch');
     },
 
     onPlaceDetailsClose() {
-      this.currentView = 'placeList';
+      this.$store.commit('views/setView', 'placeList');
     },
 
     showPlaceCard(place, point) {
@@ -189,7 +208,7 @@ export default {
       try {
         this.$store.dispatch('facilitiesSearch/searchFacilities', { ...form, ...this.coords });
         if (this.facilitiesOnSearch.length) {
-          this.currentView = 'placeList';
+          this.$store.commit('views/setView', 'placeList');
         } else {
           this.$notify({ text: 'Brak placówek. Rozważ zmianę kryteriów wyszukiwania.', type: 'error' });
         }
@@ -229,6 +248,16 @@ export default {
     flex-direction: row;
     justify-content: center;
     z-index: 2; // draw on map
+
+    .expand-box {
+      position: absolute;
+      top: 16vh;
+      left: 0;
+      background: #fff;
+      border-radius: 0 10px 10px 0;
+      padding: 7px 3px;
+      box-shadow: 0px 2px 4px rgba(var(--color-black), 0.125);
+    }
   }
 
   .page_hovered-place {
@@ -258,6 +287,20 @@ export default {
       top: 15%;
       left: 100px;
     }
+  }
+}
+
+.views-invisible {
+  display: none;
+}
+
+@media screen and (max-width: $desktop_breakpoint) {
+  .views-invisible {
+    display: block !important;
+  }
+
+  .expand-box {
+    display: none;
   }
 }
 </style>

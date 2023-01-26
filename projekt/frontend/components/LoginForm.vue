@@ -75,7 +75,7 @@ export default {
           .then(() => {
             if (this.isLoggedIn) {
               this.$notify({ text: 'Zalogowano pomyślnie', type: 'success' });
-              this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id });
+              this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id, time: 24 });
               this.$router.push({ name: 'user-panel' });
             } else {
               this.$notify({ text: 'Coś poszło nie tak. Spróbuj ponownie.', type: 'error' });
