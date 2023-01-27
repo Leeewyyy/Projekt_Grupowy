@@ -15,6 +15,12 @@ export default {
     AppPage,
     RegisterForm,
   },
+
+  head() {
+    return {
+      title: 'Rejestracja',
+    };
+  },
 };
 </script>
 

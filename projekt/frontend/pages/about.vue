@@ -17,6 +17,12 @@ export default {
     AppPage,
     InfoBoxAbout,
   },
+
+  head() {
+    return {
+      title: 'O aplikacji',
+    };
+  },
 };
 </script>
 

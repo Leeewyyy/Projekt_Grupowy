@@ -17,6 +17,12 @@ export default {
     AppPage,
     InfoBoxContact,
   },
+
+  head() {
+    return {
+      title: 'Kontakt',
+    };
+  },
 };
 </script>
 

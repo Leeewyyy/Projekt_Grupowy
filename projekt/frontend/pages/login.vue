@@ -15,5 +15,11 @@ export default {
     AppPage,
     LoginForm,
   },
+
+  head() {
+    return {
+      title: 'Logowanie',
+    };
+  },
 };
 </script>
