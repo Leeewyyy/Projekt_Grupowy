@@ -19,6 +19,7 @@ import pl.lokalnylekarz.projekt.repository.UserRepository;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -157,17 +158,17 @@ public class InitSeeder implements CommandLineRunner {
                     .phone("+48123123123")
                     .websiteUrl("https://pg.edu.pl")
                     .description("""
-                                         ### Opis placówki
-                            Grupa LUX MED jest liderem rynku prywatnych usług zdrowotnych w Polsce i częścią międzynarodowej grupy Bupa, która działa jako ubezpieczyciel i świadczeniodawca usług medycznych na całym świecie.
-                                                                     
-                            Zapewniamy pełną opiekę: ambulatoryjną, diagnostyczną, rehabilitacyjną, szpitalną i długoterminową dla ponad 2 500 000 Pacjentów.
-                                         """)
+                                                      ### Opis placówki
+                                         Grupa LUX MED jest liderem rynku prywatnych usług zdrowotnych w Polsce i częścią międzynarodowej grupy Bupa, która działa jako ubezpieczyciel i świadczeniodawca usług medycznych na całym świecie.
+                                                                                  
+                                         Zapewniamy pełną opiekę: ambulatoryjną, diagnostyczną, rehabilitacyjną, szpitalną i długoterminową dla ponad 2 500 000 Pacjentów.
+                                                      """)
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.365000, 18.635410))
-                    .specialist(List.of(specialistRepository.findById(1L).orElse(null)))
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user1)
                     .favoriteFor(users)
                     .build();
@@ -200,17 +201,17 @@ public class InitSeeder implements CommandLineRunner {
                     .phone("+48123123123")
                     .websiteUrl("https://pg.edu.pl")
                     .description("""
-                                         ### Opis placówki
-                            Nasza oferta dla firm obejmuje pakiety medyczne zróżnicowane pod względem zakresu i ceny, kompleksowe zarządzanie medycyną pracy oraz szczepienia i akcje profilaktyczne (w tym testy, szczepienia i diagnostyka powikłań COVID-19).
-                                                                     
-                            Klientom indywidualnym oferujemy prywatne pakiety opieki medycznej, badania laboratoryjne i diagnostyczne oraz jednorazowe konsultacje lekarzy różnych specjalizacji.
-                            """)
+                                                      ### Opis placówki
+                                         Nasza oferta dla firm obejmuje pakiety medyczne zróżnicowane pod względem zakresu i ceny, kompleksowe zarządzanie medycyną pracy oraz szczepienia i akcje profilaktyczne (w tym testy, szczepienia i diagnostyka powikłań COVID-19).
+                                                                                  
+                                         Klientom indywidualnym oferujemy prywatne pakiety opieki medycznej, badania laboratoryjne i diagnostyczne oraz jednorazowe konsultacje lekarzy różnych specjalizacji.
+                                         """)
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.377320, 18.608100))
-                    .specialist(List.of(specialistRepository.findById(2L).orElse(null)))
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user2)
                     .build();
 
@@ -236,118 +237,188 @@ public class InitSeeder implements CommandLineRunner {
                     .phone("+48123123123")
                     .websiteUrl("https://pg.edu.pl")
                     .description("""
-                                         ### Opis placówki
-                            Uniwersyteckie Centrum Kliniczne – jeden z największych szpitali w Polsce, funkcjonujący wcześniej pod nazwą Akademickie Centrum Kliniczne – zostało  utworzone przez Gdański Uniwersytet Medyczny w 1945 roku. Od tego czasu świadczymy usługi medyczne, oferując naszym pacjentom kompleksową diagnostykę i leczenie. Współpraca z uczelnią daje nam dostęp do najnowocześniejszych technologii, światowej wiedzy medycznej i badań klinicznych. Oddając się w ręce naszego zespołu, mogą Państwo czuć się bezpiecznie – w UCK pracują wybitni specjaliści, którzy do swojej dyspozycji mają nowoczesne zaplecze diagnostyczne i kliniczne.
-                                         """)
+                                                      ### Opis placówki
+                                         Uniwersyteckie Centrum Kliniczne – jeden z największych szpitali w Polsce, funkcjonujący wcześniej pod nazwą Akademickie Centrum Kliniczne – zostało  utworzone przez Gdański Uniwersytet Medyczny w 1945 roku. Od tego czasu świadczymy usługi medyczne, oferując naszym pacjentom kompleksową diagnostykę i leczenie. Współpraca z uczelnią daje nam dostęp do najnowocześniejszych technologii, światowej wiedzy medycznej i badań klinicznych. Oddając się w ręce naszego zespołu, mogą Państwo czuć się bezpiecznie – w UCK pracują wybitni specjaliści, którzy do swojej dyspozycji mają nowoczesne zaplecze diagnostyczne i kliniczne.
+                                                      """)
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.366310, 18.625540))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user3)
                     .favoriteFor(users)
                     .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pg.edu.pl/files/wilis/styles/large/public/2021-03/000c%20DSC_1597%20800pix%20%282%29.jpg?itok=YBvdbN3w"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://bi.im-g.pl/im/1d/e3/12/z19804189IHG,Politechnika-Gdanska-.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://uczelnie.info.pl/wp-content/uploads/2020/12/a_Politechnika_Gdanska.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pg.edu.pl/files/styles/artykul_664x445/public/2022-10/DSC_4110.webp?itok=tjTm4qya"
+            ));
 
             MedicalFacility medicalFacility4 = MedicalFacility.builder()
                     .name("Politechnika Gdanska")
                     .type(MedicalFacilityTypes.APTEKA)
                     .address("ul. Politechniczna")
-                    .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479;")
+                    .imageUrl("https://pg.edu.pl/image/journal/article?img_id=66815909&t=1515678457479")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://pg.edu.pl")
                     .description("""
-                            ### Opis placówki
-                            Najlepsza uczelnia w Polsce, która oferuje wiele nowocześnie wyposażonych laboratoriów.""")
+                                         ### Opis placówki
+                                         Najlepsza uczelnia w Polsce, która oferuje wiele nowocześnie wyposażonych laboratoriów.""")
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3739, 18.6214))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://download.cloudgdansk.pl/gdansk-pl/t/202112182016.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://uckwum.pl/wp-content/uploads/2020/06/12.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://pliki.rynekzdrowia.pl/i/15/76/96/157696_r2_940.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://uck.pl/gallery/557/UCK_CMN_17.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.poznan.pl/mim/upload/obiekty/1487230079512szpital.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.kliniki.pl/photos/208/szpital-wielospecjalistyczny-szpital-sw-wojciecha_207116_800x500fc.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://ocdn.eu/pulscms-transforms/1/3obk9kqTURBXy9hZjhmMWQ3ZjEyZjhiMGJlMWIxODczNjg5NTViNzYyOS5qcGVnkpUDAAHNFKzNC6GTBc0DSM0B-t4AAqEwBaExAQ"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://d-art.ppstatic.pl/kadry/k/r/1/19/99/5c5afb33dae54_o_large.jpg"
+            ));
 
             MedicalFacility medicalFacility5 = MedicalFacility.builder()
                     .name("Szpital Specjalistyczny Św. Wojciecha")
                     .type(MedicalFacilityTypes.SZPITAL)
                     .address("Jana Pawła II 50")
-                    .imageUrl("https://copernicus.gda.pl/gallery/652325290f7ff4e679d2853e77a0af78.1920.jpg;")
+                    .imageUrl("https://copernicus.gda.pl/gallery/652325290f7ff4e679d2853e77a0af78.1920.jpg")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://copernicus.gda.pl/")
                     .description("""
-                            ### Opis placówki
-                            Największy szpital w Gdańsku.
-                            Oddziały:
-                            Oddział Chorób Wewnętrznych\s
-                            tel.: 58 768 44 92
-                            Oddział Chirurgiczny Ogólny\s
-                            tel.: 58 768 45 50
-                            """)
+                                         ### Opis placówki
+                                         Największy szpital w Gdańsku.
+                                         Oddziały:
+                                         Oddział Chorób Wewnętrznych\s
+                                         tel.: 58 768 44 92
+                                         Oddział Chirurgiczny Ogólny\s
+                                         tel.: 58 768 45 50
+                                         """)
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.4029503, 18.6126574))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.poznan.pl/mim/upload/obiekty/1487230079512szpital.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.kliniki.pl/photos/208/szpital-wielospecjalistyczny-szpital-sw-wojciecha_207116_800x500fc.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://ocdn.eu/pulscms-transforms/1/3obk9kqTURBXy9hZjhmMWQ3ZjEyZjhiMGJlMWIxODczNjg5NTViNzYyOS5qcGVnkpUDAAHNFKzNC6GTBc0DSM0B-t4AAqEwBaExAQ"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://d-art.ppstatic.pl/kadry/k/r/1/19/99/5c5afb33dae54_o_large.jpg"
+            ));
 
             MedicalFacility medicalFacility6 = MedicalFacility.builder()
                     .name("Szpital im. M. Kopernika")
                     .type(MedicalFacilityTypes.SZPITAL)
                     .address("ul. Nowe Ogrody 1-6")
-                    .imageUrl("https://copernicus.gda.pl/gallery/b47b3a1f1c8a81ad972fef12339c4da6.600.jpg;")
+                    .imageUrl("https://copernicus.gda.pl/gallery/b47b3a1f1c8a81ad972fef12339c4da6.600.jpg")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://copernicus.gda.pl/koronawirus/szpital-im-m-kopernika")
                     .description("""
-                            ### Opis placówki:
-                            Szpital Wojewódzki w Gdańsku.
-                            Oddziały:
-                            Oddział Anestezjologii i Intensywnej Terapii Dzieci
-                            tel.: 58 764 06 50
-                                                        
-                            Oddział Anestezjologii i Intensywnej Terapii Dorośli
-                            tel.: 58 764 06 60
-                                                        
-                            Oddział chirurgii Ogólnej
-                            tel.: 58 764 05 40
-                                                        
-                            Oddział Chirurgii Urazowo – Ortopedycznej
-                            tel. do rejestracji: 58 772 39 50
-                            zapisy na zabiegi planowe: 58 764 05 10
-                                                        """)
+                                         ### Opis placówki:
+                                         Szpital Wojewódzki w Gdańsku.
+                                         Oddziały:
+                                         Oddział Anestezjologii i Intensywnej Terapii Dzieci
+                                         tel.: 58 764 06 50
+                                                                     
+                                         Oddział Anestezjologii i Intensywnej Terapii Dorośli
+                                         tel.: 58 764 06 60
+                                                                     
+                                         Oddział chirurgii Ogólnej
+                                         tel.: 58 764 05 40
+                                                                     
+                                         Oddział Chirurgii Urazowo – Ortopedycznej
+                                         tel. do rejestracji: 58 772 39 50
+                                         zapisy na zabiegi planowe: 58 764 05 10
+                                                                     """)
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3512137, 18.6387727))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pljasien.pl/wp-content/uploads/2015/06/jasien3.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pljasien.pl/wp-content/uploads/2015/07/Przychodnia-Jasie%C5%84-e1437467025178.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://scontent.fpoz4-1.fna.fbcdn.net/v/t39.30808-6/299663638_478413714293818_155384085164907514_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=hvg6R55n74AAX9-m3K7&_nc_ht=scontent.fpoz4-1.fna&oh=00_AfD6f8QqXZzvqcqEWea6q4Q_-8yftpUoAnBSOiPmg5_noA&oe=63D97CBD"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pljasien.pl/wp-content/uploads/2015/07/Recepcja-Jab%C5%82oniowa-e1437467514796.jpg"
+            ));
 
             MedicalFacility medicalFacility7 = MedicalFacility.builder()
                     .name("Przychodnia Lekarska Jasień")
                     .type(MedicalFacilityTypes.PRZYCHODNIA)
                     .address("ul. Kartuska 404")
-                    .imageUrl("https://lh3.googleusercontent.com/p/AF1QipPv5qSiiTdP3wwsmQ_vKGRTvetLNdhwmW6anLb6=s680-w680-h510;")
+                    .imageUrl(
+                            "https://lh3.googleusercontent.com/p/AF1QipPv5qSiiTdP3wwsmQ_vKGRTvetLNdhwmW6anLb6=s680-w680-h510;")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://pljasien.pl/")
                     .description(("""
                             ### Opis placówki:
                             Jesteśmy firmą, której głównym zadaniem jest opieka nad człowiekiem w jego najtrudniejszych chwilach życia, a mianowicie chorobie.
-                            
+                                                        
                             Podstawowym zadaniem przychodni jest stworzenie przyjaznego środowiska w miejscu świadczenia
                             usług medycznych, od którego w znacznym stopniu zależy ostateczny efekt leczenia.
                             Naszym pacjentom oferujemy kompleksową obsługę, obejmującą lekarzy podstawowej opieki zdrowotnej,
@@ -362,70 +433,124 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3421424, 18.5510178))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://etermed.pl/wp-content/uploads/STRASZYN.jpg.webp"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://etermed.pl/wp-content/uploads/etermed-przychodnia-awf.jpg.webp"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.maperia.pl/files/var/ifiles/e/1/0b07601894f6e1b487f042bd773e1664.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://d-art.ppstatic.pl/kadry/k/r/98/27/518bb08b569a0_o_large.jpg"
+            ));
 
             MedicalFacility medicalFacility8 = MedicalFacility.builder()
                     .name("Centrum Zdrowia ETER-MED")
                     .type(MedicalFacilityTypes.PRZYCHODNIA)
                     .address("ul. Żabi Kruk 10")
-                    .imageUrl("https://lh3.googleusercontent.com/p/AF1QipPLoWcd18EC6vRYUD9bJcrpSCMmGqEDhnsphtY7=s680-w680-h510;")
+                    .imageUrl(
+                            "https://lh3.googleusercontent.com/p/AF1QipPLoWcd18EC6vRYUD9bJcrpSCMmGqEDhnsphtY7=s680-w680-h510;")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://etermed.pl/")
                     .description("""
-                                    ### Opis placówki:
-                            Jesteśmy polską, innowacyjną, dynamicznie rozwijająca się firmą, która istnieje na rynku medycznym od 1999 roku.
-                                                                
-                            Świadczymy usługi zarówno z zakresu podstawowej, jak i specjalistycznej opieki zdrowotnej dla wszystkich osób ubezpieczonych w Narodowym Funduszu Zdrowia (NFZ), a także dla klientów prywatnych.
-                                                                
-                            Świadczymy również odpłatne specjalistyczne konsultacje medyczne, posiadamy ofertę skierowaną do klubów sportowych, ale też dla osób fizycznych i firm.
-                                    """)
+                                                 ### Opis placówki:
+                                         Jesteśmy polską, innowacyjną, dynamicznie rozwijająca się firmą, która istnieje na rynku medycznym od 1999 roku.
+                                                                             
+                                         Świadczymy usługi zarówno z zakresu podstawowej, jak i specjalistycznej opieki zdrowotnej dla wszystkich osób ubezpieczonych w Narodowym Funduszu Zdrowia (NFZ), a także dla klientów prywatnych.
+                                                                             
+                                         Świadczymy również odpłatne specjalistyczne konsultacje medyczne, posiadamy ofertę skierowaną do klubów sportowych, ale też dla osób fizycznych i firm.
+                                                 """)
                     .isNFZ(true)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
-                    .location(new Location(54.3739, 18.6214))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .location(new Location(54.3439, 18.6487))
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pr0.nicelocal.pl/qKuAGKxcPAM18iIS3yHGkQ/1280x720,q85/4px-BW84_n0QJGVPszge3NRBsKw-2VcOifrJIjPYFYkOtaCZxxXQ2SiL8Z6jedGWbZcSVag4JqJQYRNSkW_noSZ_8-7fSP6AVFzZR1JkOoGarjlfg1OkNA"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://lh5.googleusercontent.com/p/AF1QipP3ol6M6rSbrMV_lQznAZhJlPtLyEa2bLWRMWSi=w408-h725-k-no"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://lh3.googleusercontent.com/p/AF1QipOk2hnxfzgPjGqtaoDeH_nxcWcyc0LTHz5Xn2dk=w600-k"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pl.wikipedia.org/wiki/Apteka#/media/Plik:Inneres_einer_historischen_Apotheke.jpg"
+            ));
 
             MedicalFacility medicalFacility9 = MedicalFacility.builder()
                     .name("APTEKA POLSKA APTE.PL")
                     .type(MedicalFacilityTypes.APTEKA)
                     .address("ul. aleja Jana Pawła II 6D")
-                    .imageUrl("https://lh3.googleusercontent.com/p/AF1QipNqYlnKsCKOgw2cYypCEM75sLBC7_VI2Phl9geG=s680-w680-h510;")
+                    .imageUrl(
+                            "https://lh3.googleusercontent.com/p/AF1QipNqYlnKsCKOgw2cYypCEM75sLBC7_VI2Phl9geG=s680-w680-h510;")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://apte.pl")
                     .description("""
-                                    ### Opis placówki
-                            Nie jesteśmy firmą z kapitałem zagranicznym, ale rodzinną oraz rodzimą firmą starającą się, aby za jakiś czas hasło "polski przedsiębiorca" nie było tylko wspomnieniem. Możliwości finansowe mamy ograniczone, ale nadrabiamy pomysłowością i zapałem.
-                                                       
-                            Apteka internetowa www.apte.pl to apteka, w której kupisz leki i kosmetyki przez internet z dostawą do domu. U nas możesz zamówić niezbędne leki dostępne bez recepty, suplementy diety, kosmetyki i sprzęt medyczny. Apteka internetowa nie jest jedyną formą działalności naszej firmy. Oprócz tego serwisu nasza firma prowadzi również "tradycyjne" apteki. Informację o nich znajdziesz w dziale Nasze apteki. Dzięki ponad 20-letniemu doświadczeniu zdobytemu w trakcie ich prowadzenia, w ofercie internetowej umieściliśmy produkty, które sprawdziły się już w praktyce, posiadają najwyższą skuteczność w działaniu i cieszą się uznaniem naszych pacjentów.
-                            """)
+                                                 ### Opis placówki
+                                         Nie jesteśmy firmą z kapitałem zagranicznym, ale rodzinną oraz rodzimą firmą starającą się, aby za jakiś czas hasło "polski przedsiębiorca" nie było tylko wspomnieniem. Możliwości finansowe mamy ograniczone, ale nadrabiamy pomysłowością i zapałem.
+                                                                    
+                                         Apteka internetowa www.apte.pl to apteka, w której kupisz leki i kosmetyki przez internet z dostawą do domu. U nas możesz zamówić niezbędne leki dostępne bez recepty, suplementy diety, kosmetyki i sprzęt medyczny. Apteka internetowa nie jest jedyną formą działalności naszej firmy. Oprócz tego serwisu nasza firma prowadzi również "tradycyjne" apteki. Informację o nich znajdziesz w dziale Nasze apteki. Dzięki ponad 20-letniemu doświadczeniu zdobytemu w trakcie ich prowadzenia, w ofercie internetowej umieściliśmy produkty, które sprawdziły się już w praktyce, posiadają najwyższą skuteczność w działaniu i cieszą się uznaniem naszych pacjentów.
+                                         """)
                     .isNFZ(false)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.391661, 18.5997536))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://domlekow.pl/images/news/7/7.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://domlekow.pl/images/news/8/8.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pr0.nicelocal.pl/AIPMm7wgzIX8TuDRuT3ooA/1067x800,q85/4px-BW84_n0QJGVPszge3NRBsKw-2VcOifrJIjPYFYkOtaCZxxXQ2TT16jPiYFKj5f8BkupZWZfT29baQqT_IbBPTPe9rhdSPdmGppXP2fTbVcWeLHEe8g"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://d-art.ppstatic.pl/kadry/k/r/1/d5/3a/55ba4aea40224_o_large.jpg"
+            ));
 
             MedicalFacility medicalFacility10 = MedicalFacility.builder()
                     .name("Dom Leków")
                     .type(MedicalFacilityTypes.APTEKA)
                     .address("ul. Władysława Cieszyńskiego 1A")
-                    .imageUrl("https://lh3.googleusercontent.com/p/AF1QipNszC0Ujn6HkzozphJQKoA-k2bWDXClVWWy7Kn4=s680-w680-h510;")
+                    .imageUrl(
+                            "https://lh3.googleusercontent.com/p/AF1QipNszC0Ujn6HkzozphJQKoA-k2bWDXClVWWy7Kn4=s680-w680-h510;")
                     .images(images)
                     .phone("+48123123123")
                     .websiteUrl("https://domlekow.pl/")
                     .description("""
-                            ### Opis placówki
-                            Apteki Dom Leków związane są z polskim rynkiem farmaceutycznym od 30 lat. Pierwsza Apteka pod szyldem "Dom Leków" została otwarta w Gdyni w 1990 roku i nadal nieprzerwanie prowadzi swoją działalność. Kolejne Apteki powstały w oparciu o tradycję i doświadczenie farmaceutyczne zdobyte na przestrzeni lat, aktualizowane o zmieniające się warunki podstawowej opieki farmaceutycznej. W chwili obecnej na terenie Polski jest otwartych 68 Aptek Dom Leków, w tym apteki całodobowe i otwarte przez 7 dni w tygodniu.
-                            """)
+                                         ### Opis placówki
+                                         Apteki Dom Leków związane są z polskim rynkiem farmaceutycznym od 30 lat. Pierwsza Apteka pod szyldem "Dom Leków" została otwarta w Gdyni w 1990 roku i nadal nieprzerwanie prowadzi swoją działalność. Kolejne Apteki powstały w oparciu o tradycję i doświadczenie farmaceutyczne zdobyte na przestrzeni lat, aktualizowane o zmieniające się warunki podstawowej opieki farmaceutycznej. W chwili obecnej na terenie Polski jest otwartych 68 Aptek Dom Leków, w tym apteki całodobowe i otwarte przez 7 dni w tygodniu.
+                                         """)
                     .isNFZ(false)
                     .rating(3)
                     .openFrom(new Timestamp(12))
@@ -479,5 +604,19 @@ public class InitSeeder implements CommandLineRunner {
             opinionRepository.save(opinion3);
             opinionRepository.save(opinion4);
         }
+    }
+
+    public List<Specialist> getRandomElement(List<Specialist> list) {
+        Random rand = new Random();
+
+        int totalItems = rand.nextInt(list.size());
+
+        List<Specialist> newList = new ArrayList<>();
+        for (int i = 0; i < totalItems; i++) {
+            int randomIndex = rand.nextInt(list.size());
+
+            newList.add(list.get(randomIndex));
+        }
+        return newList;
     }
 }
