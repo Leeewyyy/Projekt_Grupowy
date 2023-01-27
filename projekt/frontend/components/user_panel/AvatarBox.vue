@@ -9,7 +9,7 @@
           <img
             v-if="user.imageUrl"
             class="account_avatar"
-            :src="user.imageUrl"
+            :src="`${user.imageUrl}?v=${Date.now()}`"
             alt=""
           />
           <Icon
@@ -44,21 +44,18 @@ export default {
     InputFile,
   },
 
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
-
   data() {
     return {
       file: null,
     };
   },
-
+  computed: {
+    user() {
+      return this.$store.getters['user/getUser'];
+    },
+  },
   methods: {
-    async uploadImage({ target: { files } }) {
+    uploadImage({ target: { files } }) {
       const [avatarFile] = files;
 
       if (!['image/png', 'image/png', 'image/jpeg'].includes(avatarFile.type)) {
@@ -71,17 +68,15 @@ export default {
         avatarFile,
       };
 
-      try {
-        await this.$store.dispatch('user/uploadAndSetAvatar', payload);
-
-        // Set new user image
-        const localImageUrl = URL.createObjectURL(avatarFile);
-        this.$notify({ text: 'Pomyślnie zmieniono awatar!', type: 'success' });
-        this.$emit('avatarUpdated', localImageUrl);
-      } catch (error) {
-        this.$notify({ text: 'Nie udało się wgrać obrazka.', type: 'error' });
-        console.error(error);
-      }
+      this.$store.dispatch('user/uploadAndSetAvatar', payload)
+        .then(() => {
+          this.$notify({ text: 'Pomyślnie zmieniono awatar!', type: 'success' });
+          this.$store.dispatch('user/getData', this.user.id).then(() => this.imgKey++);
+        })
+        .catch((error) => {
+          this.$notify({ text: 'Nie udało się wgrać obrazka.', type: 'error' });
+          console.error(error);
+        });
     },
   },
 };

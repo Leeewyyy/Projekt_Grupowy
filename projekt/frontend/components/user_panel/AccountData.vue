@@ -107,29 +107,29 @@ export default {
   methods: {
     async submitSearch() {
       if (!this.validate()) return;
-
       const data = {
         fullName: this.form.fullName,
         email: this.form.email,
         password: this.form.newPassword,
       };
 
-      try {
-        await this.$store.dispatch('user/changeUserData', { 
-          userId: this.user.id,
-          data,
+      this.$store.dispatch('user/changeUserData', { 
+        userId: this.user.id,
+        data,
+      })
+        .then(() => {
+          this.$notify({
+            text: 'Dane zostały zmienione pomyślnie!',
+            type: 'success',
+          });
+          this.$store.dispatch('user/getData', this.user.id);
+        })
+        .catch(() => {
+          this.$notify({
+            text: 'Wystąpił błąd podczas edycji danych.',
+            type: 'error',
+          });
         });
-
-        this.$notify({
-          text: 'Dane zostały zmienione pomyślnie!',
-          type: 'success',
-        });
-      } catch (err) {
-        this.$notify({
-          text: 'Wystąpił błąd podczas edycji danych.',
-          type: 'error',
-        });
-      }
     },
 
     validate() {

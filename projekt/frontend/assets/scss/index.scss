@@ -89,3 +89,7 @@ a:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
 .ml-1 {
   margin-left: 10px;
 }
+
+img {
+  object-fit: cover;
+}

@@ -24,8 +24,9 @@
               name="address-input"
               v-model="form.search"
               :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
-              label="Adres [ wymagane ]"
+              label="Adres"
               :tab-index="1"
+              :icon-text="`Zostaw puste pole, jeżeli chcesz<br />wyszukać placówki w całej Polsce.`"
               @input="getPossibleResults"
             />
             <IconToggleButton
@@ -35,7 +36,6 @@
               icon-name="location_on"
               tabindex="2"
             />
-
               <vue-scroll 
                 v-if="!moreFiltersOn && possibleAddresses && possibleAddresses.length"
                 class="choose-result"
@@ -84,8 +84,7 @@
               name="clear-button"
               type="button"
               variant="light"
-              :disabled="!coords"
-              @click="actionOnButton()"
+              @click="clearForm()"
             >
               Wyczyść
             </Button>
@@ -94,10 +93,10 @@
               tabindex="6"
               name="submit-button"
               type="submit"
+              :disabled="loading"
               variant="dark"
-              :disabled="!coords"
             >
-              Szukaj 
+              {{ loading ? 'Ładowanie...' : 'Szukaj' }}
             </Button>
           </div>
         </div>
@@ -128,9 +127,14 @@
             <Select
               name="distance-select"
               v-model="form.maxDistance"
-              :options="distanceOptions"
-              label="name"
+              :options="distanceOptionsForSelect"
               description="Odległość"
+              label="name"
+              :icon-text="`
+                Odległość brana jest pod uwagę dopiero wtedy,<br />
+                gdy wybierzesz adres. Jeśli zostawisz to pole puste <br />
+                system szuka placówek w całej Polsce.
+              `"
               :tab-index="9"
             />
           </div>
@@ -152,6 +156,12 @@ import Icon from '@/components/shared/Icon';
 import WelcomeBox from '@/components/WelcomeBox';
 
 export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+  },
   components: {
     BoxSection,
     TextField,
@@ -182,23 +192,7 @@ export default {
       },
       coords: null,
       activeAddress: null,
-      distanceOptions: [
-        {
-          id: 1,
-          name: '5 km',
-          val: 5,
-        },
-        {
-          id: 2,
-          name: '10 km',
-          val: 10,
-        },
-        {
-          id: 3,
-          name: '50 km',
-          val: 50,
-        },
-      ],
+      distanceOptions: [5, 10, 25, 50, 100, 250, 500],
       delayTimer: null,
     };
   },
@@ -220,28 +214,58 @@ export default {
     welcomeCookie() {
       return this.$store.getters['cookie/getShowWelcomeBoxCookie'];
     },
+    distanceOptionsForSelect() {
+      return this.distanceOptions.map((optionVal, index) => ({
+        id: index,
+        val: optionVal,
+        name: `${optionVal} km`,
+      }));
+    },
   },
   watch: {
     iconLocationON(val) {
       if (val) {
         this.getCurrentPosition();
-      } else if (!this.activeAddress) this.$emit('getCoords', null);
-      else this.tmpPlaceholder = '';
+      } else {
+        if (!this.activeAddress) this.$emit('getCoords', null);
+        this.tmpPlaceholder = '';
+      }
     },
     activeAddress: {
       deep: true,
-      handler() {
-        this.iconLocationON = false;
+      handler(address) {
+        console.log(this.iconLocationON);
+        if (!address) {
+          if (!this.iconLocationON) {
+            this.coords = null;
+            this.$emit('getCoords', null);
+          }
+        } else this.iconLocationON = false;
       },
     },
     // eslint-disable-next-line
     'form.search'() {
       this.moreFiltersOn = false;
     },
+    coords(coords) {
+      if (coords) {
+        this.setDefaultDistance();
+      } else this.form.maxDistance = null;
+    },
   },
   methods: {
-    actionOnButton() {
-      this.form = {};
+    clearForm() {
+      this.form = {
+        search: null,
+        doctor: null,
+        placeType: null,
+        maxDistance: null,
+        isNFZ: null,
+      };
+
+      this.activeAddress = null;
+      this.iconLocationON = false;
+      this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
     },
 
     submitSearch() {
@@ -259,9 +283,10 @@ export default {
         this.tmpPlaceholder = 'Twoja lokalizacja';
         this.iconLocationON = true;
         this.activeAddress = null;
-        this.$emit('getCoords', null);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
+          this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+          this.setDefaultDistance();
         });
       };
 
@@ -287,6 +312,12 @@ export default {
     },
 
     async getPossibleResults(inputVal) {
+      if (!inputVal.length) {
+        this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+        this.$emit('getCoords', null);
+        return;
+      }
+
       try {
         clearTimeout(this.delayTimer);
         this.delayTimer = setTimeout(() => {
@@ -307,6 +338,11 @@ export default {
       return [city, road, neighbourhood, postcode]
         .filter((el) => !!el)
         .join(', ');
+    },
+
+    setDefaultDistance() {
+      this.form.maxDistance = this.distanceOptionsForSelect
+        .find((option) => option.val === 25);
     },
   },
 };

@@ -1,7 +1,16 @@
 <template>
   <div class="select-outer">
     <div class="container">
-      <label>{{ description }}</label>
+      <label>
+        {{ description }}
+        <Icon 
+          v-if="iconText.length"
+          class="label-icon"
+          name="info"
+          :size="15"
+          v-tooltip="iconText"
+        />
+      </label>
       <multiselect
         :id="name"
         v-model="val"
@@ -10,6 +19,7 @@
         :track-by="trackBy"
         :label="label"
         :show-labels="false"
+        :allow-empty="allowEmpty"
         :tabindex="tabIndex"
         :max-height="140"
       />
@@ -19,6 +29,7 @@
 
 <script>
 import Multiselect from 'vue-multiselect';
+import Icon from '@/components/shared/Icon';
 
 export default {
   props: {
@@ -54,8 +65,19 @@ export default {
       type: Number,
       default: 0,
     },
+    iconText: {
+      type: String,
+      default: '',
+    },
+    allowEmpty: {
+      type: Boolean,
+      default: true,
+    },
   },
-  components: { Multiselect },
+  components: { 
+    Multiselect,
+    Icon,
+  },
   computed: {
     val: {
       get() {
@@ -115,6 +137,11 @@ export default {
     font-size: 0.9em;
     color: #000;
     margin-bottom: 3px;
+
+    .label-icon {
+      position: relative;
+      top: 3px;
+    }
   }
 }
 </style>

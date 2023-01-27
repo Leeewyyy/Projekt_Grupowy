@@ -40,8 +40,8 @@ export const actions = {
     if (!address?.length) return null;
 
     const results = await this.$axios.$get('/api/ajax/locations', {
-      params: { address, limit: 3 }, // TODO: remove limit
-    });
+      params: { address }, // TODO: remove limit
+    }) ?? [];
 
     const filteredResults = results.filter((result) => {
       const requiredKeys = ['city', 'road', 'neighbourhood', 'postcode'];
@@ -56,11 +56,11 @@ export const actions = {
   async searchFacilities({ commit }, { doctor, isNFZ, maxDistance, placeType, longitude, latitude }) {
     const params = {
       type: placeType?.name || null,
-      isNFZ: isNFZ ?? null,
+      isNFZ: isNFZ || null,
       specialization: doctor?.name || null,
       latitude: latitude ?? null,
       longitude: longitude ?? null,
-      distance: maxDistance?.val ?? null,
+      distance: maxDistance?.val ?? 1000,
     };
 
     const results = await this.$axios.$get('/api/medical-facilities', { params }) ?? [];

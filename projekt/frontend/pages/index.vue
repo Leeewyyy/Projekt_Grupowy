@@ -3,7 +3,7 @@
     <Map :key="mapKey" ref="map" class="page_map" :center="mapPosition" :zoom="mapZoom">
       <!-- Test marker - Gdańsk Politechnika -->
       <l-marker
-        v-for="place in allPlaces"
+        v-for="place in (facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces)"
         :key="place.id"
         :lat-lng="[place.location.latitude, place.location.longitude]"
         @click="onPlaceSelected(place)"
@@ -41,7 +41,8 @@
         <IconToggleButton
           tooltip-text="Pokaż okno wyszukiwania"
           class="icon-hide"
-          icon-name="keyboard_double_arrow_right"
+          icon-name="keyboard_arrow_right"
+          variant="dark"
           :size="32"
           @click="boxVisible = true"
         />
@@ -51,6 +52,7 @@
           v-show="currentView === 'placeSearch'"
           id="placeSearch"
           class="page_place-search"
+          :loading="loadingfacilities"
           @getCoords="setCoords"
           @onSearch="searchPlaces"
           @hideBox="boxVisible = false"
@@ -118,6 +120,7 @@ export default {
       mapKey: 1,
       selectedPlaceId: null,
       boxVisible: true,
+      loadingfacilities: false,
     };
   },
 
@@ -204,6 +207,7 @@ export default {
     },
 
     async searchPlaces(form) {
+      this.loadingfacilities = true;
       try {
         await this.$store.dispatch('facilitiesSearch/searchFacilities', { ...form, ...this.coords });
 
@@ -215,6 +219,8 @@ export default {
         this.$store.commit('views/setView', 'placeList');
       } catch (error) {
         this.$notify({ text: 'Nie udało się pobrać placówek.', type: 'error' });
+      } finally {
+        this.loadingfacilities = false;
       }
     },
 

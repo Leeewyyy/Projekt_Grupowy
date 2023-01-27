@@ -11,6 +11,7 @@
       @reviewAdded="onReviewAdded"
     />
     
+    <div v-if="!reviews.length">Nikt jeszcze nie dodał opinii o tej placówce.</div>
     <ul class="PlaceReviews_list">
       <li
         class="list_item"

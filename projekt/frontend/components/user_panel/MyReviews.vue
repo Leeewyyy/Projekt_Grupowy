@@ -4,6 +4,7 @@
       Twoje opinie <span class="reviews-count">({{ reviews.length }})</span>
     </template>
     <template #body>
+      <div v-if="!reviews.length" class="no-opinions">Nie wystawiłeś jeszcze żadnej opinii.</div>
       <vue-scroll :ops="scrollOptions">
         <ul class="MyReviews_list">
           <li
@@ -130,5 +131,9 @@ export default {
       }
     }
   }
+}
+
+.no-opinions {
+  margin-top: 10px;
 }
 </style>

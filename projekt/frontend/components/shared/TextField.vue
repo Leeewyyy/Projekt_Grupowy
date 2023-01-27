@@ -1,7 +1,16 @@
 <template>
   <div class="text-field-outer">
     <div class="container">
-      <label>{{ label }}</label>
+      <label>
+        {{ label }}
+        <Icon 
+          v-if="iconText.length"
+          class="label-icon"
+          name="info"
+          :size="15"
+          v-tooltip="iconText"
+        />
+      </label>
       <textarea
         v-if="isTextarea"
         v-model="val"
@@ -37,6 +46,7 @@
 
 <script>
 import IconToggleButton from './IconToggleButton.vue';
+import Icon from '@/components/shared/Icon';
 
 export default {
   props: {
@@ -84,8 +94,15 @@ export default {
       type: Boolean,
       default: true,
     },
+    iconText: {
+      type: String,
+      default: '',
+    },
   },
-  components: { IconToggleButton },
+  components: { 
+    IconToggleButton,
+    Icon,
+  },
   data() {
     return {
       isPasswordActive: false,
@@ -116,6 +133,11 @@ export default {
     font-size: 0.9em;
     color: #000;
     margin-bottom: 3px;
+
+    .label-icon {
+      position: relative;
+      top: 3px;
+    }
   }
 }
 
