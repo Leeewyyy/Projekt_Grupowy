@@ -8,6 +8,7 @@ export const getters = {
   getShowWelcomeBoxCookie(state) {
     return state.showWelcomeBox;
   },
+
   getUserIdCookie(state) {
     return state.userId;
   },
@@ -24,6 +25,7 @@ export const actions = {
   async getCookie({ commit }, name) {
     const value = await this.$cookies.get(name) ?? null;
     if (value) commit('setCookie', { name, value, time: (name === 'userId' ? 24 : null) });
+    return value;
   },
 
   async removeCookie({}, name) {

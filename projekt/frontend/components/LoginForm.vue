@@ -4,7 +4,7 @@
       <h2 class="login-form-title">Wpisz dane logowania</h2>
     </template>
     <template #body>
-      <form class="login-form" @submit.prevent="submitSearch()">
+      <form class="login-form" @submit.prevent="submitLogin">
         <div class="login-form-container-inner">
           <TextField
             id="login"
@@ -66,34 +66,29 @@ export default {
     }),
   },
   methods: {
-    async submitSearch() {
-      if (this.validate()) {
-        this.$store.dispatch('user/login', {
-          email: this.inputLogin,
-          password: this.inputPassword,
-        })
-          .then(() => {
-            if (this.isLoggedIn) {
-              this.$notify({ text: 'Zalogowano pomyślnie', type: 'success' });
-              this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id, time: 24 });
-              this.$router.push({ name: 'user-panel' });
-            } else {
-              this.$notify({ text: 'Coś poszło nie tak. Spróbuj ponownie.', type: 'error' });
-            }
-          })
-          .catch(() => {
-            this.$notify({ text: 'Wstąpił błąd logowania. Spóbuj ponownie.', type: 'error' });
-          });
-      } else {
-        this.$notify({ text: 'Wypełnij pola zanim spróbujesz się zalogować.', type: 'error' });
-      }
-    },
-    validate() {
-      if (this.inputLogin.length && this.inputPassword.length) {
-        return true;
+    async submitLogin() {
+      if (!this.validate()) {
+        this.$notify({ text: 'Wypełnij wszystkie pola zanim spróbujesz się zalogować.', type: 'error' });
+        return;
       }
 
-      return false;
+      const payload = {
+        email: this.inputLogin,
+        password: this.inputPassword,
+      };
+      
+      try {
+        await this.$store.dispatch('user/login', payload);
+        this.$notify({ text: 'Zalogowano pomyślnie!', type: 'success' });
+        this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id, time: 24 });
+        this.$router.push({ name: 'user-panel' });
+      } catch (error) {
+        this.$notify({ text: 'Wstąpił błąd logowania. Spóbuj ponownie.', type: 'error' });
+      }
+    },
+
+    validate() {
+      return this.inputLogin.length && this.inputPassword.length;
     },
   },
 };

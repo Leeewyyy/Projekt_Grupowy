@@ -2,20 +2,22 @@
 export const actions = {
   // Fetch all facilities & favourite facilities
   // because they are being used globally on the site
+  async nuxtServerInit({ dispatch }) {
+    let userId = null;
 
-  async nuxtServerInit({ rootGetters, dispatch, getters }) {
     try {
-      dispatch('cookie/getCookie', 'userId');
-      const userId = getters['cookie/getUserIdCookie'];
+      userId = await dispatch('cookie/getCookie', 'userId');
+
       if (userId) {
         const data = await dispatch('user/getData', userId);
-        if (data) this.$notify({ text: 'Przywrócono dane zalogowanego użytkownika', type: 'success' });
+
+        if (data) {
+          this.$notify({ text: 'Przywrócono dane zalogowanego użytkownika', type: 'success' });
+        }
       }
     } catch (error) {
-      console.error('LoginError!');
+      console.error('Wystąpił problem podczas logowania, error: ', error);
     }
-    
-    const userId = rootGetters['user/getUserId'];
 
     try {
       await dispatch('facility/fetchAll');

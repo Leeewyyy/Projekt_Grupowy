@@ -22,7 +22,8 @@ export default {
   computed: {
     textHtml() {
       const converter = new Showdown.Converter();
-      return converter.makeHtml(this.text);
+      const text = this.text?.trim() || '';
+      return converter.makeHtml(text);
     },
   },
 };

@@ -62,7 +62,6 @@
           :places="facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces"
           @onPlaceSelected="onPlaceSelected"
           @onClose="onPlaceListClose"
-          @updateList="getPlaces()"
           @hideBox="boxVisible = false"
         />
         <PlaceDetails
@@ -206,20 +205,17 @@ export default {
 
     async searchPlaces(form) {
       try {
-        this.$store.dispatch('facilitiesSearch/searchFacilities', { ...form, ...this.coords });
-        if (this.facilitiesOnSearch.length) {
-          this.$store.commit('views/setView', 'placeList');
-        } else {
-          this.$notify({ text: 'Brak placówek. Rozważ zmianę kryteriów wyszukiwania.', type: 'error' });
-        }
-      } catch (error) {
-        this.$notify({ text: 'Nie udało się pobrać placówek', type: 'error' });
-      }
-    },
+        await this.$store.dispatch('facilitiesSearch/searchFacilities', { ...form, ...this.coords });
 
-    getPlaces() {
-      // some ajax get
-      // this.places = new Array()
+        if (!this.facilitiesOnSearch?.length) {
+          this.$notify({ text: 'Brak placówek. Rozważ zmianę kryteriów wyszukiwania.', type: 'error' });
+          return;
+        }
+        
+        this.$store.commit('views/setView', 'placeList');
+      } catch (error) {
+        this.$notify({ text: 'Nie udało się pobrać placówek.', type: 'error' });
+      }
     },
 
     setCoords(coords) {
