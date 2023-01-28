@@ -80,7 +80,7 @@ export default {
       try {
         await this.$store.dispatch('user/login', payload);
         this.$notify({ text: 'Zalogowano pomyślnie!', type: 'success' });
-        this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id, time: 24 });
+        this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id });
         this.$router.push({ name: 'user-panel' });
       } catch (error) {
         this.$notify({ text: 'Wstąpił błąd logowania. Spóbuj ponownie.', type: 'error' });
