@@ -5,13 +5,13 @@
     </template>
     <template #body>
       <form class="account-data-container" @submit.prevent="submitSearch">
-        <TextField 
+        <InputText 
           name="fullname-input"
           v-model="form.fullName"
           label="Imię i nazwisko"
         />
 
-        <TextField 
+        <InputText 
           name="email-input"
           v-model="form.email"
           label="Adres e-mail"
@@ -19,20 +19,20 @@
         />
 
         <div class="account-data-container-inner">
-          <TextField
+          <InputText
             name="current-password-input"
             v-model="form.currentPassword"
             label="Obecne hasło"
             type="password"
           />
-          <TextField
+          <InputText
             name="new-password-input"
             v-model="form.newPassword"
             label="Nowe hasło"
             type="password"
             class="mt-1"
           />
-          <TextField
+          <InputText
             name="new-password-confirmed-input"
             v-model="form.newPasswordConfirmed"
             label="Potwierdź nowe hasło"
@@ -61,13 +61,13 @@
 // eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Button from '@/components/shared/Button';
 
 export default {
   components: {
     BoxSection,
-    TextField,
+    InputText,
     Button,
   },
 

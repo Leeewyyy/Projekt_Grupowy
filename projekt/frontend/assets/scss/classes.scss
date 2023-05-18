@@ -111,3 +111,11 @@
 .width-100 {
   width: 100%;
 }
+
+.border {
+  border: 1px solid $black;
+
+  &-rounded {
+    border-radius: 10px;
+  }
+}

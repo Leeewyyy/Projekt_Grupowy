@@ -20,21 +20,18 @@
       <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
         <div class="PlaceSearch_container_inner">
           <div class="outer-input">
-            <TextField
+            <InputText
               name="address-input"
               v-model="form.search"
               :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
-              label="Adres"
-              :tab-index="1"
-              :icon-text="`Zostaw puste pole, jeżeli chcesz<br />wyszukać placówki w całej Polsce.`"
-              @input="getPossibleResults"
-            />
-            <IconToggleButton
-              @click="iconLocationON = $event"
-              :is-active="iconLocationON"
-              :with-shadow="true"
-              icon-name="location_on"
-              tabindex="2"
+              :icon="{ 
+                show: true,
+                name: 'my_location',
+                tooltip: 'Wyszukaj lokalizację',
+                size: 23,
+              }"
+              label="Wpisz, aby zobaczyć proponowane adresy"
+              @input="/*getPossibleResults*/"
             />
               <vue-scroll 
                 v-if="!moreFiltersOn && possibleAddresses && possibleAddresses.length"
@@ -66,15 +63,6 @@
               description="Lekarz"
               style="margin-top: 10px"
               :tab-index="3"
-            />
-            <IconToggleButton
-              :is-active="form.isNFZ"
-              name="nfz-button"
-              :is-custom="true"
-              :with-shadow="true"
-              icon-name="nfz-icon"
-              @click="form.isNFZ = $event"
-              tabindex="4"
             />
           </div>
 
@@ -148,7 +136,7 @@
 // eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
@@ -164,7 +152,7 @@ export default {
   },
   components: {
     BoxSection,
-    TextField,
+    InputText,
     Select,
     Button,
     IconToggleButton,
@@ -567,17 +555,6 @@ export default {
           padding-left: 20px !important;
         }
       }
-    }
-
-    .icon-button {
-      width: 35px;
-      height: 35px;
-      position: relative;
-      top: -2px;
-    }
-
-    .icon-button[name='nfz-button'] {
-      top: -5px;
     }
   }
 

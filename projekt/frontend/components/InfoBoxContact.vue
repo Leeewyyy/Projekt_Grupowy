@@ -7,7 +7,7 @@
       <div class="info-box">
         <form class="info-box-container-inner" @submit.prevent="sendMessage">
           <div class="section">
-            <TextField
+            <InputText
               :tab-index="1"
               id="name"
               name="name-input"
@@ -16,7 +16,7 @@
               :is-flat="true"
             />
 
-            <TextField
+            <InputText
               id="email"
               name="email-input"
               v-model="email"
@@ -36,7 +36,7 @@
             </div>
           </div>
           <div class="section">
-            <TextField
+            <InputText
               id="question"
               name="question-area"
               v-model="question"
@@ -71,7 +71,7 @@
 import BoxSection from '@/components/BoxSection';
 import Icon from '@/components/shared/Icon';
 import Button from '@/components/shared/Button';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Checkbox from '@/components/shared/Checkbox';
 
 export default {
@@ -79,7 +79,7 @@ export default {
     BoxSection,
     Icon,
     Button,
-    TextField,
+    InputText,
     Checkbox,
   },
   data() {
