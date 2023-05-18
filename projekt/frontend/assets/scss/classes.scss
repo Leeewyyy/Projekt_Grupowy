@@ -1,0 +1,113 @@
+@import 'colors';
+
+.bg {
+  &-blue {
+    background-color: $light-blue;
+  }
+
+  &-dark-grey {
+    background-color: $dark-grey;
+  }
+
+  &-black {
+    background-color: $black;
+  }
+
+  &-light-grey {
+    background-color: $extra-light-grey;
+  }
+
+  &-white {
+    background-color: $white;
+  }
+}
+
+.text {
+  &-blue {
+    color: $light-blue;
+  }
+
+  &-dark-grey {
+    color: $dark-grey;
+  }
+
+  &-black {
+    color: $black;
+  }
+
+  &-light-grey {
+    color: $extra-light-grey;
+  }
+
+  &-white {
+    color: $white;
+  } 
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.display {
+  &-block {
+    display: block;
+  }
+
+  &-flex {
+    display: flex;
+  }
+}
+
+.justify {
+  &-start {
+    justify-content: flex-start;
+  }
+
+  &-center {
+    justify-content: center;
+  }
+
+  &-end {
+    justify-content: flex-end;
+  }
+
+  &-between {
+    justify-content: space-between;
+  }
+
+  &-around {
+    justify-content: space-around;
+  }
+}
+
+.align {
+  &-top {
+    align-items: flex-start;
+  }
+
+  &-center {
+    align-items: center;
+  }
+
+  &-end {
+    align-items: flex-end
+  }
+}
+
+.position {
+  &-relative {
+    position: relative;
+  }
+
+  &-absolute {
+    position: absolute;
+  }
+}
+
+.max-width-100 {
+  max-width: 100%;
+}
+
+.width-100 {
+  width: 100%;
+}
