@@ -66,12 +66,6 @@ export default {
     },
   },
 
-  data() {
-    return {
-      
-    };
-  },
-
   methods: {
     onInput(event) {
       const { checked } = event.target;
@@ -157,6 +151,16 @@ export default {
   &_input:checked + &_label:after {
     left: calc(100% - 2px);
     transform: translateX(-100%);
+  }
+
+  &:hover {
+    .SwitchButton_label {
+      background: $light-grey;
+    }
+
+    .SwitchButton_input:checked + .SwitchButton_label {
+      background: $light-blue-darken;
+    }
   }
 }
 </style>
