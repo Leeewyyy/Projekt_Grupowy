@@ -1,9 +1,13 @@
 <template>
   <button
-    ref="button"
-    :class="[variant, { disabled }]"
+    class="Button"
+    :class="{
+      'Button--active': active,
+      'Button--submit': type === 'submit',
+    }"
+    :type="type"
     :disabled="disabled"
-    @click="$emit('click')"
+    v-on="$listeners"
   >
     <slot></slot>
   </button>
@@ -12,9 +16,13 @@
 <script>
 export default {
   props: {
-    variant: {
+    type: {
       type: String,
-      default: 'dark',
+      default: null,
+    },
+    active: {
+      type: Boolean,
+      default: false,
     },
     disabled: {
       type: Boolean,
@@ -25,37 +33,41 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-button {
+.Button {
+  padding: 1rem;
+  color: $dark-grey;
+  background: $extra-light-grey;
   border-radius: 10px;
-  padding: 18px 30px;
-  font-size: 1em;
   cursor: pointer;
-  transition: all 0.1s ease-in;
-  display: block;
 
-  &.disabled {
-    pointer-events: none;
-    cursor: not-allowed !important;
+  &:hover {
+    background: $light-grey;
   }
-}
 
-.dark {
-  background-color: #333333;
-  color: #ffffff;
-
-  &:hover,
-  &:focus {
-    background-color: #262626;
+  &:disabled {
+    background: $extra-light-grey;
+    cursor: not-allowed;
   }
-}
 
-.light {
-  background-color: #ddd;
-  color: #333333;
+  &--active {
+    background: $light-blue;
 
-  &:hover,
-  &:focus {
-    background-color: #cdcdcd;
+    &:hover {
+      background: $light-blue-darken;
+    }
+  }
+
+  &--submit {
+    color: $white;
+    background: $dark-grey;
+
+    &:hover {
+      background: $black;
+    }
+
+    &:disabled {
+      background: $dark-grey-lighten;
+    }
   }
 }
 </style>

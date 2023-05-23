@@ -1,12 +1,20 @@
 @import 'colors';
 
 .bg {
-  &-blue {
+  &-light-blue {
     background-color: $light-blue;
+  }
+
+  &-light-blue-darken {
+    background-color: $light-blue-darken;
   }
 
   &-dark-grey {
     background-color: $dark-grey;
+  }
+
+  &-dark-grey-lighten {
+    background-color: $dark-grey-lighten;
   }
 
   &-black {
@@ -14,6 +22,10 @@
   }
 
   &-light-grey {
+    background-color: $light-grey;
+  }
+
+  &-extra-light-grey {
     background-color: $extra-light-grey;
   }
 
@@ -23,12 +35,20 @@
 }
 
 .text {
-  &-blue {
+  &-light-blue {
     color: $light-blue;
+  }
+
+  &-light-blue-darken {
+    color: $light-blue-darken;
   }
 
   &-dark-grey {
     color: $dark-grey;
+  }
+
+  &-dark-grey-lighten {
+    color: $dark-grey-lighten;
   }
 
   &-black {
@@ -36,16 +56,24 @@
   }
 
   &-light-grey {
+    color: $light-grey;
+  }
+
+  &-extra-light-grey {
     color: $extra-light-grey;
   }
 
   &-white {
     color: $white;
-  } 
+  }
 }
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
 }
 
 .display {
