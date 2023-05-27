@@ -1,15 +1,13 @@
 @import './default/notification.scss';
 @import './default/tooltip.scss';
-@import 'classes';
-@import 'colors';
-
+@import './classes';
+@import './colors';
 
 // Breakpoints
 $tablet_breakpoint: 768px;
 $desktop_breakpoint: 1280px;
 
-// specific styles and classes below 
-
+// Specific styles and classes below 
 .main-container {
   width: 100%;
   max-width: 500px;
@@ -46,7 +44,6 @@ $desktop_breakpoint: 1280px;
   }
 }
 
-
 a:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
   color: rgb(var(--color-text));
   font-weight: 600;
@@ -59,4 +56,10 @@ a:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
 
 img {
   object-fit: cover;
+}
+
+@media screen and (max-width: $desktop_breakpoint) {
+  .mobile-hidden {
+    display: none !important;
+  }
 }

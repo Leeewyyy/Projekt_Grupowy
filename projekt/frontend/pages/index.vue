@@ -72,6 +72,7 @@
           id="placeDetails"
           :placeId="selectedPlaceId"
           @onClose="onPlaceDetailsClose"
+          @hideBox="boxVisible = false"
         />
       </div>
     </div>

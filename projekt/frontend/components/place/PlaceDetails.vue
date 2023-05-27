@@ -1,27 +1,13 @@
 <template>
-  <BoxSection class="PlaceDetails main-container">
+  <BoxSection
+    class="PlaceDetails main-container"
+    :showBackButton="true"
+    @onBack="onBack"
+  >
     <template #header>
-      <div class="PlaceDetails_header" v-if="!isLoading">
-        <div class="header_actions">
-          <FavouriteButton v-if="isLogged" :placeId="placeId" />
-        </div>
-        <div class="header_info">
-          <div class="info_title">
-            <h2 class="title_text">
-              {{ place.name }}
-            </h2>
-          </div>
-          <div class="info_address">
-            {{ place.address }}
-          </div>
-          <div class="info_rating">
-            <Rating class="details_rating" v-model="place.rating" />
-          </div>
-        </div>
-        <button class="header_close-button" @click.prevent="onClose">
-          <Icon name="keyboard_backspace" :size="24" />
-        </button>
-        <NFZMark class="header_nfz-mark" :value="place.isNFZ" />
+      <div class="PlaceDetails_header mobile-hidden">
+        <Branding id="placeDetailsBranding" />
+        <CollapseButton @collapse="$emit('hideBox')" />
       </div>
     </template>
     <template #body>
@@ -37,16 +23,57 @@
               Dla tej placówki nie zamieszczono żadnych zdjęć.
             </div>
           </div>
+          <div class="container_details">
+            <div class="details_wrapper">
+              <div class="details_name">
+                {{ place.name }}
+              </div>
+              <div class="details_address">
+                {{ place.address }}
+              </div>
+              <div class="details_group">
+                <div class="details_rating">
+                  <Rating
+                    class="details_rating"
+                    v-model="place.rating"
+                    :ratingCount="place.ratingCount || 0"
+                  />
+                </div>
+                <div class="details_building-type">
+                  <Icon
+                    class="building-type_icon"
+                    name="home"
+                    :size="18"
+                  /> {{ place.type }}
+                </div>
+              </div>
+            </div>
+            <div class="details_sidebar">
+              <FavouriteButton
+                v-if="isLogged"
+                class="sidebar_favourite-button"
+                :placeId="placeId"
+              />
+              <NFZStatus
+                class="sidebar_nfz-status"
+                :status="place.nfzStatus || 'none'"
+              />
+            </div>
+          </div>
           <div class="container_links" v-if="links.length">
             <ul class="links_list">
               <li class="list_item" v-for="(link, idx) in links" :key="idx">
                 <div class="item_link">
-                  <Icon class="link_icon" :name="link.icon" :size="24" color="#333" />
                   <a
                     :href="link.href"
                     :target="link.icon === 'phone' ? '_self' : '_blank'"
                     rel="noopener noreferer"
                   >
+                    <Icon
+                      class="link_icon"
+                      :name="link.icon"
+                      :size="36" color="#333"
+                    />
                     <div class="link_text">
                       {{ link.name }}
                     </div>
@@ -83,8 +110,10 @@ import PlaceDescription from '@/components/place/PlaceDescription';
 import PlaceReviews from '@/components/place/PlaceReviews';
 import ImageSlider from '@/components/ImageSlider';
 import Rating from '@/components/Rating';
-import NFZMark from '@/components/NFZMark';
+import NFZStatus from '@/components/NFZStatus';
 import Icon from '@/components/shared/Icon';
+import Branding from '@/components/Branding';
+import CollapseButton from '@/components/CollapseButton';
 
 export default {
   components: {
@@ -94,8 +123,10 @@ export default {
     PlaceReviews,
     ImageSlider,
     Rating,
-    NFZMark,
+    NFZStatus,
     Icon,
+    Branding,
+    CollapseButton,
   },
 
   props: {
@@ -112,7 +143,7 @@ export default {
 
       if (websiteUrl) {
         list.push({
-          name: 'Strona',
+          name: 'Odwiedź witrynę',
           icon: 'public',
           href: websiteUrl,
         });
@@ -120,7 +151,7 @@ export default {
 
       if (phone) {
         list.push({
-          name: phone,
+          name: `Zadzwoń ${phone}`,
           icon: 'phone',
           href: `tel:${phone}`,
         });
@@ -158,7 +189,7 @@ export default {
   },
 
   methods: {
-    onClose() {
+    onBack() {
       this.$emit('onClose');
     },
   },
@@ -185,68 +216,12 @@ export default {
   .PlaceDetails_header {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    position: relative;
-    padding: 0.5rem;
-
-    .header_actions {
-      .actions_list {
-        list-style-type: none;
-
-        .list_item {
-          margin-bottom: 0.5rem;
-
-          .item_button {
-            background: none;
-            padding: 0.5rem;
-          }
-        }
-      }
-    }
-
-    .header_info {
-      margin-right: 4rem;
-      padding: 0.25rem;
-      color: #000;
-
-      .info_title {
-        .title_text {
-          font-size: 1.5rem;
-          font-weight: 600;
-        }
-      }
-
-      .info_address {
-        margin-top: 0.25rem;
-        font-size: 1rem;
-      }
-
-      .info_rating {
-        margin-top: 0.5rem;
-      }
-    }
-
-    .header_nfz-mark {
-      position: absolute;
-      top: 1.2rem;
-      right: 2.85rem;
-    }
-
-    .header_close-button {
-      width: max-content;
-      display: flex;
-      align-items: center;
-      margin-left: auto;
-      padding: 0.5rem;
-      background: none;
-      cursor: pointer;
-    }
+    justify-content: center;
+    padding: 1rem 0;
   }
 
   .PlaceDetails_container {
-    max-height: 60vh;
+    max-height: 50vh;
     color: #333;
 
     .container_image {
@@ -254,6 +229,60 @@ export default {
         margin: 0.5rem 0 1rem 0;
         color: #888;
         text-align: center;
+      }
+    }
+    
+    .container_details {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 1rem;
+
+      .details_name {
+        display: -webkit-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
+
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+
+      .details_address {
+        margin-top: 0.25rem;
+      }
+
+      .details_group {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+        margin-top: 0.5rem;
+      }
+
+      .details_building-type {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0.5rem 0 0 0.5rem;
+        text-transform: lowercase;
+
+        .building-type_icon {
+          margin-right: 0.25rem;
+        }
+      }
+
+      .details_sidebar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .sidebar_favourite-button {
+          margin-bottom: 5px;
+        }
       }
     }
 
@@ -264,21 +293,26 @@ export default {
       .links_list {
         display: flex;
         flex-direction: row;
+        justify-content: center;
         align-items: center;
         list-style-type: none;
 
         .list_item {
+          margin-right: 2rem;
+
+          &:last-child {
+            margin-right: 0;
+          }
+
           .item_link {
+            width: 100px;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             align-items: center;
-            margin-right: 1rem;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            background: #ddd;
+            text-align: center;
 
             .link_icon {
-              margin-right: 0.25rem;
+              margin-bottom: 0.5rem;
             }
           }
         }
@@ -291,6 +325,7 @@ export default {
 
     @media screen and (max-width: $desktop_breakpoint) {
       max-height: unset;
+      padding-bottom: 0;
     }
   }
 }
