@@ -1,23 +1,17 @@
 <template>
   <BoxSection class="PlaceSearch main-container">
     <template #header>
-      <div class="place-search-header">
-        <h2 class="PlaceSearch_title">
-          <span class="title-desktop">Wyszukaj placówki w okolicy</span>
-          <span class="title-mobile">Znajdź placówki <br />medyczne w oklicy</span>
-        </h2>
-        <IconToggleButton
-          v-if="welcomeCookie"
-          tooltip-text="Zwiń okno wyszukiwania"
-          class="icon-hide"
-          @click="$emit('hideBox')"
-          icon-name="keyboard_double_arrow_left"
+      <div class="header_logo mobile-hidden">
+        <Branding
+          id="placeSearchBranding"
+          description="Placówki medyczne w Twojej okolicy"
         />
       </div>
+      <CollapseButton class="mobile-hidden" @collapse="$emit('hideBox')" />
     </template>
     <template #body>
-      <WelcomeBox v-if="!welcomeCookie"/>
-      <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
+      <WelcomeBox />
+      <!-- <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
         <div class="PlaceSearch_container_inner">
           <div class="outer-input">
             <InputText
@@ -127,7 +121,7 @@
             />
           </div>
         </div>
-      </form>
+      </form> -->
     </template>
   </BoxSection>
 </template>
@@ -142,6 +136,9 @@ import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
 import Icon from '@/components/shared/Icon';
 import WelcomeBox from '@/components/WelcomeBox';
+import Branding from '@/components/Branding';
+import CollapseButton from '@/components/CollapseButton';
+import SingleWelcomeBox from '@/components/SingleWelcomeBox';
 
 export default {
   props: {
@@ -158,6 +155,9 @@ export default {
     IconToggleButton,
     Icon,
     WelcomeBox,
+    Branding,
+    CollapseButton,
+    SingleWelcomeBox,
   },
 
   data() {

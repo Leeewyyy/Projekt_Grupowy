@@ -86,6 +86,10 @@
   }
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .justify {
   &-start {
     justify-content: flex-start;
@@ -146,4 +150,8 @@
   &-rounded {
     border-radius: 10px;
   }
+}
+
+.padding-2rem {
+  padding: 2rem;
 }

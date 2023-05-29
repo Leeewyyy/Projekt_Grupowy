@@ -132,13 +132,6 @@ export default {
   .PlaceList_header {
     padding: 1rem;
 
-    .header_logo {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-
     .header_title {
       text-indent: 1rem;
       font-size: 1.2rem;

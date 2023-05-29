@@ -1,5 +1,5 @@
 <template>
-  <div :class="['width-100', ]">
+  <div class="width-100">
     <div :class="[`input-outer bg-white
       border border-rounded 
       display-flex align-center justify-center`, { 'focused': isFocused }]"

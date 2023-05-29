@@ -10,7 +10,8 @@ $desktop_breakpoint: 1280px;
 // Specific styles and classes below 
 .main-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
+  max-height: 550px;
 
   @media screen and (max-width: $desktop_breakpoint) {
     max-width: unset;
@@ -62,4 +63,11 @@ img {
   .mobile-hidden {
     display: none !important;
   }
+}
+
+.header_logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1rem;
 }
