@@ -9,7 +9,7 @@
         :header="section.header"
         :description="section.description"
         :value="section.isOpen"
-        @input="hideOtherSections"
+        @input="toggleSection"
         :style="index && !section.isOpen ? 'margin-top: 1rem' : null"
       >
         <p v-if="section.isOpen">{{ section.fullValue }}</p>
@@ -52,12 +52,32 @@ export default {
       ],
     };
   },
+  mounted() {
+    window.addEventListener('popstate', () => this.reset());
+  },
   methods: {
-    hideOtherSections({ header, isOpen }) {
+    toggleSection({ header, isOpen }) {
+      this.hideOtherSections(header, isOpen);
+      if (isOpen) {
+        /* eslint-disable-next-line */
+         history.pushState({}, "", '');
+      } else {
+        /* eslint-disable-next-line */
+        history.back();
+      }
+    },
+    hideOtherSections(header, isOpen) { 
       this.sections = this.sections.map((section) => ({
         ...section,
         isOpen: section.header === header && isOpen,
         visible: section.header === header ? true : !isOpen,
+      }));
+    },
+    reset() {
+      this.sections = this.sections.map((section) => ({
+        ...section,
+        isOpen: false,
+        visible: true,
       }));
     },
   },
