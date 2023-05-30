@@ -2,6 +2,7 @@ package pl.lokalnylekarz.projekt.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
@@ -28,8 +29,10 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MedicalFacilityRepository medicalFacilityRepository;
+    private final OpinionService opinionService;
+    private final MedicalFacilityMapper medicalFacilityMapper;
 
-    private static UserDto forDetails(User user) {
+    private UserDto forDetails(User user) {
         return new UserDto(
                 user.getId(),
                 user.getFullName(),
@@ -42,8 +45,8 @@ public class UserService {
                         return -o1.getAddedAt().compareTo(o2.getAddedAt());
                     }
                 }).map(OpinionService::forUser).toList(),
-                user.getAddedMedicalFacilities().stream().map(MedicalFacilityService::toDtoList).toList(),
-                user.getFavoriteFacilities().stream().map(MedicalFacilityService::toDtoList).toList()
+                user.getAddedMedicalFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList(),
+                user.getFavoriteFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList()
         );
     }
 
@@ -232,6 +235,6 @@ public class UserService {
              public int compare(Opinion o1, Opinion o2) {
                  return -o1.getAddedAt().compareTo(o2.getAddedAt());
              }
-         }).map(OpinionService::fromOpinionToOpinionWithMedicalFacilityDTO).toList();
+         }).map(opinionService::fromOpinionToOpinionWithMedicalFacilityDTO).toList();
     }
 }

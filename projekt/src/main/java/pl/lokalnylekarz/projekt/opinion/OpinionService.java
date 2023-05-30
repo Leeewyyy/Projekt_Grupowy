@@ -2,6 +2,7 @@ package pl.lokalnylekarz.projekt.opinion;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
@@ -18,6 +19,7 @@ public class OpinionService {
     private final OpinionRepository opinionRepository;
     private final UserRepository userRepository;
     private final MedicalFacilityRepository medicalFacilityRepository;
+    private final MedicalFacilityMapper medicalFacilityMapper;
 
     public Opinion save(Long userId, Long facilityId, OpinionFromFrontDto opinionFromFrontDto) {
         User addedBy = userRepository.findById(userId).get();
@@ -53,12 +55,12 @@ public class OpinionService {
                 .build();
     }
 
-    public static OpinionWithMedicalFacilityDTO fromOpinionToOpinionWithMedicalFacilityDTO(Opinion opinion) {
+    public OpinionWithMedicalFacilityDTO fromOpinionToOpinionWithMedicalFacilityDTO(Opinion opinion) {
         return new OpinionWithMedicalFacilityDTO(
                 opinion.getId(),
                 opinion.getRating(),
                 opinion.getDescription(),
-                MedicalFacilityService.toDtoList(opinion.getMedicalFacility()),
+                medicalFacilityMapper.fromEntityToListDto(opinion.getMedicalFacility()),
                 opinion.getAddedAt()
         );
     }
