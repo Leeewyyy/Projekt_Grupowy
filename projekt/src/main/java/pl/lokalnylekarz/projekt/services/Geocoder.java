@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.dataTransferObjects.GeocoderLocation;
 import pl.lokalnylekarz.projekt.dataTypes.Address;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
-import pl.lokalnylekarz.projekt.user.UserService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,6 +18,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +33,7 @@ public class Geocoder {
     }
 
     protected ArrayList<GeocoderLocation> get(String address, int limit) throws IOException, ParseException {
-        String nominatimUrl = "https://nominatim.openstreetmap.org/search?q=${address}&format=json&addressdetails=1&countrycodes=pl&limit=${limit}";
+        String nominatimUrl = "https://nominatim.openstreetmap.org/search?q=${address}&format=json&addressdetails=1&countrycodes=pl&dedupe=0&limit=${limit}";
 
         URL url = new URL(nominatimUrl
                                   .replace("${address}", URLEncoder.encode(address, StandardCharsets.UTF_8))
@@ -78,6 +78,8 @@ public class Geocoder {
     protected ArrayList<GeocoderLocation> toGeocoderLocationDto(JSONArray json) {
         ArrayList<GeocoderLocation> locations = new ArrayList<>();
 
+        json = this.filterLocations(json);
+
         for (Object obj : json) {
             JSONObject jsonObject = (JSONObject) obj;
 
@@ -104,5 +106,84 @@ public class Geocoder {
         }
 
         return locations;
+    }
+
+    protected JSONArray filterLocations(JSONArray json) {
+        JSONArray newJson = new JSONArray();
+
+        for (Object o : json) {
+            JSONObject jsonObject = (JSONObject) o;
+
+            if (newJson.isEmpty()) {
+                newJson.add(jsonObject);
+
+                continue;
+            }
+
+            if (!this.isGeolocationDuplicated(newJson, jsonObject)) {
+                newJson.add(jsonObject);
+            }
+        }
+
+        return newJson;
+    }
+
+    protected boolean isGeolocationDuplicated(JSONArray jsonArray, JSONObject location) {
+        String lat = (String) location.get("lat");
+        String lon = (String) location.get("lon");
+
+        for (Object obj : jsonArray) {
+            JSONObject jsonObject = (JSONObject) obj;
+
+            if (jsonObject.get("lat").equals(lat) && jsonObject.get("lon").equals(lon)) {
+                return true;
+            }
+
+            if (this.checkJsonObjectAttributes(jsonObject, location)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected boolean checkJsonObjectAttributes(JSONObject jsonObject, JSONObject jsonObject2) {
+        JSONObject location = (JSONObject) jsonObject2.get("address");
+        JSONObject location2 = (JSONObject) jsonObject2.get("address");
+
+
+        String shop = (String) location.get("shop");
+        String road = (String) location.get("road");
+        String neighbourhood = (String) location.get("neighbourhood");
+        String suburb = (String) location.get("suburb");
+        String borough = (String) location.get("borough");
+        String city = (String) location.get("city");
+        String iso = (String) location.get("ISO3166-2-lvl4");
+        String postcode = (String) location.get("postcode");
+        String country = (String) location.get("country");
+        String country_code = (String) location.get("country_code");
+
+        return
+                (location2.get("shop") == shop &&
+                        location2.get("road") == road &&
+                        location2.get("neighbourhood") == neighbourhood &&
+                        location2.get("suburb") == suburb &&
+                        location2.get("borough") == borough &&
+                        location2.get("city") == city &&
+                        location2.get("ISO3166-2-lvl4") == iso &&
+                        location2.get("postcode") == postcode &&
+                        location2.get("country") == country &&
+                        location2.get("country_code") == country_code)
+                ||
+                (location2.get("shop").equals(shop) &&
+                        location2.get("road").equals(road) &&
+                        location2.get("neighbourhood").equals(neighbourhood) &&
+                        location2.get("suburb").equals(suburb) &&
+                        location2.get("borough").equals(borough) &&
+                        location2.get("city").equals(city) &&
+                        location2.get("ISO3166-2-lvl4").equals(iso) &&
+                        location2.get("postcode").equals(postcode) &&
+                        location2.get("country").equals(country) &&
+                        location2.get("country_code").equals(country_code));
     }
 }
