@@ -1,0 +1,157 @@
+@import 'colors';
+
+.bg {
+  &-light-blue {
+    background-color: $light-blue;
+  }
+
+  &-light-blue-darken {
+    background-color: $light-blue-darken;
+  }
+
+  &-dark-grey {
+    background-color: $dark-grey;
+  }
+
+  &-dark-grey-lighten {
+    background-color: $dark-grey-lighten;
+  }
+
+  &-black {
+    background-color: $black;
+  }
+
+  &-light-grey {
+    background-color: $light-grey;
+  }
+
+  &-extra-light-grey {
+    background-color: $extra-light-grey;
+  }
+
+  &-white {
+    background-color: $white;
+  }
+}
+
+.text {
+  &-light-blue {
+    color: $light-blue;
+  }
+
+  &-light-blue-darken {
+    color: $light-blue-darken;
+  }
+
+  &-dark-grey {
+    color: $dark-grey;
+  }
+
+  &-dark-grey-lighten {
+    color: $dark-grey-lighten;
+  }
+
+  &-black {
+    color: $black;
+  }
+
+  &-light-grey {
+    color: $light-grey;
+  }
+
+  &-extra-light-grey {
+    color: $extra-light-grey;
+  }
+
+  &-white {
+    color: $white;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.display {
+  &-block {
+    display: block;
+  }
+
+  &-flex {
+    display: flex;
+  }
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify {
+  &-start {
+    justify-content: flex-start;
+  }
+
+  &-center {
+    justify-content: center;
+  }
+
+  &-end {
+    justify-content: flex-end;
+  }
+
+  &-between {
+    justify-content: space-between;
+  }
+
+  &-around {
+    justify-content: space-around;
+  }
+}
+
+.align {
+  &-top {
+    align-items: flex-start;
+  }
+
+  &-center {
+    align-items: center;
+  }
+
+  &-end {
+    align-items: flex-end
+  }
+}
+
+.position {
+  &-relative {
+    position: relative;
+  }
+
+  &-absolute {
+    position: absolute;
+  }
+}
+
+.max-width-100 {
+  max-width: 100%;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.border {
+  border: 1px solid $black;
+
+  &-rounded {
+    border-radius: 10px;
+  }
+}
+
+.padding-2rem {
+  padding: 2rem;
+}

@@ -31,7 +31,7 @@
             Wybierz specjalistę, do którego chcesz się udać lub zostaw puste pole, jeśli chcesz
             zobaczyć placówki wszystkich możliwych lekarzy w okolicy. Możesz też wybrać typ
             placówki, do której chcesz się udać i odległóść od miejsca wyszukiwania. Domyślnie jest
-            ona ustawiona na <code>5 km</code>.
+            ona ustawiona na <code>25 km</code>.
           </p>
           <br />
           <p>To jak? Sprawdzasz?</p>

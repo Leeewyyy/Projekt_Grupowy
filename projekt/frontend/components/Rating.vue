@@ -26,6 +26,9 @@
           @click.native="onInput(n)"
         />
       </div>
+      <div v-if="isCountVisible" class="Rating_count">
+        {{ ratingCount }} opinii
+      </div>
     </div>
   </div>
 </template>
@@ -64,6 +67,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    ratingCount: {
+      type: Number,
+      default: undefined,
+    },
   },
 
   computed: {
@@ -79,6 +86,10 @@ export default {
 
     checkedStars() {
       return Math.max(this.modelValue, 0);
+    },
+
+    isCountVisible() {
+      return this.preview && typeof this.ratingCount !== 'undefined';
     },
   },
 
@@ -99,6 +110,8 @@ export default {
 <style lang="scss">
 .Rating {
   user-select: none;
+  font-size: 0.9rem;
+  font-weight: 400;
   
   &.Rating--large {
     .Rating_stars {
@@ -112,19 +125,18 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .Rating_value {
     min-width: 24px;
     margin-right: 0.25rem;
-    font-size: 0.9rem;
-    font-weight: 400;
     text-align: center;
     color: rgb(var(--color-text));
   }
 
   .Rating_stars {
+    height: 16px;
     line-height: 16px;
 
     .stars_item {
@@ -134,6 +146,13 @@ export default {
         cursor: pointer;
       }
     }
+  }
+
+  .Rating_count {
+    margin-left: 0.35rem;
+    font-size: 0.9rem;
+    color: $grey;
+    white-space: nowrap;
   }
 }
 

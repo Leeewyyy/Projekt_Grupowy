@@ -1,41 +1,32 @@
 <template>
   <BoxSection class="PlaceSearch main-container">
     <template #header>
-      <div class="place-search-header">
-        <h2 class="PlaceSearch_title">
-          <span class="title-desktop">Wyszukaj placówki w okolicy</span>
-          <span class="title-mobile">Znajdź placówki <br />medyczne w oklicy</span>
-        </h2>
-        <IconToggleButton
-          v-if="welcomeCookie"
-          tooltip-text="Zwiń okno wyszukiwania"
-          class="icon-hide"
-          @click="$emit('hideBox')"
-          icon-name="keyboard_double_arrow_left"
+      <div class="header_logo mobile-hidden">
+        <Branding
+          id="placeSearchBranding"
+          description="Placówki medyczne w Twojej okolicy"
         />
       </div>
+      <CollapseButton class="mobile-hidden" @collapse="$emit('hideBox')" />
     </template>
     <template #body>
-      <WelcomeBox v-if="!welcomeCookie"/>
-      <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
+      <WelcomeBox />
+      <!-- <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
         <div class="PlaceSearch_container_inner">
           <div class="outer-input">
-            <TextField
+            <InputText
               name="address-input"
               v-model="form.search"
               :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
-              label="Adres [ wymagane ]"
-              :tab-index="1"
-              @input="getPossibleResults"
+              :icon="{ 
+                show: true,
+                name: 'my_location',
+                tooltip: 'Wyszukaj lokalizację',
+                size: 23,
+              }"
+              label="Wpisz, aby zobaczyć proponowane adresy"
+              @input="/*getPossibleResults*/"
             />
-            <IconToggleButton
-              @click="iconLocationON = $event"
-              :is-active="iconLocationON"
-              :with-shadow="true"
-              icon-name="location_on"
-              tabindex="2"
-            />
-
               <vue-scroll 
                 v-if="!moreFiltersOn && possibleAddresses && possibleAddresses.length"
                 class="choose-result"
@@ -67,15 +58,6 @@
               style="margin-top: 10px"
               :tab-index="3"
             />
-            <IconToggleButton
-              :is-active="form.isNFZ"
-              name="nfz-button"
-              :is-custom="true"
-              :with-shadow="true"
-              icon-name="nfz-icon"
-              @click="form.isNFZ = $event"
-              tabindex="4"
-            />
           </div>
 
           <div class="buttons">
@@ -84,8 +66,7 @@
               name="clear-button"
               type="button"
               variant="light"
-              :disabled="!coords"
-              @click="actionOnButton()"
+              @click="clearForm()"
             >
               Wyczyść
             </Button>
@@ -94,10 +75,10 @@
               tabindex="6"
               name="submit-button"
               type="submit"
+              :disabled="loading"
               variant="dark"
-              :disabled="!coords"
             >
-              Szukaj 
+              {{ loading ? 'Ładowanie...' : 'Szukaj' }}
             </Button>
           </div>
         </div>
@@ -128,14 +109,19 @@
             <Select
               name="distance-select"
               v-model="form.maxDistance"
-              :options="distanceOptions"
-              label="name"
+              :options="distanceOptionsForSelect"
               description="Odległość"
+              label="name"
+              :icon-text="`
+                Odległość brana jest pod uwagę dopiero wtedy,<br />
+                gdy wybierzesz adres. Jeśli zostawisz to pole puste <br />
+                system szuka placówek w całej Polsce.
+              `"
               :tab-index="9"
             />
           </div>
         </div>
-      </form>
+      </form> -->
     </template>
   </BoxSection>
 </template>
@@ -144,22 +130,34 @@
 // eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
 import Icon from '@/components/shared/Icon';
 import WelcomeBox from '@/components/WelcomeBox';
+import Branding from '@/components/Branding';
+import CollapseButton from '@/components/CollapseButton';
+import SingleWelcomeBox from '@/components/SingleWelcomeBox';
 
 export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false,
+    },
+  },
   components: {
     BoxSection,
-    TextField,
+    InputText,
     Select,
     Button,
     IconToggleButton,
     Icon,
     WelcomeBox,
+    Branding,
+    CollapseButton,
+    SingleWelcomeBox,
   },
 
   data() {
@@ -182,23 +180,7 @@ export default {
       },
       coords: null,
       activeAddress: null,
-      distanceOptions: [
-        {
-          id: 1,
-          name: '5 km',
-          val: 5,
-        },
-        {
-          id: 2,
-          name: '10 km',
-          val: 10,
-        },
-        {
-          id: 3,
-          name: '50 km',
-          val: 50,
-        },
-      ],
+      distanceOptions: [5, 10, 25, 50, 100, 250, 500],
       delayTimer: null,
     };
   },
@@ -220,28 +202,58 @@ export default {
     welcomeCookie() {
       return this.$store.getters['cookie/getShowWelcomeBoxCookie'];
     },
+    distanceOptionsForSelect() {
+      return this.distanceOptions.map((optionVal, index) => ({
+        id: index,
+        val: optionVal,
+        name: `${optionVal} km`,
+      }));
+    },
   },
   watch: {
     iconLocationON(val) {
       if (val) {
         this.getCurrentPosition();
-      } else if (!this.activeAddress) this.$emit('getCoords', null);
-      else this.tmpPlaceholder = '';
+      } else {
+        if (!this.activeAddress) this.$emit('getCoords', null);
+        this.tmpPlaceholder = '';
+      }
     },
     activeAddress: {
       deep: true,
-      handler() {
-        this.iconLocationON = false;
+      handler(address) {
+        console.log(this.iconLocationON);
+        if (!address) {
+          if (!this.iconLocationON) {
+            this.coords = null;
+            this.$emit('getCoords', null);
+          }
+        } else this.iconLocationON = false;
       },
     },
     // eslint-disable-next-line
     'form.search'() {
       this.moreFiltersOn = false;
     },
+    coords(coords) {
+      if (coords) {
+        this.setDefaultDistance();
+      } else this.form.maxDistance = null;
+    },
   },
   methods: {
-    actionOnButton() {
-      this.form = {};
+    clearForm() {
+      this.form = {
+        search: null,
+        doctor: null,
+        placeType: null,
+        maxDistance: null,
+        isNFZ: null,
+      };
+
+      this.activeAddress = null;
+      this.iconLocationON = false;
+      this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
     },
 
     submitSearch() {
@@ -259,9 +271,10 @@ export default {
         this.tmpPlaceholder = 'Twoja lokalizacja';
         this.iconLocationON = true;
         this.activeAddress = null;
-        this.$emit('getCoords', null);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
+          this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+          this.setDefaultDistance();
         });
       };
 
@@ -287,6 +300,12 @@ export default {
     },
 
     async getPossibleResults(inputVal) {
+      if (!inputVal.length) {
+        this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+        this.$emit('getCoords', null);
+        return;
+      }
+
       try {
         clearTimeout(this.delayTimer);
         this.delayTimer = setTimeout(() => {
@@ -307,6 +326,11 @@ export default {
       return [city, road, neighbourhood, postcode]
         .filter((el) => !!el)
         .join(', ');
+    },
+
+    setDefaultDistance() {
+      this.form.maxDistance = this.distanceOptionsForSelect
+        .find((option) => option.val === 25);
     },
   },
 };
@@ -531,17 +555,6 @@ export default {
           padding-left: 20px !important;
         }
       }
-    }
-
-    .icon-button {
-      width: 35px;
-      height: 35px;
-      position: relative;
-      top: -2px;
-    }
-
-    .icon-button[name='nfz-button'] {
-      top: -5px;
     }
   }
 

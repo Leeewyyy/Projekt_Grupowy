@@ -15,7 +15,7 @@
           :preview="false"
         />
       </div>
-      <TextField
+      <InputText
         class="form_textarea"
         name="reviewText"
         :isTextarea="true"
@@ -31,7 +31,7 @@
 
 <script>
 import Rating from '@/components/Rating';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Button from '@/components/shared/Button';
 
 export default {
@@ -44,7 +44,7 @@ export default {
 
   components: {
     Rating,
-    TextField,
+    InputText,
     Button,
   },
 

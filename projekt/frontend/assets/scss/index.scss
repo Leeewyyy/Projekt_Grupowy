@@ -1,18 +1,17 @@
-// Default site-wide components
-@import './default/tooltip.scss';
 @import './default/notification.scss';
+@import './default/tooltip.scss';
+@import './classes';
+@import './colors';
 
 // Breakpoints
 $tablet_breakpoint: 768px;
 $desktop_breakpoint: 1280px;
 
-.cursor-pointer {
-  cursor: pointer;
-}
-
+// Specific styles and classes below 
 .main-container {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
+  max-height: 550px;
 
   @media screen and (max-width: $desktop_breakpoint) {
     max-width: unset;
@@ -46,14 +45,6 @@ $desktop_breakpoint: 1280px;
   }
 }
 
-.w-100 {
-  width: 100%;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-}
-
 a:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
   color: rgb(var(--color-text));
   font-weight: 600;
@@ -64,28 +55,19 @@ a:not(.leaflet-control-zoom-in):not(.leaflet-control-zoom-out) {
   }
 }
 
-.d-flex {
-  &-center {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-  }
+img {
+  object-fit: cover;
+}
 
-  &-between {
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
+@media screen and (max-width: $desktop_breakpoint) {
+  .mobile-hidden {
+    display: none !important;
   }
 }
 
-.mr-1 {
-  margin-right: 10px;
-}
-
-.mt-1 {
-  margin-top: 10px;
-}
-
-.ml-1 {
-  margin-left: 10px;
+.header_logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 1rem;
 }

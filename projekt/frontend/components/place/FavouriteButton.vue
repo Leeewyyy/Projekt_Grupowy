@@ -4,7 +4,6 @@
     :size="24"
     variant="dark"
     class="favourite"
-    style="margin-top: 5px;"
     @click="toggleFavorite"
   />
 </template>

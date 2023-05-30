@@ -1,3 +1,8 @@
+const cookiesTimes = {
+  showWelcomeBox: 24 * 356,
+  userId: 24,
+};
+
 export const state = () => ({
   /* names of the cookies */
   showWelcomeBox: null,
@@ -15,8 +20,16 @@ export const getters = {
 };
 
 export const mutations = {
-  setCookie(state, { name, value, time }) {
-    this.$cookies.set(name, value, time ? { maxAge: 60 * 60 * time } : {});
+  setCookie(state, { name, value }) {
+    this.$cookies.set(
+      name, 
+      value, 
+      cookiesTimes[name] ? { maxAge: 60 * 60 * cookiesTimes[name] } : {},
+    );
+    state[name] = value;
+  },
+
+  setCookieState(state, { name, value }) {
     state[name] = value;
   },
 };
@@ -24,7 +37,7 @@ export const mutations = {
 export const actions = {
   async getCookie({ commit }, name) {
     const value = await this.$cookies.get(name) ?? null;
-    if (value) commit('setCookie', { name, value, time: (name === 'userId' ? 24 : null) });
+    if (value) commit('setCookieState', { name, value });
     return value;
   },
 

@@ -4,29 +4,26 @@
     :class="{
       'PlaceList--selectable': selectable,
     }"
+    :showBackButton="closable"
+    @onBack="onBack"
   >
     <template #header>
-      <div class="PlaceList_header">
-        <div class="text-with-button d-flex-center">
-          <button class="header_close-button" v-if="closable" @click.prevent="onClose">
-            <Icon name="keyboard_backspace" />
-          </button>
-          <h2 class="header_title">
-            <span v-if="customTitle">
-              {{ customTitle }}
-            </span>
-            <span v-else>
-              Znaleziono <strong class="title_count">{{ places.length }}</strong> wyników
-            </span>
-          </h2>
+      <div v-if="!customTitle" class="PlaceList_header">
+        <div class="header_logo mobile-hidden">
+          <Branding
+            id="placeListBranding"
+            description="Placówki medyczne w Twojej okolicy"
+          />
         </div>
-        <IconToggleButton
-          v-if="!customTitle && welcomeCookie"
-          tooltip-text="Zwiń okno wyszukiwania"
-          class="icon-hide"
-          @click="$emit('hideBox')"
-          icon-name="keyboard_double_arrow_left"
-        />
+        <div class="header_title">
+          Znaleziono <b class="title_count">{{ places.length }}</b> wyników
+        </div>
+        <CollapseButton class="mobile-hidden" @collapse="$emit('hideBox')" />
+      </div>
+      <div v-else class="PlaceList_header">
+        <h2 class="header_title">
+          {{ customTitle }}
+        </h2>
       </div>
     </template>
     <template #body>
@@ -54,16 +51,18 @@
 
 <script>
 import BoxSection from '@/components/BoxSection';
+import Branding from '@/components/Branding';
 import PlaceCard from '@/components/place/PlaceCard';
 import Icon from '@/components/shared/Icon';
-import IconToggleButton from '@/components/shared/IconToggleButton';
+import CollapseButton from '@/components/CollapseButton';
 
 export default {
   components: {
     BoxSection,
+    Branding,
     PlaceCard,
     Icon,
-    IconToggleButton,
+    CollapseButton,
   },
 
   props: {
@@ -106,7 +105,7 @@ export default {
       this.$emit('onPlaceSelected', place);
     },
 
-    onClose() {
+    onBack() {
       this.$emit('onClose');
     },
 
@@ -131,86 +130,29 @@ export default {
   }
 
   .PlaceList_header {
-    height: 55px;
-    font-size: .8rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1rem;
+    padding: 1rem;
 
     .header_title {
       text-indent: 1rem;
+      font-size: 1.2rem;
       font-weight: 600;
-    }
-
-    .text-with-button {
-      padding-left: 10px;
-    }
-
-    .icon-hide {
-      padding-right: 15px;
-    }
-
-    @media screen and (max-width: $desktop_breakpoint) {
-      justify-content: center;
-
-      .icon-hide {
-        display: none;
-      }
-    }
-
-    .header_close-button {
-      width: max-content;
-      display: flex;
-      align-items: center;
-      background: none;
-      cursor: pointer;
-
-      .material-icons {
-        font-size: 1.5rem !important;
-      }
-    }
-
-    @media screen and (max-width: $desktop_breakpoint) {
-      font-size: .9em;
-      text-indent: unset;
-      height: 140px;
-      line-height: .9em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      background: transparent;
-      position: relative;
-
-      .header_close-button {
-        position: absolute;
-        bottom: 10px;
-        left: 17px;
-
-        .material-icons {
-          font-size: 2rem !important;
-        }
-      }
-
-      .header_title {
-        text-indent: unset;
-      }
     }
   }
 
   .PlaceList_container {
-    padding: 2rem;
-    background: rgb(var(--color-main));
+    padding: 0 2rem;
+    background: $white;
 
     .container_list {
-      max-height: 60vh;
+      max-height: 50vh;
       list-style-type: none;
-      padding-bottom: 2em;
 
       .list_item {
         margin-bottom: 1rem;
+
+        .item_place-card {
+          background: $extra-light-grey;
+        }
 
         &:last-child {
           margin-bottom: 0;
@@ -219,12 +161,12 @@ export default {
 
       @media screen and (max-width: $desktop_breakpoint) {
         max-height: unset;
+        padding-bottom: 2rem;
       }
     }
 
     @media screen and (max-width: $desktop_breakpoint) {
-      background: transparent;
-      padding: 0 1em;
+      padding: 0 1rem !important;
     }
   }
 }

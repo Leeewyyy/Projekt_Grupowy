@@ -2,7 +2,7 @@
 export const actions = {
   // Fetch all facilities & favourite facilities
   // because they are being used globally on the site
-  async nuxtServerInit({ dispatch }) {
+  async nuxtServerInit({ dispatch, commit }) {
     let userId = null;
 
     try {
@@ -12,6 +12,7 @@ export const actions = {
         const data = await dispatch('user/getData', userId);
 
         if (data) {
+          commit('cookie/setCookie', { name: 'userId', value: userId });
           this.$notify({ text: 'Przywrócono dane zalogowanego użytkownika', type: 'success' });
         }
       }

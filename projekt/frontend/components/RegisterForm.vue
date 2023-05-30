@@ -6,7 +6,7 @@
     <template #body>
       <form class="register-form" @submit.prevent="registerAccount">
         <div class="register-form-container-inner">
-          <TextField
+          <InputText
             id="full-name"
             name="fullname-input"
             v-model="form.fullName"
@@ -15,7 +15,7 @@
             required
           />
 
-          <TextField
+          <InputText
             id="email"
             name="email-input"
             v-model="form.email"
@@ -26,7 +26,7 @@
             required
           />
 
-          <TextField
+          <InputText
             id="password"
             name="password-input"
             v-model="form.password"
@@ -36,7 +36,7 @@
             required
           />
 
-          <TextField
+          <InputText
             id="password-repeat"
             name="password-input-repeat"
             v-model="passwordConfirm"
@@ -59,7 +59,7 @@
 
 <script>
 import BoxSection from '@/components/BoxSection';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
@@ -68,7 +68,7 @@ import Icon from '@/components/shared/Icon';
 export default {
   components: {
     BoxSection,
-    TextField,
+    InputText,
     Select,
     Button,
     IconToggleButton,

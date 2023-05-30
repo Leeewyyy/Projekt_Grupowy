@@ -6,7 +6,7 @@
     <template #body>
       <form class="login-form" @submit.prevent="submitLogin">
         <div class="login-form-container-inner">
-          <TextField
+          <InputText
             id="login"
             name="login-input"
             v-model="inputLogin"
@@ -14,7 +14,7 @@
             :is-flat="true"
           />
 
-          <TextField
+          <InputText
             id="password"
             name="password-input"
             v-model="inputPassword"
@@ -37,7 +37,7 @@
 // eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
-import TextField from '@/components/shared/TextField';
+import InputText from '@/components/shared/InputText';
 import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
@@ -46,7 +46,7 @@ import Icon from '@/components/shared/Icon';
 export default {
   components: {
     BoxSection,
-    TextField,
+    InputText,
     Select,
     Button,
     IconToggleButton,
@@ -80,7 +80,7 @@ export default {
       try {
         await this.$store.dispatch('user/login', payload);
         this.$notify({ text: 'Zalogowano pomyślnie!', type: 'success' });
-        this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id, time: 24 });
+        this.$store.commit('cookie/setCookie', { name: 'userId', value: this.user.id });
         this.$router.push({ name: 'user-panel' });
       } catch (error) {
         this.$notify({ text: 'Wstąpił błąd logowania. Spóbuj ponownie.', type: 'error' });

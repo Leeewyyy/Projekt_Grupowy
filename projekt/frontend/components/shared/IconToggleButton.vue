@@ -3,18 +3,12 @@
     :class="[
       'icon-button cursor-pointer',
       variant,
-      { active: isActive, 'with-shadow': withShadow },
+      { active: isActive },
     ]"
     type="button"
     @click.stop="$emit('click', !isActive)"
   >
-    <img
-      v-if="isCustom"
-      :src="require(`@/assets/images/${iconName}.svg`)"
-      :alt="customIconDescription"
-    />
     <Icon 
-      v-else 
       v-tooltip="tooltipText" 
       :name="iconName"
       :size="size"
@@ -36,21 +30,9 @@ export default {
       type: String,
       required: true,
     },
-    isCustom: {
-      type: Boolean,
-      default: false,
-    },
-    customIconDescription: {
-      type: String,
-      default: 'Ikona kustomowa',
-    },
     size: {
       type: Number,
       default: 35,
-    },
-    withShadow: {
-      type: Boolean,
-      default: false,
     },
     variant: {
       type: String,
@@ -75,19 +57,6 @@ button {
   display: flex;
   align-items: center;
 
-  &.with-shadow:after {
-    content: '';
-    width: 70px;
-    height: 40px;
-    position: absolute;
-    top: 12px;
-    left: -15px;
-    background: rgb(0, 0, 0);
-    background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, rgba(138, 169, 206, 0) 38%);
-    z-index: -1;
-    transform: skew(-20deg);
-  }
-
   .material-icons {
     transition: 0.2s all;
   }
@@ -95,8 +64,7 @@ button {
   &.light {
     &:hover,
     &:focus {
-      .material-icons,
-      img {
+      .material-icons {
         filter: invert(1) opacity(0.5);
       }
     }
@@ -113,8 +81,7 @@ button {
   &.dark {
     &:hover,
     &:focus {
-      .material-icons,
-      img {
+      .material-icons {
         filter: opacity(0.7);
       }
     }

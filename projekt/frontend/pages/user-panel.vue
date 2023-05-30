@@ -2,11 +2,7 @@
   <AppPage name="user-panel" class="gray-background">
     <div class="user-panel_container">
       <div class="container_column">
-        <AvatarBox
-          :user="user"
-          class="column_avatar-box"
-          @avatarUpdated="onAvatarUpdated"
-        />
+        <AvatarBox class="column_avatar-box" />
         <MyReviews :user="user" class="column_reviews" />
       </div>
       <div class="container_column column--account-data">
@@ -51,6 +47,9 @@ export default {
     favouritePlaces() {
       return this.$store.getters['favouriteFacility/getFacilities'];
     },
+    user() {
+      return this.$store.getters['user/getUser'];
+    },
   },
 
   async asyncData({ store, error }) {
@@ -61,17 +60,7 @@ export default {
       return error({ statusCode: 401 });
     }
 
-    const user = { ...currentUser };
-
-    return {
-      user,
-    };
-  },
-
-  methods: {
-    onAvatarUpdated(newUrl) {
-      this.user.imageUrl = newUrl;
-    },
+    return currentUser;
   },
 };
 </script>
