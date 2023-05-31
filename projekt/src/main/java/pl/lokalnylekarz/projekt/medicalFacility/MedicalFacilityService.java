@@ -1,25 +1,20 @@
 package pl.lokalnylekarz.projekt.medicalFacility;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
-import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
-import pl.lokalnylekarz.projekt.enumeration.Specialization;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.Specialist;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
-import pl.lokalnylekarz.projekt.specialist.SpecialistService;
 import pl.lokalnylekarz.projekt.specification.MedicalFacilitySpecification;
 import pl.lokalnylekarz.projekt.user.UserService;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

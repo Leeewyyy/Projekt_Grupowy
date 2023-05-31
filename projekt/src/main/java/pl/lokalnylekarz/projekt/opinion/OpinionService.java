@@ -3,7 +3,6 @@ package pl.lokalnylekarz.projekt.opinion;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
-import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.User;
