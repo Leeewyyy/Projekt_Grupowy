@@ -1,9 +1,10 @@
 package pl.lokalnylekarz.projekt.medicalFacility;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.ReportingPolicy;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 
-@Mapper
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MedicalFacilityMapper {
 
     MedicalFacilityDto fromEntityToDto(MedicalFacility medicalFacility);
