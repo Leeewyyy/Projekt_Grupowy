@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -23,7 +24,7 @@ public class MedicalFacilityListDto {
     private String imageUrl;
     private String phone;
     private String websiteUrl;
-    private Boolean isNFZ;
+    private NfzStatuses nfzStatus;
     private Float rating;
     private Long ratingCount;
     private Timestamp openFrom;

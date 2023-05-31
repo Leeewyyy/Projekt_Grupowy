@@ -25,6 +25,6 @@ public class MedicalFacilityFilter {
     }
 
     public boolean isFilterDistance() {
-        return longitude != null && latitude != null && distance != null;
+        return (longitude != null && latitude != null && distance != null);
     }
 }
