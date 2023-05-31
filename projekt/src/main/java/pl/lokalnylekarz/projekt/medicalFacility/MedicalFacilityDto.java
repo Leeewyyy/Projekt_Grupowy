@@ -39,4 +39,5 @@ public class MedicalFacilityDto {
     private List<SpecialistDto> specialist;
     private UserAddedByDto addedBy;
     private List<OpinionDto> opinions;
+    private List<String> specialists;
 }

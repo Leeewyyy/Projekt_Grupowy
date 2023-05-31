@@ -9,6 +9,7 @@ import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -29,4 +30,5 @@ public class MedicalFacilityListDto {
     private Timestamp openTo;
     private Location location;
     private Date addedAt;
+    private List<String> specialists;
 }

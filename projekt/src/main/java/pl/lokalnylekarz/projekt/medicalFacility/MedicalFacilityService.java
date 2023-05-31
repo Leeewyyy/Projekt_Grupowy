@@ -8,6 +8,7 @@ import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
+import pl.lokalnylekarz.projekt.model.Specialist;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
@@ -15,6 +16,7 @@ import pl.lokalnylekarz.projekt.specialist.SpecialistService;
 import pl.lokalnylekarz.projekt.specification.MedicalFacilitySpecification;
 import pl.lokalnylekarz.projekt.user.UserService;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +36,7 @@ public class MedicalFacilityService {
 
         for (MedicalFacilityListDto medicalFacilityListDto : medicalFacilityListDtos) {
             addRatingAndRatingCount(medicalFacilityListDto, medicalFacilityListDto.getId());
+            medicalFacilityListDto.setSpecialists(addSpecialists(medicalFacilityListDto.getId()));
         }
 
         return medicalFacilityListDtos;
@@ -55,6 +58,7 @@ public class MedicalFacilityService {
 
         for (MedicalFacilityListDto medicalFacilityListDto : medicalFacilityListDtos) {
             addRatingAndRatingCount(medicalFacilityListDto, medicalFacilityListDto.getId());
+            medicalFacilityListDto.setSpecialists(addSpecialists(medicalFacilityListDto.getId()));
         }
 
         return medicalFacilityListDtos;
@@ -65,6 +69,7 @@ public class MedicalFacilityService {
 
         MedicalFacilityDto medicalFacilityDto = medicalFacilityMapper.fromEntityToDto(medicalFacility);
         addRatingRatingCountAddedByOpinions(medicalFacilityDto, medicalFacility.getId());
+        medicalFacilityDto.setSpecialists(addSpecialists(medicalFacilityDto.getId()));
 
         return medicalFacilityDto;
     }
@@ -103,7 +108,6 @@ public class MedicalFacilityService {
     }
 
     public void addRatingAndRatingCount(MedicalFacilityListDto medicalFacilityListDto, Long medicalFacilityId) {
-        MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElse(null);
 
         Long ratingsSum = opinionRepository.sumRatingsByMedicalFacility(medicalFacilityId);
         Long ratingsCount = opinionRepository.countByMedicalFacility(medicalFacilityId);
@@ -114,5 +118,21 @@ public class MedicalFacilityService {
 
         medicalFacilityListDto.setRating(rating);
         medicalFacilityListDto.setRatingCount(ratingsCount);
+    }
+
+    public List<String> addSpecialists(Long medicalFacilityId) {
+
+        List<String> specialists = new ArrayList<>();
+
+        MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElse(null);
+
+        List<Specialist> specialistList = medicalFacility.getSpecialist();
+
+        for (Specialist specialist : specialistList) {
+            String specialization = specialist.getSpecialization().toString();
+            if (!specialists.contains(specialization)) specialists.add(specialization);
+        }
+
+        return specialists;
     }
 }
