@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.opinion.OpinionDto;
 import pl.lokalnylekarz.projekt.specialist.SpecialistDto;
 import pl.lokalnylekarz.projekt.user.UserAddedByDto;
@@ -29,7 +30,7 @@ public class MedicalFacilityDto {
     private String phone;
     private String websiteUrl;
     private String description;
-    private Boolean isNFZ;
+    private NfzStatuses nfzStatus;
     private Float rating;
     private Long ratingCount;
     private Timestamp openFrom;
