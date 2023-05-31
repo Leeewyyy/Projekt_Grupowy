@@ -19,7 +19,7 @@ public class Opinion {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User addedBy;
 
@@ -29,7 +29,7 @@ public class Opinion {
     @Column
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medical_facilities_id")
     @JsonIgnore
     private MedicalFacility medicalFacility;

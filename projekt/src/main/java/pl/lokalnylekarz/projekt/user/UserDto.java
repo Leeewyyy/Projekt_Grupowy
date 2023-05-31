@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityDto;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.opinion.OpinionDto;
 
@@ -20,8 +21,8 @@ public class UserDto {
     private String imageUrl;
     private Timestamp registrationDate;
     private List<OpinionDto> opinions;
-    private List<MedicalFacilityDto> addedMedicalFacilities;
-    private List<MedicalFacilityDto> favoriteMedicalFacilities;
+    private List<MedicalFacilityListDto> addedMedicalFacilities;
+    private List<MedicalFacilityListDto> favoriteMedicalFacilities;
 
     public UserDto(
             Long id,
