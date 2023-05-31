@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
@@ -163,7 +164,7 @@ public class InitSeeder implements CommandLineRunner {
                                                                                   
                                          Zapewniamy pełną opiekę: ambulatoryjną, diagnostyczną, rehabilitacyjną, szpitalną i długoterminową dla ponad 2 500 000 Pacjentów.
                                                       """)
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.FULL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -206,7 +207,7 @@ public class InitSeeder implements CommandLineRunner {
                                                                                   
                                          Klientom indywidualnym oferujemy prywatne pakiety opieki medycznej, badania laboratoryjne i diagnostyczne oraz jednorazowe konsultacje lekarzy różnych specjalizacji.
                                          """)
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.PARTIAL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -240,7 +241,7 @@ public class InitSeeder implements CommandLineRunner {
                                                       ### Opis placówki
                                          Uniwersyteckie Centrum Kliniczne – jeden z największych szpitali w Polsce, funkcjonujący wcześniej pod nazwą Akademickie Centrum Kliniczne – zostało  utworzone przez Gdański Uniwersytet Medyczny w 1945 roku. Od tego czasu świadczymy usługi medyczne, oferując naszym pacjentom kompleksową diagnostykę i leczenie. Współpraca z uczelnią daje nam dostęp do najnowocześniejszych technologii, światowej wiedzy medycznej i badań klinicznych. Oddając się w ręce naszego zespołu, mogą Państwo czuć się bezpiecznie – w UCK pracują wybitni specjaliści, którzy do swojej dyspozycji mają nowoczesne zaplecze diagnostyczne i kliniczne.
                                                       """)
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.PARTIAL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -280,7 +281,7 @@ public class InitSeeder implements CommandLineRunner {
                     .description("""
                                          ### Opis placówki
                                          Najlepsza uczelnia w Polsce, która oferuje wiele nowocześnie wyposażonych laboratoriów.""")
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.FULL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -325,7 +326,7 @@ public class InitSeeder implements CommandLineRunner {
                                          Oddział Chirurgiczny Ogólny\s
                                          tel.: 58 768 45 50
                                          """)
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.PARTIAL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -378,7 +379,7 @@ public class InitSeeder implements CommandLineRunner {
                                          tel. do rejestracji: 58 772 39 50
                                          zapisy na zabiegi planowe: 58 764 05 10
                                                                      """)
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.FULL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -428,7 +429,7 @@ public class InitSeeder implements CommandLineRunner {
                             tak aby kojarzyła się z najwyższą jakością świadczonych usług medycznych oraz kulturą obsługi,
                             a także skuteczną i profesjonalną profilaktyką.
                             """))
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.PARTIAL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -473,7 +474,7 @@ public class InitSeeder implements CommandLineRunner {
                                                                              
                                          Świadczymy również odpłatne specjalistyczne konsultacje medyczne, posiadamy ofertę skierowaną do klubów sportowych, ale też dla osób fizycznych i firm.
                                                  """)
-                    .isNFZ(true)
+                    .nfzStatus(NfzStatuses.FULL)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -516,7 +517,7 @@ public class InitSeeder implements CommandLineRunner {
                                                                     
                                          Apteka internetowa www.apte.pl to apteka, w której kupisz leki i kosmetyki przez internet z dostawą do domu. U nas możesz zamówić niezbędne leki dostępne bez recepty, suplementy diety, kosmetyki i sprzęt medyczny. Apteka internetowa nie jest jedyną formą działalności naszej firmy. Oprócz tego serwisu nasza firma prowadzi również "tradycyjne" apteki. Informację o nich znajdziesz w dziale Nasze apteki. Dzięki ponad 20-letniemu doświadczeniu zdobytemu w trakcie ich prowadzenia, w ofercie internetowej umieściliśmy produkty, które sprawdziły się już w praktyce, posiadają najwyższą skuteczność w działaniu i cieszą się uznaniem naszych pacjentów.
                                          """)
-                    .isNFZ(false)
+                    .nfzStatus(NfzStatuses.NONE)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
@@ -551,7 +552,7 @@ public class InitSeeder implements CommandLineRunner {
                                          ### Opis placówki
                                          Apteki Dom Leków związane są z polskim rynkiem farmaceutycznym od 30 lat. Pierwsza Apteka pod szyldem "Dom Leków" została otwarta w Gdyni w 1990 roku i nadal nieprzerwanie prowadzi swoją działalność. Kolejne Apteki powstały w oparciu o tradycję i doświadczenie farmaceutyczne zdobyte na przestrzeni lat, aktualizowane o zmieniające się warunki podstawowej opieki farmaceutycznej. W chwili obecnej na terenie Polski jest otwartych 68 Aptek Dom Leków, w tym apteki całodobowe i otwarte przez 7 dni w tygodniu.
                                          """)
-                    .isNFZ(false)
+                    .nfzStatus(NfzStatuses.NONE)
                     .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))

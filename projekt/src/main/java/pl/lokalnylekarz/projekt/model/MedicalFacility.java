@@ -8,6 +8,7 @@ import org.springframework.data.web.SortDefault;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.persistence.ImagesConverter;
 import pl.lokalnylekarz.projekt.persistence.LocationConverter;
 
@@ -55,7 +56,8 @@ public class MedicalFacility {
     private String description;
 
     @Column
-    private Boolean isNFZ;
+    @Enumerated(EnumType.STRING)
+    private NfzStatuses nfzStatus;
 
     @Column
     private Integer rating;

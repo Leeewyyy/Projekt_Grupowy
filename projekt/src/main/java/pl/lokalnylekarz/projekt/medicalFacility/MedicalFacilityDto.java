@@ -6,6 +6,7 @@ import lombok.Data;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.opinion.OpinionDto;
 import pl.lokalnylekarz.projekt.specialist.SpecialistDto;
 import pl.lokalnylekarz.projekt.user.UserDto;
@@ -28,7 +29,7 @@ public class MedicalFacilityDto {
     private String phone;
     private String websiteUrl;
     private String description;
-    private Boolean isNFZ;
+    private NfzStatuses nfzStatus;
     private Integer rating;
     private Timestamp openFrom;
     private Timestamp openTo;
@@ -46,7 +47,7 @@ public class MedicalFacilityDto {
             String imageUrl,
             String phone,
             String websiteUrl,
-            Boolean isNFZ,
+            NfzStatuses nfzStatus,
             Integer rating,
             Timestamp openFrom,
             Timestamp openTo,
@@ -60,7 +61,7 @@ public class MedicalFacilityDto {
         this.imageUrl = imageUrl;
         this.phone = phone;
         this.websiteUrl = websiteUrl;
-        this.isNFZ = isNFZ;
+        this.nfzStatus = nfzStatus;
         this.rating = rating;
         this.openFrom = openFrom;
         this.openTo = openTo;
