@@ -107,6 +107,9 @@ public class MedicalFacilityService {
 
         Long ratingsSum = opinionRepository.sumRatingsByMedicalFacility(medicalFacilityId);
         Long ratingsCount = opinionRepository.countByMedicalFacility(medicalFacilityId);
+
+        if (ratingsSum == null || ratingsCount == null) return;
+
         Float rating = ratingsSum.floatValue() / ratingsCount.floatValue();
 
         medicalFacilityListDto.setRating(rating);

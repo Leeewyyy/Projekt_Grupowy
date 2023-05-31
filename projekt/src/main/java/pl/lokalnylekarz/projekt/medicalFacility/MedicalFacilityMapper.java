@@ -1,6 +1,7 @@
 package pl.lokalnylekarz.projekt.medicalFacility;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 

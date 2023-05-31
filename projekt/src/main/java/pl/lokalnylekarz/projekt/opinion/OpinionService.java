@@ -30,7 +30,7 @@ public class OpinionService {
     public static OpinionDto fromEntityToDto(Opinion opinion) {
         return new OpinionDto(
                 opinion.getId(),
-                UserService.fromEntityToDto(opinion.getAddedBy()),
+                UserService.forMedicalDto(opinion.getAddedBy()),
                 opinion.getRating(),
                 opinion.getDescription(),
                 opinion.getAddedAt()

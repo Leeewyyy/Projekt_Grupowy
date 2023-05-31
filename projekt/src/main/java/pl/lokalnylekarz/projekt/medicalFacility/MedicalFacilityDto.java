@@ -9,12 +9,11 @@ import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.opinion.OpinionDto;
 import pl.lokalnylekarz.projekt.specialist.SpecialistDto;
-import pl.lokalnylekarz.projekt.user.UserDto;
+import pl.lokalnylekarz.projekt.user.UserAddedByDto;
 
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -38,6 +37,6 @@ public class MedicalFacilityDto {
     private Location location;
     private Date addedAt;
     private List<SpecialistDto> specialist;
-    private UserDto addedBy;
+    private UserAddedByDto addedBy;
     private List<OpinionDto> opinions;
 }

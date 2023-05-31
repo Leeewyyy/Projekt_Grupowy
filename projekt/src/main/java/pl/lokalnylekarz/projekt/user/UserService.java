@@ -3,7 +3,6 @@ package pl.lokalnylekarz.projekt.user;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
-import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.User;
@@ -66,13 +65,12 @@ public class UserService {
         );
     }
 
-    public static UserDto forMedicalDto(User user) {
-        return new UserDto(
+    public static UserAddedByDto forMedicalDto(User user) {
+        return new UserAddedByDto(
                 user.getId(),
                 user.getFullName(),
                 user.getEmail(),
                 (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
-                user.getOpinions().stream().map(OpinionService::forUser).toList(),
                 user.getRegistrationDate()
         );
     }
