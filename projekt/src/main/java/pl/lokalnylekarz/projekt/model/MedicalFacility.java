@@ -1,10 +1,10 @@
 package pl.lokalnylekarz.projekt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.web.SortDefault;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
@@ -15,7 +15,6 @@ import pl.lokalnylekarz.projekt.persistence.LocationConverter;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @AllArgsConstructor
@@ -58,9 +57,6 @@ public class MedicalFacility {
     @Column
     @Enumerated(EnumType.STRING)
     private NfzStatuses nfzStatus;
-
-    @Column
-    private Integer rating;
 
     @Column
     private Timestamp openFrom;

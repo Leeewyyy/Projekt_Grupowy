@@ -165,7 +165,6 @@ public class InitSeeder implements CommandLineRunner {
                                          Zapewniamy pełną opiekę: ambulatoryjną, diagnostyczną, rehabilitacyjną, szpitalną i długoterminową dla ponad 2 500 000 Pacjentów.
                                                       """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.365000, 18.635410))
@@ -208,7 +207,6 @@ public class InitSeeder implements CommandLineRunner {
                                          Klientom indywidualnym oferujemy prywatne pakiety opieki medycznej, badania laboratoryjne i diagnostyczne oraz jednorazowe konsultacje lekarzy różnych specjalizacji.
                                          """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.377320, 18.608100))
@@ -242,7 +240,6 @@ public class InitSeeder implements CommandLineRunner {
                                          Uniwersyteckie Centrum Kliniczne – jeden z największych szpitali w Polsce, funkcjonujący wcześniej pod nazwą Akademickie Centrum Kliniczne – zostało  utworzone przez Gdański Uniwersytet Medyczny w 1945 roku. Od tego czasu świadczymy usługi medyczne, oferując naszym pacjentom kompleksową diagnostykę i leczenie. Współpraca z uczelnią daje nam dostęp do najnowocześniejszych technologii, światowej wiedzy medycznej i badań klinicznych. Oddając się w ręce naszego zespołu, mogą Państwo czuć się bezpiecznie – w UCK pracują wybitni specjaliści, którzy do swojej dyspozycji mają nowoczesne zaplecze diagnostyczne i kliniczne.
                                                       """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.366310, 18.625540))
@@ -282,7 +279,6 @@ public class InitSeeder implements CommandLineRunner {
                                          ### Opis placówki
                                          Najlepsza uczelnia w Polsce, która oferuje wiele nowocześnie wyposażonych laboratoriów.""")
                     .nfzStatus(NfzStatuses.FULL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3739, 18.6214))
@@ -327,7 +323,6 @@ public class InitSeeder implements CommandLineRunner {
                                          tel.: 58 768 45 50
                                          """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.4029503, 18.6126574))
@@ -380,7 +375,6 @@ public class InitSeeder implements CommandLineRunner {
                                          zapisy na zabiegi planowe: 58 764 05 10
                                                                      """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3512137, 18.6387727))
@@ -430,7 +424,6 @@ public class InitSeeder implements CommandLineRunner {
                             a także skuteczną i profesjonalną profilaktyką.
                             """))
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3421424, 18.5510178))
@@ -475,7 +468,6 @@ public class InitSeeder implements CommandLineRunner {
                                          Świadczymy również odpłatne specjalistyczne konsultacje medyczne, posiadamy ofertę skierowaną do klubów sportowych, ale też dla osób fizycznych i firm.
                                                  """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3439, 18.6487))
@@ -518,7 +510,6 @@ public class InitSeeder implements CommandLineRunner {
                                          Apteka internetowa www.apte.pl to apteka, w której kupisz leki i kosmetyki przez internet z dostawą do domu. U nas możesz zamówić niezbędne leki dostępne bez recepty, suplementy diety, kosmetyki i sprzęt medyczny. Apteka internetowa nie jest jedyną formą działalności naszej firmy. Oprócz tego serwisu nasza firma prowadzi również "tradycyjne" apteki. Informację o nich znajdziesz w dziale Nasze apteki. Dzięki ponad 20-letniemu doświadczeniu zdobytemu w trakcie ich prowadzenia, w ofercie internetowej umieściliśmy produkty, które sprawdziły się już w praktyce, posiadają najwyższą skuteczność w działaniu i cieszą się uznaniem naszych pacjentów.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.391661, 18.5997536))
@@ -553,7 +544,6 @@ public class InitSeeder implements CommandLineRunner {
                                          Apteki Dom Leków związane są z polskim rynkiem farmaceutycznym od 30 lat. Pierwsza Apteka pod szyldem "Dom Leków" została otwarta w Gdyni w 1990 roku i nadal nieprzerwanie prowadzi swoją działalność. Kolejne Apteki powstały w oparciu o tradycję i doświadczenie farmaceutyczne zdobyte na przestrzeni lat, aktualizowane o zmieniające się warunki podstawowej opieki farmaceutycznej. W chwili obecnej na terenie Polski jest otwartych 68 Aptek Dom Leków, w tym apteki całodobowe i otwarte przez 7 dni w tygodniu.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .rating(3)
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3376318, 18.6125888))
@@ -581,7 +571,7 @@ public class InitSeeder implements CommandLineRunner {
 
             Opinion opinion2 = Opinion.builder()
                     .addedBy(user2)
-                    .rating(4)
+                    .rating(3)
                     .description("Lorem ipsum dolor sit amend")
                     .medicalFacility(medicalFacility1)
                     .build();
@@ -595,7 +585,7 @@ public class InitSeeder implements CommandLineRunner {
 
             Opinion opinion4 = Opinion.builder()
                     .addedBy(user4)
-                    .rating(4)
+                    .rating(2)
                     .description("Lorem ipsum dolor sit amend")
                     .medicalFacility(medicalFacility2)
                     .build();

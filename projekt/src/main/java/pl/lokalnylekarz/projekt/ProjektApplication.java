@@ -9,9 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @SpringBootApplication
-//@EntityScan("pl.lokalnylekarz.projekt.model")
-//@ComponentScan(basePackages = {"pl.lokalnylekarz.projekt.database.seeder"})
-//@EnableJpaRepositories("pl.lokalnylekarz.projekt.repository")
 public class ProjektApplication {
 
 

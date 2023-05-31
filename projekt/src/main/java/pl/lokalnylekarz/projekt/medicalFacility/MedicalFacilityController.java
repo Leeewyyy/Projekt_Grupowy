@@ -19,7 +19,7 @@ public class MedicalFacilityController {
     @GetMapping()
     @ResponseBody
     @JsonIgnoreProperties("specialist")
-    public List<MedicalFacilityDto> getMedicalFacilities(MedicalFacilityFilter filters) {
+    public List<MedicalFacilityListDto> getMedicalFacilities(MedicalFacilityFilter filters) {
         return filters.isEmpty() ? service.getAll() : service.getAll(filters);
     }
 

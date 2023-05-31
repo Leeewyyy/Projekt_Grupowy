@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityDto;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 
 import java.sql.Timestamp;
 
@@ -14,6 +15,6 @@ public class OpinionWithMedicalFacilityDTO {
     private Long id;
     private Integer rating;
     private String description;
-    private MedicalFacilityDto medicalFacility;
+    private MedicalFacilityListDto medicalFacility;
     private Timestamp addedAt;
 }
