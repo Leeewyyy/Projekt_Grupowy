@@ -66,11 +66,12 @@ export default {
   }
 
   .Branding_description {
-    margin-top: 1rem;
+    margin-top: .7rem;
     color: $black;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 400;
     text-align: center;
+    padding: 0 10px;
   }
 }
 </style>

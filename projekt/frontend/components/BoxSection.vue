@@ -5,28 +5,34 @@
     </header>
     <div
       class="BoxSection_body"
-      :class="{ 'body--with-back-button': showBackButton }"
+      :class="{ 'body--with-back-button': showBottomButtons }"
     >
       <slot name="body"></slot>
-      <BackButton
-        v-if="showBackButton"
+      <BottomButtons
+        v-if="showBottomButtons"
         class="body_back-button"
+        :show-submit="showSubmit"
         @back="onBack"
+        @submit="$emit('submit')"
       />
     </div>
   </section>
 </template>
 
 <script>
-import BackButton from '@/components/BackButton';
+import BottomButtons from '@/components/BottomButtons';
 
 export default {
   components: {
-    BackButton,
+    BottomButtons,
   },
 
   props: {
-    showBackButton: {
+    showBottomButtons: {
+      type: Boolean,
+      default: false,
+    },
+    showSubmit: {
       type: Boolean,
       default: false,
     },
@@ -57,6 +63,7 @@ export default {
 
   .BoxSection_body {
     position: relative;
+    height: 79%;
     
     @media screen and (max-width: $desktop_breakpoint) {
       &.body--with-back-button {

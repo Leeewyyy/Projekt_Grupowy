@@ -40,13 +40,13 @@ export const actions = {
     if (!address?.length) return null;
 
     const results = await this.$axios.$get('/api/ajax/locations', {
-      params: { address }, // TODO: remove limit
+      params: { address },
     }) ?? [];
 
-    const filteredResults = results.filter((result) => {
+    const filteredResults = results?.filter((result) => {
       const requiredKeys = ['city', 'road', 'neighbourhood', 'postcode'];
       return requiredKeys.some((key) => !!result.address[key]);
-    });
+    }) ?? [];
 
     commit('setPossibleAddresses', filteredResults);
     return filteredResults;

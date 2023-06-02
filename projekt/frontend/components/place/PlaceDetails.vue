@@ -1,7 +1,7 @@
 <template>
   <BoxSection
     class="PlaceDetails main-container"
-    :showBackButton="true"
+    :show-bottom-buttons="true"
     @onBack="onBack"
   >
     <template #header>

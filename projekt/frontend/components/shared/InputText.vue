@@ -23,6 +23,7 @@
         @click="$emit('iconClicked')"
       />
     </div>
+    <slot />
     <label v-if="label.length">{{ label }}</label>
   </div>
 </template>

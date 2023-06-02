@@ -287,8 +287,8 @@ export default {
     .page_place-list,
     .page_place-details {
       position: absolute;
-      top: 15%;
-      left: 100px;
+      top: 12%;
+      left: 50px;
     }
   }
 }

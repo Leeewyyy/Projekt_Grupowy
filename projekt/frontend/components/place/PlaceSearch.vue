@@ -1,5 +1,7 @@
 <template>
-  <BoxSection class="PlaceSearch main-container">
+  <BoxSection class="PlaceSearch main-container"
+    :show-bottom-buttons="showButtons" :show-submit="showSubmit"
+    @onBack="resetForm" @submit=submitSearch>
     <template #header>
       <div class="header_logo mobile-hidden">
         <Branding
@@ -10,7 +12,23 @@
       <CollapseButton class="mobile-hidden" @collapse="$emit('hideBox')" />
     </template>
     <template #body>
-      <WelcomeBox />
+      <form>
+        <SearchInput
+          :key="searchKey"
+          :placeholder="tmpPlaceholder"
+          :coords="coords"
+          @toggleAddress="toggleAddress"
+          @resultsLength="handleAddresses"
+          @loading="showWelcomeBox = !$event"
+          @iconClicked="getCurrentPosition()"
+          style="margin-bottom: .5rem;"
+        />
+        <WelcomeBox v-if="showWelcomeBox && !showButtons" />
+        <!-- <BackButton v-if="!showWelcomeBox" /> -->
+        <!-- <div class="buttons">
+          <Button v-if="coords" class="submit-button" type="submit">Szukaj</Button>
+        </div> -->
+      </form>
       <!-- <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
         <div class="PlaceSearch_container_inner">
           <div class="outer-input">
@@ -130,7 +148,7 @@
 // eslint-disable-next-line
 import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
-import InputText from '@/components/shared/InputText';
+import SearchInput from '@/components/SearchInput';
 import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
@@ -139,6 +157,7 @@ import WelcomeBox from '@/components/WelcomeBox';
 import Branding from '@/components/Branding';
 import CollapseButton from '@/components/CollapseButton';
 import SingleWelcomeBox from '@/components/SingleWelcomeBox';
+import BottomButtons from '@/components/BottomButtons';
 
 export default {
   props: {
@@ -149,7 +168,7 @@ export default {
   },
   components: {
     BoxSection,
-    InputText,
+    SearchInput,
     Select,
     Button,
     IconToggleButton,
@@ -158,6 +177,7 @@ export default {
     Branding,
     CollapseButton,
     SingleWelcomeBox,
+    BottomButtons,
   },
 
   data() {
@@ -173,15 +193,15 @@ export default {
       moreFiltersOn: false,
       iconLocationON: false,
       tmpPlaceholder: '',
-      scrollOptions: {
-        mode: 'native',
-        sizeStrategy: 'percent',
-        detectResize: true,
-      },
+
       coords: null,
       activeAddress: null,
       distanceOptions: [5, 10, 25, 50, 100, 250, 500],
       delayTimer: null,
+      showWelcomeBox: true,
+      searchKey: 0,
+      showButtons: false,
+      showSubmit: false,
     };
   },
   mounted() {
@@ -211,38 +231,13 @@ export default {
     },
   },
   watch: {
-    iconLocationON(val) {
-      if (val) {
-        this.getCurrentPosition();
-      } else {
-        if (!this.activeAddress) this.$emit('getCoords', null);
-        this.tmpPlaceholder = '';
-      }
-    },
-    activeAddress: {
-      deep: true,
-      handler(address) {
-        console.log(this.iconLocationON);
-        if (!address) {
-          if (!this.iconLocationON) {
-            this.coords = null;
-            this.$emit('getCoords', null);
-          }
-        } else this.iconLocationON = false;
-      },
-    },
     // eslint-disable-next-line
     'form.search'() {
       this.moreFiltersOn = false;
     },
-    coords(coords) {
-      if (coords) {
-        this.setDefaultDistance();
-      } else this.form.maxDistance = null;
-    },
   },
   methods: {
-    clearForm() {
+    resetForm() {
       this.form = {
         search: null,
         doctor: null,
@@ -252,8 +247,14 @@ export default {
       };
 
       this.activeAddress = null;
-      this.iconLocationON = false;
+      this.tmpPlaceholder = false;
       this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+      this.searchKey++;
+      this.coords = null;
+      this.$emit('getCoords', null);
+      this.showButtons = false;
+      this.showSubmit = false;
+      this.showWelcomeBox = true;
     },
 
     submitSearch() {
@@ -263,18 +264,21 @@ export default {
     getCurrentPosition() {
       const onSuccess = ({ coords }) => {
         const { latitude, longitude } = coords;
+        this.searchKey++;
+        this.tmpPlaceholder = 'Twoja lokalizacja';
         this.coords = { 
           latitude,
           longitude,
         };
-        this.form.search = '';
-        this.tmpPlaceholder = 'Twoja lokalizacja';
-        this.iconLocationON = true;
         this.activeAddress = null;
+        this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
-          this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
           this.setDefaultDistance();
+          this.showWelcomeBox = false;
+          this.showButtons = true;
+          this.showSubmit = true;
+          this.$notify({ text: 'Ustawiono Twoją lokalizację, jako domyślny adres wyszukiwania', type: 'success' });
         });
       };
 
@@ -286,39 +290,25 @@ export default {
     },
 
     toggleAddress(address) {
-      if (this.isActive(address)) {
+      if (this.isActive(address) || !address) {
         this.coords = null;
         this.activeAddress = null;
-        this.form.search = '';
+        this.tmpPlaceholder = '';
+        this.showSubmit = false;
       } else {
         this.activeAddress = address;
-        this.coords = address.location;
-        this.form.search = this.buildAddress(address);
+        this.coords = address?.location;
+        this.tmpPlaceholder = this.buildAddress(address);
+        this.showSubmit = true;
+        this.searchKey++;
       }
 
       this.$emit('getCoords', this.coords);
     },
 
-    async getPossibleResults(inputVal) {
-      if (!inputVal.length) {
-        this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
-        this.$emit('getCoords', null);
-        return;
-      }
-
-      try {
-        clearTimeout(this.delayTimer);
-        this.delayTimer = setTimeout(() => {
-          this.$store.dispatch('facilitiesSearch/getAddresses', inputVal);
-        }, 700);
-      } catch (error) {
-        this.$notify({ text: 'Błąd pobierania możliwych adresów' });
-      }
-    },
-
     isActive(address) {
-      return address.location.longitude === this.coords?.longitude 
-      && address.location.latitude === this.coords?.latitude;
+      return address?.location.longitude === this.coords?.longitude 
+      && address?.location.latitude === this.coords?.latitude;
     },
 
     // eslint-disable-next-line
@@ -331,6 +321,11 @@ export default {
     setDefaultDistance() {
       this.form.maxDistance = this.distanceOptionsForSelect
         .find((option) => option.val === 25);
+    },
+
+    handleAddresses(length) {
+      this.showWelcomeBox = !length;
+      this.showButtons = length;
     },
   },
 };
@@ -505,33 +500,6 @@ export default {
     @media screen and (max-width: $desktop_breakpoint) {
       padding: 0 1em 3em 1em;
     }
-  }
-
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;
-
-    button[name='submit-button'] {
-      width: 60%;
-    }
-
-    button[name='clear-button'] {
-      width: 35%;
-      padding-left: 9px;
-      padding-right: 9px;
-    }
-
-     @media screen and (max-width: $desktop_breakpoint) {
-      button[name='clear-button'] {
-        display: none;
-      }
-      
-      button[name='submit-button'] {
-        width: 100%;
-      }
-     }
   }
 
   .outer-input {

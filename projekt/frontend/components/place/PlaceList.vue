@@ -4,7 +4,7 @@
     :class="{
       'PlaceList--selectable': selectable,
     }"
-    :showBackButton="closable"
+    :show-bottom-buttons="closable"
     @onBack="onBack"
   >
     <template #header>

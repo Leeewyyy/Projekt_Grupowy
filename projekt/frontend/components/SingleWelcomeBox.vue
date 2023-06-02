@@ -7,6 +7,7 @@
     <h2>{{ header }}</h2>
     <p v-if="description && !isOpen" >{{ description }}</p>
     <slot />
+    <div v-if="isOpen" class="label-span">Naciśnij ponownie, aby zamknąć</div>
   </div>
 </template>
 
@@ -39,6 +40,7 @@ export default {
 .single-welcome-box {
   box-sizing: border-box;
   padding: 1rem 1.5rem;
+  position: relative;
 }
 
 h2 {
@@ -49,5 +51,15 @@ p {
   margin-top: .5rem;
   font-size: 1rem;
   padding-right: 4rem;
+}
+
+.label-span {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
 }
 </style>
