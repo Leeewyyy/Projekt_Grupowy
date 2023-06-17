@@ -2,7 +2,8 @@
   <div class="Layout">
     <Header />
     <nuxt />
-    <Authors class="autors-component"/>
+
+    <Authors class="Layout_authors"/>
 
     <client-only>
       <notifications classes="main-notification" position="bottom left" width="370px" />
@@ -58,9 +59,9 @@ html {
   scroll-behavior: smooth;
 }
 
-  @media screen and (max-width: $desktop_breakpoint) {
-    .autors-component {
-      display: none;
-    }
+@media screen and (max-width: $desktop_breakpoint) {
+  .Layout_authors {
+    display: none;
   }
+}
 </style>
