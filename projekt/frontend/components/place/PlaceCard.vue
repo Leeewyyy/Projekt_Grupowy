@@ -94,8 +94,7 @@ export default {
     },
     nfzStatus: {
       type: String,
-      default: 'none',
-      validator: (value) => ['full', 'partial', 'none'].includes(value),
+      default: 'NONE',
     },
     rating: {
       type: Number,

@@ -1,7 +1,7 @@
 <template>
   <div
     class="NFZStatus"
-    :class="`NFZStatus--${status}`"
+    :class="`NFZStatus--${statusValue}`"
     v-tooltip="tooltipText"
   >
     <Icon
@@ -27,17 +27,21 @@ export default {
     status: {
       type: String,
       default: '',
-      validator: (value) => ['full', 'partial', 'none'].includes(value),
+      validator: (value) => ['full', 'partial', 'none'].includes(value.toLowerCase()),
     },
   },
 
   computed: {
+    statusValue() {
+      return this.status?.toLowerCase();
+    },
+
     iconName() {
-      return this.icons[this.status];
+      return this.icons[this.statusValue];
     },
 
     tooltipText() {
-      return this.tooltips[this.status];
+      return this.tooltips[this.statusValue];
     },
   },
 
@@ -81,7 +85,7 @@ export default {
     white-space: nowrap;
   }
 
-  &.NFZStatus--full, &.NFZStatuus--partial {
+  &.NFZStatus--full, &.NFZStatus--partial {
     .NFZStatus_icon {
       background: $light-blue;
     }
