@@ -137,6 +137,10 @@ export default {
       type: Number,
       required: true,
     },
+    emitOpened: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -187,6 +191,7 @@ export default {
 
       try {
         this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
+        if (this.emitOpened) this.$nuxt.$emit('map:placeOpened', this.place);
       } catch (error) {
         if (process.client) this.$notify({ text: 'Wystąpił problem przy pobieraniu szczegółów placówki.', type: 'error' });
         console.error(error);

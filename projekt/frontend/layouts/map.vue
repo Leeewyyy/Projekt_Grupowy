@@ -113,7 +113,9 @@ export default {
     },
 
     mapPosition() {
-      return [this.coords.latitude, this.coords.longitude - 0.03];
+      return this.zoomCords
+        ? [this.zoomCords.latitude, this.zoomCords.longitude - 0.03]
+        : [this.coords.latitude, this.coords.longitude - 0.03];
     },
 
     hoveredPlaceCardStyle() {
@@ -141,6 +143,7 @@ export default {
 
   data() {
     return {
+      zoomCords: null,
       mapZoom: 13,
 
       // Hovered card
@@ -164,6 +167,11 @@ export default {
     hidePlaceCard() {
       this.isHoveredPlaceCardVisible = false;
     },
+
+    onPlaceOpened(place) {
+      if (!place?.location) return;
+      this.zoomCords = place.location;
+    },
     
     toggleBoxExpand() {
       this.$store.dispatch('boxExpand/setExpanded', !this.isBoxExpanded);
@@ -176,10 +184,12 @@ export default {
 
   created() {
     this.$nuxt.$on('map:toggleBoxExpand', this.toggleBoxExpand);
+    this.$nuxt.$on('map:placeOpened', this.onPlaceOpened);
   },
 
   destroyed() {
     this.$nuxt.$off('map:toggleBoxExpand', this.toggleBoxExpand);
+    this.$nuxt.$off('map:placeOpened', this.onPlaceOpened);
   },
   
   watch: {

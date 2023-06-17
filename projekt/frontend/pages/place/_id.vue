@@ -4,6 +4,7 @@
     class="main-box"
     id="placeDetails"
     :placeId="placeId"
+    :emitOpened="true"
     @onClose="onPlaceDetailsClose"
     @hideBox="hideBox"
   />
