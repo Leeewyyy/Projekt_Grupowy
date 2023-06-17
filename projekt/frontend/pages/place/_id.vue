@@ -5,6 +5,7 @@
     id="placeDetails"
     :placeId="placeId"
     @onClose="onPlaceDetailsClose"
+    @hideBox="hideBox"
   />
 </template>
 
@@ -48,6 +49,10 @@ export default {
         this.$store.dispatch('facilitiesSearch/reset');
         this.$router.push('/');
       }
+    },
+
+    hideBox() {
+      this.$nuxt.$emit('map:toggleBoxExpand');
     },
   },
 };

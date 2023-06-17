@@ -45,8 +45,21 @@
           :style="hoveredPlaceCardStyle"
           v-bind="hoveredPlace"
         />
-        
-        <nuxt></nuxt>
+
+        <div v-if="!isBoxExpanded" class="main_expand-box">
+          <IconToggleButton
+            class="icon-hide"
+            icon-name="keyboard_arrow_right"
+            variant="dark"
+            :size="32"
+            @click="toggleBoxExpand"
+            tooltip-text="Pokaż okno wyszukiwania"
+          />
+        </div>
+
+        <div v-if="isBoxExpanded">
+          <nuxt></nuxt>
+        </div>
       </div>
     </main>
 
@@ -63,6 +76,7 @@ import Header from '@/components/Header';
 import Authors from '@/components/Authors';
 import Map from '@/components/Map';
 import PlaceCard from '@/components/place/PlaceCard';
+import IconToggleButton from '@/components/shared/IconToggleButton';
 
 export default {
   components: {
@@ -70,6 +84,7 @@ export default {
     Authors,
     Map,
     PlaceCard,
+    IconToggleButton,
   },
 
   computed: {
@@ -118,6 +133,10 @@ export default {
         left: `${cardX}px`,
       };
     },
+
+    isBoxExpanded() {
+      return this.$store.getters['boxExpand/getExpanded'];
+    },
   },
 
   data() {
@@ -144,6 +163,31 @@ export default {
 
     hidePlaceCard() {
       this.isHoveredPlaceCardVisible = false;
+    },
+    
+    toggleBoxExpand() {
+      this.$store.dispatch('boxExpand/setExpanded', !this.isBoxExpanded);
+    },
+
+    resetBoxExpand() {
+      this.$store.dispatch('boxExpand/setExpanded', true);
+    },
+  },
+
+  created() {
+    this.$nuxt.$on('map:toggleBoxExpand', this.toggleBoxExpand);
+  },
+
+  destroyed() {
+    this.$nuxt.$off('map:toggleBoxExpand', this.toggleBoxExpand);
+  },
+  
+  watch: {
+    $route: {
+      // eslint-disable-next-line
+      handler: function () {
+        this.resetBoxExpand();
+      },
     },
   },
 };
@@ -230,6 +274,10 @@ html {
     .main_hovered-place {
       position: absolute;
     }
+
+    .main_expand-box {
+      display: none;
+    }
   }
 }
 
@@ -238,6 +286,17 @@ html {
     .LayoutMap_main {
       .main_map {
         display: block;
+      }
+
+      .main_expand-box {
+        display: block;
+        position: absolute;
+        top: 16vh;
+        left: 0;
+        background: #fff;
+        border-radius: 0 10px 10px 0;
+        padding: 7px 3px;
+        box-shadow: 0px 2px 4px rgba(var(--color-black), 0.125);
       }
     }
 

@@ -4,6 +4,7 @@
     class="main-box"
     @getCoords="updateMapCoords"
     @onSearch="searchPlaces"
+    @hideBox="hideBox"
   />
 </template>
 
@@ -45,6 +46,10 @@ export default {
         }, {});
       
       this.$router.push({ path: '/places', query });
+    },
+
+    hideBox() {
+      this.$nuxt.$emit('map:toggleBoxExpand');
     },
   },
 };

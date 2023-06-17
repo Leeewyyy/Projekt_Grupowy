@@ -6,6 +6,7 @@
     :isLoading="isLoading"
     @onPlaceSelected="onPlaceSelected"
     @onClose="onPlaceListClose"
+    @hideBox="hideBox"
   />
 </template>
 
@@ -72,6 +73,10 @@ export default {
     async onPlaceListClose() {
       this.$store.dispatch('facilitiesSearch/reset');
       this.$router.push('/');
+    },
+
+    hideBox() {
+      this.$nuxt.$emit('map:toggleBoxExpand');
     },
   },
 };
