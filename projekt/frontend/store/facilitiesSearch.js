@@ -1,6 +1,6 @@
 export const state = () => ({
   possibleAddresses: [],
-  facilities: [],
+  facilities: null,
   facilitiesTypes: [],
   specialistsTypes: [],
 });
@@ -52,17 +52,8 @@ export const actions = {
     return filteredResults;
   },
 
-  // eslint-disable-next-line
-  async searchFacilities({ commit }, { doctor, isNFZ, maxDistance, placeType, longitude, latitude }) {
-    const params = {
-      type: placeType?.name || null,
-      isNFZ: isNFZ || null,
-      specialization: doctor?.name || null,
-      latitude: latitude ?? null,
-      longitude: longitude ?? null,
-      distance: maxDistance?.val ?? 1000,
-    };
-
+  async searchFacilities({ commit }, params) {
+    if (!params.distance) params.distance = 1000;
     const results = await this.$axios.$get('/api/medical-facilities', { params }) ?? [];
     commit('setFacilities', results);
   },
@@ -75,5 +66,9 @@ export const actions = {
   async getSpecialistsTypes({ commit }) {
     const results = await this.$axios.$get('/api/specialists/types') ?? [];
     commit('setSpecialistsTypes', results.map((name, id) => ({ name, id })));
+  },
+
+  async reset({ commit }) {
+    commit('setFacilities', null);
   },
 };

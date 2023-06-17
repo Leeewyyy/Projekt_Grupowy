@@ -1,5 +1,5 @@
-@import './default/notification.scss';
-@import './default/tooltip.scss';
+@import './default/notification';
+@import './default/tooltip';
 @import './classes';
 @import './colors';
 
@@ -11,7 +11,8 @@ $desktop_breakpoint: 1280px;
 .main-container {
   width: 100%;
   max-width: 450px;
-  height: 85vh;
+  // min-height: 50vh;
+  // height: 85vh;
 
   @media screen and (max-width: $desktop_breakpoint) {
     max-width: unset;

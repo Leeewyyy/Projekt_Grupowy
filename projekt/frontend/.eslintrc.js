@@ -28,5 +28,6 @@ module.exports = {
     'no-unused-vars': 'warn',
     'linebreak-style': 'off',
     'spaced-comment': 'warn',
+    'max-len': 'off',
   },
 };

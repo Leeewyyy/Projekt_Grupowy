@@ -28,7 +28,7 @@
       >
         Zaloguj się
       </MenuLink>
-      <MenuLink href="user-panel" class="account_link flex-panel-button" v-else> 
+      <MenuLink href="/user-panel" class="account_link flex-panel-button" v-else> 
         <template #before>
           <img
             v-if="user && user.imageUrl"
@@ -73,11 +73,11 @@ export default {
       menuItems: [
         {
           name: 'O aplikacji',
-          href: 'about',
+          href: '/about',
         },
         {
           name: 'Kontakt',
-          href: 'contact',
+          href: '/contact',
         },
       ],
     };

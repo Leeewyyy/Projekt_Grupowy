@@ -13,7 +13,7 @@
         class="body_back-button"
         :show-submit="showSubmit"
         @back="onBack"
-        @submit="$emit('submit')"
+        @submit="onSubmit"
       />
     </div>
   </section>
@@ -42,6 +42,10 @@ export default {
     onBack() {
       this.$emit('onBack');
     },
+
+    onSubmit() {
+      this.$emit('onSubmit');
+    },
   },
 };
 </script>
@@ -63,7 +67,6 @@ export default {
 
   .BoxSection_body {
     position: relative;
-    height: 79%;
     
     @media screen and (max-width: $desktop_breakpoint) {
       &.body--with-back-button {

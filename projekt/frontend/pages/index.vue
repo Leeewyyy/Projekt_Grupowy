@@ -1,309 +1,51 @@
 <template>
-  <AppPage name="page">
-    <Map :key="mapKey" ref="map" class="page_map" :center="mapPosition" :zoom="mapZoom">
-      <!-- Test marker - Gdańsk Politechnika -->
-      <l-marker
-        v-for="place in (facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces)"
-        :key="place.id"
-        :lat-lng="[place.location.latitude, place.location.longitude]"
-        @click="onPlaceSelected(place)"
-        @mouseenter="showPlaceCard(place, $event.containerPoint)"
-        @mouseleave="hidePlaceCard"
-      >
-      </l-marker>
-
-      <l-marker 
-        v-if="coords"
-        :lat-lng="[coords.latitude, coords.longitude]"
-        class="my-position-marker"
-      >
-        <l-icon 
-          :icon-size="[44, 57]"
-          :icon-anchor="[30, 94]"
-         >
-          <img src="/images/my_position3.svg" class="my-position-icon">
-          <div class="headline">Tu jestem</div>
-         </l-icon>
-      </l-marker>
-    </Map>
-
-    <!-- Put all elements to draw on top of map here -->
-    <div class="page_container">
-      <!-- Hovered card -->
-      <PlaceCard
-          class="page_hovered-place"
-          ref="hoveredPlaceCard"
-          v-if="isHoveredPlaceCardVisible"
-          :style="hoveredPlaceCardStyle"
-          v-bind="hoveredPlace"
-      />
-      <div v-if="!boxVisible" class="expand-box">
-        <IconToggleButton
-          tooltip-text="Pokaż okno wyszukiwania"
-          class="icon-hide"
-          icon-name="keyboard_arrow_right"
-          variant="dark"
-          :size="32"
-          @click="boxVisible = true"
-        />
-      </div>
-      <div :class="['w-100', { 'views-invisible': !boxVisible }]">
-        <PlaceSearch
-          v-show="currentView === 'placeSearch'"
-          id="placeSearch"
-          class="page_place-search"
-          :loading="loadingfacilities"
-          @getCoords="setCoords"
-          @onSearch="searchPlaces"
-          @hideBox="boxVisible = false"
-        />
-        <PlaceList
-          v-show="currentView === 'placeList'"
-          class="page_place-list"
-          id="placeList"
-          :places="facilitiesOnSearch.length ? facilitiesOnSearch : allPlaces"
-          @onPlaceSelected="onPlaceSelected"
-          @onClose="onPlaceListClose"
-          @hideBox="boxVisible = false"
-        />
-        <PlaceDetails
-          v-if="currentView === 'placeDetails' && selectedPlaceId"
-          class="page_place-details"
-          id="placeDetails"
-          :placeId="selectedPlaceId"
-          @onClose="onPlaceDetailsClose"
-          @hideBox="boxVisible = false"
-        />
-      </div>
-    </div>
-  </AppPage>
+  <PlaceSearch
+    id="placeSearch"
+    class="main-box"
+    @getCoords="updateMapCoords"
+    @onSearch="searchPlaces"
+  />
 </template>
 
 <script>
-// eslint-disable-next-line
-import { mapGetters } from 'vuex';
-import AppPage from '@/components/AppPage';
-import Map from '@/components/Map';
 import PlaceSearch from '@/components/place/PlaceSearch';
-import PlaceList from '@/components/place/PlaceList';
-import PlaceDetails from '@/components/place/PlaceDetails';
-import PlaceCard from '@/components/place/PlaceCard';
 import IconToggleButton from '@/components/shared/IconToggleButton';
 
 export default {
   components: {
-    AppPage,
-    Map,
     PlaceSearch,
-    PlaceList,
-    PlaceDetails,
-    PlaceCard,
     IconToggleButton,
   },
 
-  layout: 'page',
+  layout: 'map',
 
   head() {
     return {
-      title: 'Mapa',
-    };
-  },
-
-  data() {
-    return {
-      coords: null,
-
-      lastCoords: {
-        latitude: 54.3739,
-        longitude: 18.6214,
-      },
-
-      mapKey: 1,
-      selectedPlaceId: null,
-      boxVisible: true,
-      loadingfacilities: false,
-    };
-  },
-
-  watch: {
-    coords(coords) {
-      if (coords) this.lastCoords = { ...coords };
-    },
-  },
-
-  computed: {
-    ...mapGetters('facilitiesSearch', {
-      facilitiesOnSearch: 'getFacilities',
-    }),
-
-    allPlaces() {
-      return this.$store.getters['facility/getFacilities'];
-    },
-
-    hoveredPlaceCardStyle() {
-      const { x, y } = this.hoveredPlacePoint;
-      const { innerWidth, innerHeight } = window;
-
-      // TODO: Maybe get those values from ref value if dynamic size
-      const cardWidth = 460;
-      const cardHeight = 105;
-      const offset = 15;
-
-      // Clamp X/Y values within screen size
-      const cardX = x + cardWidth + offset > innerWidth ? x - cardWidth - offset : x + offset;
-
-      const cardY = y + cardHeight + offset > innerHeight ? y - cardHeight - offset : y + offset;
-
-      return {
-        top: `${cardY}px`,
-        left: `${cardX}px`,
-      };
-    },
-
-    mapPosition() {
-      return this.coords
-        ? [this.coords.latitude, this.coords.longitude - 0.03]
-        : [this.lastCoords?.latitude, this.lastCoords?.longitude - 0.03];
-    },
-
-    currentView() {
-      return this.$store.getters['views/getView'];
-    },
-  },
-
-  async asyncData() {
-    return {
-      mapZoom: 13,
-
-      // Hovered card
-      hoveredPlace: null,
-      hoveredPlacePoint: null,
-      isHoveredPlaceCardVisible: false,
+      title: 'Wyszukaj placówki',
     };
   },
 
   methods: {
-    onPlaceSelected({ id }) {
-      this.selectedPlaceId = id;
-      this.$store.commit('views/setView', 'placeDetails');
-      this.boxVisible = true;
-    },
-
-    onPlaceListClose() {
-      this.$store.commit('views/setView', 'placeSearch');
-    },
-
-    onPlaceDetailsClose() {
-      this.$store.commit('views/setView', 'placeList');
-    },
-
-    showPlaceCard(place, point) {
-      this.hoveredPlace = place;
-      this.hoveredPlacePoint = point;
-      this.isHoveredPlaceCardVisible = true;
-    },
-
-    hidePlaceCard() {
-      this.isHoveredPlaceCardVisible = false;
+    updateMapCoords(coords) {
+      if (!coords) return;
+      this.$store.dispatch('map/setCoords', coords);
+      this.$store.dispatch('map/setCustomCoords', true);
+      this.$store.dispatch('map/incrementKey');
     },
 
     async searchPlaces(form) {
-      this.loadingfacilities = true;
-      try {
-        await this.$store.dispatch('facilitiesSearch/searchFacilities', { ...form, ...this.coords });
+      console.log('Searching places!');
 
-        if (!this.facilitiesOnSearch?.length) {
-          this.$notify({ text: 'Brak placówek. Rozważ zmianę kryteriów wyszukiwania.', type: 'error' });
-          return;
-        }
-        
-        this.$store.commit('views/setView', 'placeList');
-      } catch (error) {
-        this.$notify({ text: 'Nie udało się pobrać placówek.', type: 'error' });
-      } finally {
-        this.loadingfacilities = false;
-      }
-    },
-
-    setCoords(coords) {
-      this.coords = coords;
-      if (coords) this.mapKey++;
+      // Skip empty form parameters
+      const query = Object.keys(form)
+        .reduce((obj, key) => {
+          const value = form[key];
+          if (value) obj[key] = value;
+          return obj;
+        }, {});
+      
+      this.$router.push({ path: '/places', query });
     },
   },
 };
 </script>
-
-<style lang="scss">
-.AppPage--page {
-  position: relative;
-  
-  .page_map {
-    width: 100vw;
-    height: 100vh;
-    display: none;
-    z-index: 1;
-  }
-
-  .page_container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    z-index: 2; // draw on map
-
-    .expand-box {
-      position: absolute;
-      top: 16vh;
-      left: 0;
-      background: #fff;
-      border-radius: 0 10px 10px 0;
-      padding: 7px 3px;
-      box-shadow: 0px 2px 4px rgba(var(--color-black), 0.125);
-    }
-  }
-
-  .page_hovered-place {
-    position: absolute;
-  }
-}
-
-.headline {
-  text-align: center;
-  font-size: 1em;
-  font-weight: bold;
-  width: 60px;
-  position: relative;
-  left: -10px;
-}
-
-@media screen and (min-width: $desktop_breakpoint) {
-  .AppPage--page {
-    .page_map {
-      display: block;
-    }
-
-    .page_place-search,
-    .page_place-list,
-    .page_place-details {
-      position: absolute;
-      top: 12%;
-      left: 50px;
-    }
-  }
-}
-
-.views-invisible {
-  display: none;
-}
-
-@media screen and (max-width: $desktop_breakpoint) {
-  .views-invisible {
-    display: block !important;
-  }
-
-  .expand-box {
-    display: none;
-  }
-}
-</style>

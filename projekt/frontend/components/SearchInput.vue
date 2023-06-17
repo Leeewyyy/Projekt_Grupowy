@@ -82,17 +82,17 @@ export default {
         this.loading = true;
         this.$emit('loading', true);
         clearTimeout(this.delayTimer);
-        this.delayTimer = setTimeout(() => {
+        this.delayTimer = setTimeout(async () => {
           if (!value.length) {
-            this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+            await this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
             this.$emit('toggleAddress', null);
           } else {
-            this.$store.dispatch('facilitiesSearch/getAddresses', value);
+            await this.$store.dispatch('facilitiesSearch/getAddresses', value);
           }
           
           this.loading = false;
           this.$emit('loading', false);
-        }, 1000);
+        }, 500);
       } catch (error) {
         this.$notify({ text: 'Błąd pobierania możliwych adresów' });
       }

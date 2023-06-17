@@ -1,7 +1,7 @@
 <template>
   <BoxSection
     class="PlaceDetails main-container"
-    :show-bottom-buttons="true"
+    :showBottomButtons="true"
     @onBack="onBack"
   >
     <template #header>
@@ -12,7 +12,7 @@
     </template>
     <template #body>
       <vue-scroll :ops="scrollOptions">
-        <div class="PlaceDetails_container" v-if="!isLoading">
+        <div class="PlaceDetails_container" v-if="place">
           <div class="container_image">
             <ImageSlider
               v-if="place.images && place.images.length"
@@ -95,8 +95,11 @@
             :reviews="place.opinions"
           />
         </div>
-        <div v-else class="PlaceDetails_loading">
+        <div v-else-if="isLoading" class="PlaceDetails_message">
           Trwa wczytywanie szczegółów placówki...
+        </div>
+        <div v-else class="PlaceDetails_message">
+          Nie znaleziono podanej placówki.
         </div>
       </vue-scroll>
     </template>
@@ -138,9 +141,9 @@ export default {
 
   computed: {
     links() {
-      const { websiteUrl, phone } = this.place;
+      const { websiteUrl, phone } = this.place || {};
       const list = [];
-
+      
       if (websiteUrl) {
         list.push({
           name: 'Odwiedź witrynę',
@@ -159,20 +162,10 @@ export default {
 
       return list;
     },
+    
     isLogged() {
       return this.$store.getters['user/isLoggedIn'];
     },
-  },
-
-  async fetch() {
-    this.isLoading = true;
-    try {
-      this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
-    } catch (error) {
-      this.$notify({ text: 'Wystąpił problem przy pobieraniu szczegółów placówki.', type: 'error' });
-      console.error(error);
-    }
-    this.isLoading = false;
   },
 
   data() {
@@ -182,33 +175,40 @@ export default {
         sizeStrategy: 'percent',
         detectResize: true,
       },
-
-      place: {},
-      isLoading: false,
+      
+      place: null,
+      isLoading: true,
     };
   },
 
   methods: {
+    async loadPlaceDetails() {
+      this.isLoading = true;
+
+      try {
+        this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
+      } catch (error) {
+        if (process.client) this.$notify({ text: 'Wystąpił problem przy pobieraniu szczegółów placówki.', type: 'error' });
+        console.error(error);
+      }
+
+      this.isLoading = false;
+    },
+
     onBack() {
       this.$emit('onClose');
     },
   },
 
-  watch: {
-    placeId: {
-      // eslint-disable-next-line
-      handler: async function (newValue, oldValue) {
-        if (newValue === oldValue) return;
-        await this.$fetch();
-      },
-    },
+  async mounted() {
+    await this.loadPlaceDetails();
   },
 };
 </script>
 
 <style lang="scss">
 .PlaceDetails {
-  .PlaceDetails_loading {
+  .PlaceDetails_message {
     padding: 2rem 0;
     text-align: center;
   }

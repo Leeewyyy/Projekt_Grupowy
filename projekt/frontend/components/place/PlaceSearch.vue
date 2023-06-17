@@ -1,7 +1,11 @@
 <template>
-  <BoxSection class="PlaceSearch main-container"
-    :show-bottom-buttons="showButtons" :show-submit="showSubmit"
-    @onBack="resetForm" @submit=submitSearch>
+  <BoxSection
+    class="PlaceSearch main-container"
+    :showBottomButtons="showButtons"
+    :showSubmit="showSubmit"
+    @onBack="resetForm"
+    @onSubmit="submitSearch"
+  >
     <template #header>
       <div class="header_logo mobile-hidden">
         <Branding
@@ -187,7 +191,7 @@ export default {
         doctor: null,
         placeType: null,
         maxDistance: null,
-        isNFZ: null,
+        nfzStatus: null,
       },
 
       moreFiltersOn: false,
@@ -204,6 +208,7 @@ export default {
       showSubmit: false,
     };
   },
+  
   mounted() {
     try {
       this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
@@ -243,11 +248,11 @@ export default {
         doctor: null,
         placeType: null,
         maxDistance: null,
-        isNFZ: null,
+        nfzStatus: null,
       };
 
       this.activeAddress = null;
-      this.tmpPlaceholder = false;
+      this.tmpPlaceholder = '';
       this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
       this.searchKey++;
       this.coords = null;
@@ -258,7 +263,14 @@ export default {
     },
 
     submitSearch() {
-      this.$emit('onSearch', this.form);
+      console.log('Search submitted!');
+
+      this.$emit('onSearch', {
+        ...this.form,
+        ...this.coords,
+      });
+
+      this.resetForm();
     },
 
     getCurrentPosition() {

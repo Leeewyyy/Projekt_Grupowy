@@ -78,7 +78,6 @@ export default {
     },
 
     closeNavigation() {
-      this.$store.commit('views/setView', 'placeSearch');
       this.isNavigationVisible = false;
     },
   },

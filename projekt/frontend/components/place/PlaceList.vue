@@ -16,7 +16,8 @@
           />
         </div>
         <div class="header_title">
-          Znaleziono <b class="title_count">{{ places.length }}</b> wyników
+          <span v-if="isLoading">Trwa ładowanie placówek...</span>
+          <span v-else>Znaleziono <b class="title_count">{{ places.length }}</b> wyników</span>
         </div>
         <CollapseButton class="mobile-hidden" @collapse="$emit('hideBox')" />
       </div>
@@ -28,7 +29,8 @@
     </template>
     <template #body>
       <div class="PlaceList_container">
-        <div v-if="!places.length" class="container_empty">
+        <Loader v-if="isLoading" style="padding: 1rem;" />
+        <div v-else-if="!places.length" class="container_empty">
           Nie znaleziono żadnych miejsc spełniających kryteria.
         </div>
         <vue-scroll v-else :ops="scrollOptions">
@@ -55,6 +57,7 @@ import Branding from '@/components/Branding';
 import PlaceCard from '@/components/place/PlaceCard';
 import Icon from '@/components/shared/Icon';
 import CollapseButton from '@/components/CollapseButton';
+import Loader from '@/components/shared/Loader';
 
 export default {
   components: {
@@ -63,6 +66,7 @@ export default {
     PlaceCard,
     Icon,
     CollapseButton,
+    Loader,
   },
 
   props: {
@@ -81,6 +85,10 @@ export default {
     closable: {
       type: Boolean,
       default: true,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
 
