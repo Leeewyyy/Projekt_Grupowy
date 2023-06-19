@@ -1,9 +1,9 @@
 <template>
   <BoxSection
     class="PlaceSearch main-container"
-    :showBottomButtons="showButtons"
-    :showSubmit="showSubmit"
-    @onBack="resetForm"
+    :showBottomButtons="step !== SEARCH_STEPS.WELCOME"
+    :showSubmit="step === SEARCH_STEPS.MORE_FILTERS"
+    @onBack="handlePreviousStep"
     @onSubmit="submitSearch"
   >
     <template #header>
@@ -21,13 +21,50 @@
           :key="searchKey"
           :placeholder="tmpPlaceholder"
           :coords="coords"
+          :hide-results="step === SEARCH_STEPS.MORE_FILTERS"
+          :hide-label="step === SEARCH_STEPS.MORE_FILTERS"
           @toggleAddress="toggleAddress"
           @resultsLength="handleAddresses"
-          @loading="showWelcomeBox = !$event"
+          @loading="step = SEARCH_STEPS.RESULTS_VISIBLE"
           @iconClicked="getCurrentPosition()"
           style="margin-bottom: .5rem;"
         />
-        <WelcomeBox v-if="showWelcomeBox && !showButtons" />
+        <WelcomeBox v-if="step === SEARCH_STEPS.WELCOME" />
+        <div v-if="step === SEARCH_STEPS.MORE_FILTERS" class="more-filters">
+          <div class="display-flex align-center justify-between first-row">
+            <Select
+              name="place-type"
+              v-model="form.placeType"
+              :options="facilitiesTypes"
+              label="name"
+              select-label="Wybierz typ placówki"
+              class="select"
+            />
+            <SwitchButton id="switch-nfz" v-model="form.nfzStatus" description="NFZ" class="switch" />
+          </div>
+
+          <Select
+            name="doctors-select"
+            v-model="form.doctor"
+            :options="specialistsTypes"
+            select-label="Wybierz specjalizację lekarza"
+            class="second-row"
+          />
+          
+          <div class="buttons display-flex align-center justify-center flex-wrap">
+            <Button 
+              v-for="distance in distanceOptions"
+              :key="distance.value"
+              type="button"
+              :class="['button', { 'wider': distance.isWiderButton }]"
+              :active="form.maxDistance === distance.value"
+              @click="form.maxDistance = distance.value"
+            >
+              {{ distance.name }}
+            </Button>
+          </div>
+          <label class="buttons-label">Wybierz max. odległość od wskazanego adresu</label>
+        </div>
         <!-- <BackButton v-if="!showWelcomeBox" /> -->
         <!-- <div class="buttons">
           <Button v-if="coords" class="submit-button" type="submit">Szukaj</Button>
@@ -162,6 +199,8 @@ import Branding from '@/components/Branding';
 import CollapseButton from '@/components/CollapseButton';
 import SingleWelcomeBox from '@/components/SingleWelcomeBox';
 import BottomButtons from '@/components/BottomButtons';
+import SwitchButton from '@/components/shared/SwitchButton';
+import { SEARCH_STEPS } from '../../consts';
 
 export default {
   props: {
@@ -182,15 +221,17 @@ export default {
     CollapseButton,
     SingleWelcomeBox,
     BottomButtons,
+    SwitchButton,
   },
 
   data() {
     return {
+      SEARCH_STEPS,
       form: {
         search: null,
         doctor: null,
         placeType: null,
-        maxDistance: null,
+        maxDistance: 50,
         nfzStatus: null,
       },
 
@@ -200,12 +241,35 @@ export default {
 
       coords: null,
       activeAddress: null,
-      distanceOptions: [5, 10, 25, 50, 100, 250, 500],
+      distanceOptions: [{
+        value: 10,
+        name: '10 km',
+      }, {
+        value: 25,
+        name: '25 km',
+      }, {
+        value: 50,
+        name: '50 km',
+      }, {
+        value: 100,
+        name: '100 km',
+      }, {
+        value: 200,
+        name: '200 km',
+      }, {
+        value: 500,
+        name: '500 km',
+      }, {
+        value: 1000,
+        name: 'Cała Polska',
+        isWiderButton: true,
+      }],
       delayTimer: null,
-      showWelcomeBox: true,
       searchKey: 0,
-      showButtons: false,
+      addressSelected: false,
       showSubmit: false,
+      step: SEARCH_STEPS.WELCOME,
+      addressesVisible: false,
     };
   },
   
@@ -213,7 +277,6 @@ export default {
     try {
       this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
       this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
-      this.$store.dispatch('cookie/getCookie', 'showWelcomeBox');
     } catch (e) {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
     }
@@ -224,21 +287,14 @@ export default {
       facilitiesTypes: 'getFacilitiesTypes',
       specialistsTypes: 'getSpecialistsTypes',
     }),
-    welcomeCookie() {
-      return this.$store.getters['cookie/getShowWelcomeBoxCookie'];
-    },
-    distanceOptionsForSelect() {
-      return this.distanceOptions.map((optionVal, index) => ({
-        id: index,
-        val: optionVal,
-        name: `${optionVal} km`,
-      }));
-    },
   },
   watch: {
     // eslint-disable-next-line
     'form.search'() {
       this.moreFiltersOn = false;
+    },
+    step(step) {
+      if (step === SEARCH_STEPS.WELCOME) this.resetForm();
     },
   },
   methods: {
@@ -247,7 +303,7 @@ export default {
         search: null,
         doctor: null,
         placeType: null,
-        maxDistance: null,
+        maxDistance: 50,
         nfzStatus: null,
       };
 
@@ -257,9 +313,8 @@ export default {
       this.searchKey++;
       this.coords = null;
       this.$emit('getCoords', null);
-      this.showButtons = false;
       this.showSubmit = false;
-      this.showWelcomeBox = true;
+      this.step = SEARCH_STEPS.WELCOME;
     },
 
     submitSearch() {
@@ -286,10 +341,9 @@ export default {
         this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
-          this.setDefaultDistance();
-          this.showWelcomeBox = false;
-          this.showButtons = true;
           this.showSubmit = true;
+          this.step = SEARCH_STEPS.MORE_FILTERS;
+          this.addressesVisible = false;
           this.$notify({ text: 'Ustawiono Twoją lokalizację, jako domyślny adres wyszukiwania', type: 'success' });
         });
       };
@@ -307,12 +361,14 @@ export default {
         this.activeAddress = null;
         this.tmpPlaceholder = '';
         this.showSubmit = false;
+        this.step = SEARCH_STEPS.RESULTS_VISIBLE;
       } else {
         this.activeAddress = address;
         this.coords = address?.location;
         this.tmpPlaceholder = this.buildAddress(address);
         this.showSubmit = true;
         this.searchKey++;
+        this.step = SEARCH_STEPS.MORE_FILTERS;
       }
 
       this.$emit('getCoords', this.coords);
@@ -330,14 +386,22 @@ export default {
         .join(', ');
     },
 
-    setDefaultDistance() {
-      this.form.maxDistance = this.distanceOptionsForSelect
-        .find((option) => option.val === 25);
+    handleAddresses(length) {
+      this.addressesVisible = length;
+      if (length) {
+        this.step = SEARCH_STEPS.RESULTS_VISIBLE;
+      } else {
+        this.step = SEARCH_STEPS.WELCOME;
+      }
     },
 
-    handleAddresses(length) {
-      this.showWelcomeBox = !length;
-      this.showButtons = length;
+    handlePreviousStep() {
+      if (!this.addressesVisible) {
+        this.step = SEARCH_STEPS.WELCOME;
+        return;
+      }
+
+      this.step--;
     },
   },
 };
@@ -348,7 +412,7 @@ export default {
   
   @media screen and (max-width: $desktop_breakpoint) {
     display: flex;
-    align-items: center;
+    align-items: center;  
     justify-content: center;
     flex-direction: column;
     background: rgb(var(--color-main));
@@ -561,6 +625,53 @@ export default {
       margin: 15px auto 0 auto;
       font-size: 1em;
     }
+  }
+}
+
+.more-filters {
+  padding: 0 2rem;
+
+  .first-row {
+    margin-top: 1rem;
+
+    .select {
+      width: 82%;
+    }
+
+    .switch {
+      position: relative;
+      top: 10px;
+
+      .SwitchButton_label {
+        bottom: 5px;
+      }
+    }
+  }
+
+  .second-row {
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .buttons {
+    margin-top: 1rem;
+    gap: 10px;
+
+    .button {
+      width: 23%;
+      padding-left: 10px;
+
+      &.wider {
+        width: 48%;
+      }
+    }
+  }
+
+  .buttons-label {
+    font-size: 13px;
+    padding-left: 10px;
+    position: relative;
+    top: 5px;
   }
 }
 </style>

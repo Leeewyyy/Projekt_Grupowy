@@ -10,7 +10,6 @@
           :label="label"
           :show-labels="false"
           :allow-empty="allowEmpty"
-          :tabindex="tabIndex"
           :max-height="140"
           @focus="isFocused = true"
           @blur="isFocused = false"

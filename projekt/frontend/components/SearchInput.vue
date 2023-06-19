@@ -3,7 +3,7 @@
     <InputText 
       v-model="value"
       name="search-address"
-      :label="!loading ? 'Wpisz, aby zobaczyć proponowane adresy' : ''"
+      :label="!loading && !hideLabel ? 'Wpisz, aby zobaczyć proponowane adresy' : ''"
       :placeholder="placeholder || 'np. Gdańsk, Zwycięstwa'"
       :icon="{ show: true, tooltip: 'Ustaw moją lokalizację', name: 'my_location', size: 23 }"
       @input="getAddresses"
@@ -11,7 +11,7 @@
     >
       <Loader v-if="loading" style="margin: 1em 0;"/>
       <vue-scroll 
-        v-else
+        v-else-if="!hideResults"
         class="choose-result"
         :ops="scrollOptions"
       >
@@ -52,6 +52,14 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+    hideResults: {
+      type: Boolean,
+      default: true,
+    },
+    hideLabel: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

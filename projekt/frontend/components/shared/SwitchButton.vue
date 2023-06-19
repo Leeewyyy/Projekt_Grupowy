@@ -86,6 +86,10 @@ export default {
     width: max-content;
   }
 
+  &_description {
+    text-align: center;
+  }
+
   &--right {
     .SwitchButton_wrapper {
       flex-direction: row-reverse;
@@ -120,8 +124,8 @@ export default {
     display: block;
     position: relative;
     width: 50px;
-    height: 22px;
-    border-radius: 22px;
+    height: 25px;
+    border-radius: 25px;
     background: $extra-light-grey;
     text-indent: -9999px;
     cursor: pointer;
@@ -130,11 +134,11 @@ export default {
   &_label:after {
     content: '';
     position: absolute;
-    top: 2px;
+    top: 2.5px;
     left: 2px;
-    width: 18px;
-    height: 18px;
-    border-radius: 18px;
+    width: 20px;
+    height: 20px;
+    border-radius: 20px;
     background: $dark-grey;
     transition: .3s;
   }
