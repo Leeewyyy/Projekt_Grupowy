@@ -11,40 +11,53 @@
       </li>
     </ul>
     <!-- User panel link -->
-    <Button
-      v-if="$route.name === 'user-panel'"
-      variant="light"
-      class="Header_logout-button d-flex-center less-padding cursor-pointer"
-      @click="logout()"
-    >
-      Wyloguj się <Icon name="logout" class="ml-1" />
-    </Button>
-    <div v-else-if="$route.name !== 'login'" class="Header_account">
-      <MenuLink
-        v-if="!isLoggedIn"
-        href="login"
-        class="account_button"
-        type="button"
+    <div class="display-flex align-center justify-center">
+      <div class="search display-flex align-center justify-center">
+        <span>Wyszukaj placówkę (jeszcze nie działa)</span>
+        <InputText
+          name="search-input"
+          v-model="searchValue"
+          placeholder="Wpisz..."
+          style="margin-left: 20px;"
+          class="searchInput"
+        />
+      </div>
+      <Button
+        v-if="$route.name === 'user-panel'"
+        variant="light"
+        class="Header_logout-button d-flex-center less-padding cursor-pointer"
+        @click="logout()"
       >
-        Zaloguj się
-      </MenuLink>
-      <MenuLink href="/user-panel" class="account_link flex-panel-button" v-else> 
-        <template #before>
-          <img
-            v-if="user && user.imageUrl"
-            class="account_avatar"
-            :src="user.imageUrl"
-            alt=""
-          />
-          <Icon
-            v-else
-            name="account_circle"
-            :size="40"
-            color="#8AA9CE"
-          />
-        </template>
-        Panel użytkownika 
-      </MenuLink>
+        Wyloguj się <Icon name="logout" class="ml-1" />
+      </Button>
+      <div v-else-if="$route.name !== 'login'" class="Header_account">
+        <MenuLink
+          v-if="!isLoggedIn"
+          href="login"
+          class="account_button"
+          type="button"
+        >
+          Zaloguj się
+        </MenuLink>
+        <MenuLink href="/user-panel" class="account_link flex-panel-button" v-else> 
+          <template #before>
+            <img
+              v-if="user && user.imageUrl"
+              class="account_avatar"
+              :src="user.imageUrl"
+              alt=""
+            />
+            <Icon
+              v-else
+              name="account_circle"
+              :size="40"
+              color="#8AA9CE"
+            />
+          </template>
+          Panel użytkownika 
+        </MenuLink>
+      </div>
+      
     </div>
   </nav>
 </template>
@@ -54,11 +67,13 @@
 import { mapGetters } from 'vuex';
 import Icon from '@/components/shared/Icon';
 import MenuLink from '@/components/MenuLink';
+import InputText from '@/components/shared/InputText';
 
 export default {
   components: {
     Icon,
     MenuLink,
+    InputText,
   },
 
   computed: {
@@ -70,13 +85,10 @@ export default {
 
   data() {
     return {
+      searchValue: '',
       menuItems: [
         {
-          name: 'O aplikacji',
-          href: '/about',
-        },
-        {
-          name: 'Kontakt',
+          name: 'Napisz do nas',
           href: '/contact',
         },
       ],
@@ -102,6 +114,35 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 
+  .search {
+    margin-right: 1rem;
+
+    span {
+      font-size: .8rem;
+    }
+
+    .searchInput {
+      width: 200px;
+
+      .input-outer {
+        height: 35px;
+        border: none;
+
+        &.focused {
+          -webkit-box-shadow: 0 1px 2px rgba(0,0,0, .125);
+          -moz-box-shadow: 0 1px 2px rgba(0,0,0, .125);
+          -o--shadow: 0 1px 2px rgba(0,0,0, .125);
+          box-shadow: 0 1px 2px rgba(0,0,0, .125);
+        }
+      }
+
+      input {
+        padding-top: 0;
+        padding-bottom: 0; 
+      }
+    }
+  }
+
   .Navigation_list {
     display: flex;
     flex-direction: row;
@@ -110,7 +151,8 @@ export default {
 
     .list_item {
       min-width: 140px;
-      margin-right: 1rem;
+      display: flex;
+      align-items: center;
 
       &:last-child {
         margin-right: 0;

@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 0 2rem; box-sizing: border-box">
-    <InputText 
+    <InputText
       v-model="value"
       name="search-address"
       :label="!loading && !hideLabel ? 'Wpisz, aby zobaczyć proponowane adresy' : ''"

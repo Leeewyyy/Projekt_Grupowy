@@ -196,7 +196,7 @@ export default {
   destroyed() {
     this.$nuxt.$off('map:toggleBoxExpand', this.toggleBoxExpand);
     this.$nuxt.$off('map:placeOpened', this.onPlaceOpened);
-    this.$nuxt.$ff('map:placeClosed', this.onPlaceClosed);
+    this.$nuxt.$off('map:placeClosed', this.onPlaceClosed);
   },
   
   watch: {

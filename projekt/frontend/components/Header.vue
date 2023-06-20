@@ -8,15 +8,9 @@
     <div class="Header_container">
       <div class="container_wrapper">
         <!-- Logo -->
-        <div class="Header_logo">
+        <div v-if="$route.name !== 'index'" class="Header_logo">
           <nuxtLink to="/" class="logo_link" @click.native="closeNavigation">
-            <img
-              class="logo_image"
-              src="/images/logo.png"
-              alt=""
-              loading="lazy"
-            />
-            <h1 class="logo_text">LokalnyLekarz</h1>
+            Strona główna
           </nuxtLink>
         </div>
         <!-- Main navigation -->
@@ -45,6 +39,7 @@ import Navigation from '@/components/Navigation';
 import MenuLink from '@/components/MenuLink';
 import Icon from '@/components/shared/Icon';
 import Button from '@/components/shared/Button';
+import { SEARCH_STEPS } from '../consts';
 
 export default {
   components: {
@@ -68,6 +63,7 @@ export default {
 
   data() {
     return {
+      SEARCH_STEPS,
       isNavigationVisible: false,
     };
   },
@@ -85,7 +81,7 @@ export default {
   watch: {
     '$route.path': {
       // eslint-disable-next-line
-      handler: function () {
+      handler: function (val) {
         this.closeNavigation();
       },
     },
@@ -98,9 +94,14 @@ export default {
   width: 100%;
   height: 50px;
   position: absolute;
-  margin: 1rem 0;
-  padding: 0 1rem;
+  padding: 0 1.5rem 0 3rem;
   z-index: 10;
+  font-weight: 20px;
+  background: white;
+  -webkit-box-shadow: 0 2px 2px rgba(0,0,0, .125); 
+  -moz-box-shadow: 0 2px 2px rgba(0,0,0, .125); 
+  -o-box-shadow: 0 2px 2px rgba(0,0,0, .125); 
+  box-shadow: 0 2px 2px rgba(0,0,0, .125); 
 
   .Header_navigation-toggle {
     display: none;
@@ -121,37 +122,16 @@ export default {
     }
 
     .Header_logo {
-      width: max-content;
-      height: 50px;
-      padding: 0 0.75rem;
-      // background: rgb(var(--color-white));
-      // box-shadow: 0px 2px 6px rgba(var(--color-text), 0.25);
-      // border-radius: 8px;
-
+      min-width: 120px;
+      margin-right: .5rem;
       .logo_link {
-        height: 100%;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
-
-      .logo_image {
-        height: 35px;
-        width: auto;
-      }
-
-      .logo_text {
-        color: rgb(var(--color-text));
-        font-family: 'Poppins';
-        font-weight: 500;
-        font-size: 1.5rem;
-        text-indent: 0.5rem;
+        font-weight: bold;
+        
       }
     }
 
     .Header_navigation {
       width: 100%;
-      margin-left: 1.5rem;
     }
   }
 
@@ -164,6 +144,7 @@ export default {
   .Header {
     margin: 0;
     height: 60px;
+    box-sizing: border-box;
     background: #fff;
     position: relative;
 
