@@ -9,7 +9,6 @@
     @click.stop="$emit('click', !isActive)"
   >
     <Icon 
-      v-tooltip="tooltipText" 
       :name="iconName"
       :size="size"
       :color="variant === 'light' ? '#DDD' : '#000'"

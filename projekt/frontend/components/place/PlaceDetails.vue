@@ -201,6 +201,7 @@ export default {
     },
 
     onBack() {
+      this.$nuxt.$emit('map:placeClosed');
       this.$emit('onClose');
     },
   },

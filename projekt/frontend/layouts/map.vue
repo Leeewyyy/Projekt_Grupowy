@@ -115,7 +115,7 @@ export default {
     mapPosition() {
       return this.zoomCords
         ? [this.zoomCords.latitude, this.zoomCords.longitude - 0.03]
-        : [this.coords.latitude, this.coords.longitude - 0.03];
+        : [this.coords.latitude - 0.005, this.coords.longitude - 0.03];
     },
 
     hoveredPlaceCardStyle() {
@@ -172,6 +172,11 @@ export default {
       if (!place?.location) return;
       this.zoomCords = place.location;
     },
+
+    onPlaceClosed() {
+      console.log('closed');
+      this.zoomCords = null;
+    },
     
     toggleBoxExpand() {
       this.$store.dispatch('boxExpand/setExpanded', !this.isBoxExpanded);
@@ -185,11 +190,13 @@ export default {
   created() {
     this.$nuxt.$on('map:toggleBoxExpand', this.toggleBoxExpand);
     this.$nuxt.$on('map:placeOpened', this.onPlaceOpened);
+    this.$nuxt.$on('map:placeClosed', this.onPlaceClosed);
   },
 
   destroyed() {
     this.$nuxt.$off('map:toggleBoxExpand', this.toggleBoxExpand);
     this.$nuxt.$off('map:placeOpened', this.onPlaceOpened);
+    this.$nuxt.$ff('map:placeClosed', this.onPlaceClosed);
   },
   
   watch: {
@@ -267,9 +274,16 @@ html {
       text-align: center;
       font-size: 1em;
       font-weight: bold;
-      width: 60px;
+      width: 100px;
       position: relative;
-      left: -10px;
+      left: -30px;
+      background: white;
+      border-radius: 10px;
+      padding: 5px 10px;
+      -webkit-box-shadow: 0px 1px 2px rgba(0,0,0,.25);
+      -moz-box-shadow: 0px 1px 2px rgba(0,0,0,.25);
+      -o-box-shadow: 0px 1px 2px rgba(0,0,0,.25);
+      box-shadow: 0px 1px 2px rgba(0,0,0,.25);
     }
 
     .main_container {

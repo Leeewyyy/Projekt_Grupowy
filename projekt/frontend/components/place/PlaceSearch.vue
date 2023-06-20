@@ -19,7 +19,7 @@
       <form>
         <SearchInput
           :key="searchKey"
-          :placeholder="tmpPlaceholder"
+          :placeholder="placeholder"
           :coords="coords"
           :hide-results="step === SEARCH_STEPS.MORE_FILTERS"
           :hide-label="step === SEARCH_STEPS.MORE_FILTERS"
@@ -34,20 +34,22 @@
           <div class="display-flex align-center justify-between first-row">
             <Select
               name="place-type"
-              v-model="placeType"
+              :value="formState.placeType"
               :options="facilitiesTypes"
               label="name"
               select-label="Wybierz typ placówki"
+              @input="(value) => setFormState({ key: 'placeType', value })"
               class="select"
             />
-            <SwitchButton id="switch-nfz" v-model="nfzStatus" description="NFZ" class="switch" />
+            <SwitchButton id="switch-nfz" :model-value="formState.nfzStatus" @change="(value) => setFormState({ key: 'nfzStatus', value })" description="NFZ" class="switch" />
           </div>
 
           <Select
             name="doctors-select"
-            v-model="doctor"
+            :value="formState.doctor"
             :options="specialistsTypes"
             select-label="Wybierz specjalizację lekarza"
+            @input="(value) => setFormState({ key: 'doctor', value })"
             class="second-row"
           />
           
@@ -57,8 +59,8 @@
               :key="value"
               type="button"
               :class="['button', { 'wider': isWiderButton }]"
-              :active="distance === value"
-              @click="distance = value"
+              :active="formState.distance === value"
+              @click="setFormState({ key: 'distance', value })"
             >
               {{ name }}
             </Button>
@@ -227,13 +229,6 @@ export default {
   data() {
     return {
       SEARCH_STEPS,
-      doctor: null,
-      placeType: null,
-      distance: 50,
-      nfzStatus: true,
-      moreFiltersOn: false,
-      iconLocationON: false,
-      tmpPlaceholder: '',
       coords: null,
       activeAddress: null,
       distanceOptions: [{
@@ -262,7 +257,6 @@ export default {
       delayTimer: null,
       searchKey: 0,
       addressSelected: false,
-      showSubmit: false,
       addressesVisible: false,
     };
   },
@@ -282,15 +276,17 @@ export default {
       facilitiesTypes: 'getFacilitiesTypes',
       specialistsTypes: 'getSpecialistsTypes',
     }),
-    step() {
-      return this.$store.getters['placeSearch/getStep'];
-    },
+    ...mapGetters('placeSearch', {
+      formState: 'getFormState',
+      step: 'getStep',
+      placeholder: 'getPlaceholder',
+    }),
     form() {
       return {
-        doctor: this.doctor?.id ?? null,
-        placeType: this.placeType?.id ?? null,
-        distance: this.distance,
-        nfzStatus: this.nfzStatus,
+        doctor: this.formState.doctor?.id ?? null,
+        placeType: this.formState.placeType?.id ?? null,
+        distance: this.formState.distance,
+        nfzStatus: this.formState.nfzStatus,
       };
     },
   },
@@ -301,19 +297,15 @@ export default {
     },
   },
   methods: {
-    ...mapActions('placeSearch', ['setStep']),
+    ...mapActions('placeSearch', ['setStep', 'setFormState', 'resetFormState', 'setPlaceholder']),
     resetForm() {
-      this.doctor = null;
-      this.placeType = null;
-      this.distance = 50;
-      this.nfzStatus = true;
+      this.resetFormState();
       this.activeAddress = null;
-      this.tmpPlaceholder = '';
+      this.setPlaceholder('');
       this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
       this.searchKey++;
       this.coords = null;
       this.$emit('getCoords', null);
-      this.showSubmit = false;
       this.setStep(SEARCH_STEPS.WELCOME);
     },
 
@@ -328,7 +320,7 @@ export default {
       const onSuccess = ({ coords }) => {
         const { latitude, longitude } = coords;
         this.searchKey++;
-        this.tmpPlaceholder = 'Twoja lokalizacja';
+        this.setPlaceholder('Twoja lokalizacja');
         this.coords = { 
           latitude,
           longitude,
@@ -337,7 +329,6 @@ export default {
         this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
-          this.showSubmit = true;
           this.setStep(SEARCH_STEPS.MORE_FILTERS);
           this.addressesVisible = false;
           this.$notify({ text: 'Ustawiono Twoją lokalizację, jako domyślny adres wyszukiwania', type: 'success' });
@@ -355,14 +346,12 @@ export default {
       if (this.isActive(address) || !address) {
         this.coords = null;
         this.activeAddress = null;
-        this.tmpPlaceholder = '';
-        this.showSubmit = false;
+        this.setPlaceholder('');
         this.setStep(SEARCH_STEPS.RESULTS_VISIBLE);
       } else {
         this.activeAddress = address;
         this.coords = address?.location;
-        this.tmpPlaceholder = this.buildAddress(address);
-        this.showSubmit = true;
+        this.setPlaceholder(this.buildAddress(address));
         this.searchKey++;
         this.setStep(SEARCH_STEPS.MORE_FILTERS);
       }
