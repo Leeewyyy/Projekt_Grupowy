@@ -25,7 +25,7 @@
           :hide-label="step === SEARCH_STEPS.MORE_FILTERS"
           @toggleAddress="toggleAddress"
           @resultsLength="handleAddresses"
-          @loading="step = SEARCH_STEPS.RESULTS_VISIBLE"
+          @loading="setStep(SEARCH_STEPS.RESULTS_VISIBLE)"
           @iconClicked="getCurrentPosition()"
           style="margin-bottom: .5rem;"
         />
@@ -34,18 +34,18 @@
           <div class="display-flex align-center justify-between first-row">
             <Select
               name="place-type"
-              v-model="form.placeType"
+              v-model="placeType"
               :options="facilitiesTypes"
               label="name"
               select-label="Wybierz typ placówki"
               class="select"
             />
-            <SwitchButton id="switch-nfz" v-model="form.nfzStatus" description="NFZ" class="switch" />
+            <SwitchButton id="switch-nfz" v-model="nfzStatus" description="NFZ" class="switch" />
           </div>
 
           <Select
             name="doctors-select"
-            v-model="form.doctor"
+            v-model="doctor"
             :options="specialistsTypes"
             select-label="Wybierz specjalizację lekarza"
             class="second-row"
@@ -53,14 +53,14 @@
           
           <div class="buttons display-flex align-center justify-center flex-wrap">
             <Button 
-              v-for="distance in distanceOptions"
-              :key="distance.value"
+              v-for="{ value, isWiderButton, name } in distanceOptions"
+              :key="value"
               type="button"
-              :class="['button', { 'wider': distance.isWiderButton }]"
-              :active="form.maxDistance === distance.value"
-              @click="form.maxDistance = distance.value"
+              :class="['button', { 'wider': isWiderButton }]"
+              :active="distance === value"
+              @click="distance = value"
             >
-              {{ distance.name }}
+              {{ name }}
             </Button>
           </div>
           <label class="buttons-label">Wybierz max. odległość od wskazanego adresu</label>
@@ -75,7 +75,7 @@
           <div class="outer-input">
             <InputText
               name="address-input"
-              v-model="form.search"
+              v-model="search"
               :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
               :icon="{ 
                 show: true,
@@ -103,7 +103,7 @@
                 </ul>
               </vue-scroll>
               <div 
-                v-else-if="!moreFiltersOn && form.search && form.search.length"
+                v-else-if="!moreFiltersOn && search && search.length"
                 class="write-more"
               ><span>Pisz dalej...</span></div>
           </div>
@@ -111,7 +111,7 @@
           <div class="outer-input">
             <Select
               name="doctors-select"
-              v-model="form.doctor"
+              v-model="doctor"
               :options="specialistsTypes"
               description="Lekarz"
               style="margin-top: 10px"
@@ -158,7 +158,7 @@
           <div class="bottom-filters">
             <Select
               name="places-select"
-              v-model="form.placeType"
+              v-model="placeType"
               :options="facilitiesTypes"
               label="name"
               description="Typ placówki"
@@ -167,7 +167,7 @@
 
             <Select
               name="distance-select"
-              v-model="form.maxDistance"
+              v-model="distance"
               :options="distanceOptionsForSelect"
               description="Odległość"
               label="name"
@@ -187,7 +187,7 @@
 
 <script>
 // eslint-disable-next-line
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/shared/Select';
@@ -227,18 +227,13 @@ export default {
   data() {
     return {
       SEARCH_STEPS,
-      form: {
-        search: null,
-        doctor: null,
-        placeType: null,
-        maxDistance: 50,
-        nfzStatus: null,
-      },
-
+      doctor: null,
+      placeType: null,
+      distance: 50,
+      nfzStatus: true,
       moreFiltersOn: false,
       iconLocationON: false,
       tmpPlaceholder: '',
-
       coords: null,
       activeAddress: null,
       distanceOptions: [{
@@ -268,7 +263,6 @@ export default {
       searchKey: 0,
       addressSelected: false,
       showSubmit: false,
-      step: SEARCH_STEPS.WELCOME,
       addressesVisible: false,
     };
   },
@@ -277,6 +271,7 @@ export default {
     try {
       this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
       this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
+      this.$store.dispatch('facilitiesQuery/setQuery', null);
     } catch (e) {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
     }
@@ -287,26 +282,31 @@ export default {
       facilitiesTypes: 'getFacilitiesTypes',
       specialistsTypes: 'getSpecialistsTypes',
     }),
+    step() {
+      return this.$store.getters['placeSearch/getStep'];
+    },
+    form() {
+      return {
+        doctor: this.doctor?.id ?? null,
+        placeType: this.placeType?.id ?? null,
+        distance: this.distance,
+        nfzStatus: this.nfzStatus,
+      };
+    },
   },
   watch: {
     // eslint-disable-next-line
-    'form.search'() {
-      this.moreFiltersOn = false;
-    },
     step(step) {
       if (step === SEARCH_STEPS.WELCOME) this.resetForm();
     },
   },
   methods: {
+    ...mapActions('placeSearch', ['setStep']),
     resetForm() {
-      this.form = {
-        search: null,
-        doctor: null,
-        placeType: null,
-        maxDistance: 50,
-        nfzStatus: null,
-      };
-
+      this.doctor = null;
+      this.placeType = null;
+      this.distance = 50;
+      this.nfzStatus = true;
       this.activeAddress = null;
       this.tmpPlaceholder = '';
       this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
@@ -314,18 +314,14 @@ export default {
       this.coords = null;
       this.$emit('getCoords', null);
       this.showSubmit = false;
-      this.step = SEARCH_STEPS.WELCOME;
+      this.setStep(SEARCH_STEPS.WELCOME);
     },
 
     submitSearch() {
-      console.log('Search submitted!');
-
       this.$emit('onSearch', {
         ...this.form,
         ...this.coords,
       });
-
-      this.resetForm();
     },
 
     getCurrentPosition() {
@@ -342,7 +338,7 @@ export default {
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
           this.showSubmit = true;
-          this.step = SEARCH_STEPS.MORE_FILTERS;
+          this.setStep(SEARCH_STEPS.MORE_FILTERS);
           this.addressesVisible = false;
           this.$notify({ text: 'Ustawiono Twoją lokalizację, jako domyślny adres wyszukiwania', type: 'success' });
         });
@@ -361,14 +357,14 @@ export default {
         this.activeAddress = null;
         this.tmpPlaceholder = '';
         this.showSubmit = false;
-        this.step = SEARCH_STEPS.RESULTS_VISIBLE;
+        this.setStep(SEARCH_STEPS.RESULTS_VISIBLE);
       } else {
         this.activeAddress = address;
         this.coords = address?.location;
         this.tmpPlaceholder = this.buildAddress(address);
         this.showSubmit = true;
         this.searchKey++;
-        this.step = SEARCH_STEPS.MORE_FILTERS;
+        this.setStep(SEARCH_STEPS.MORE_FILTERS);
       }
 
       this.$emit('getCoords', this.coords);
@@ -389,19 +385,19 @@ export default {
     handleAddresses(length) {
       this.addressesVisible = length;
       if (length) {
-        this.step = SEARCH_STEPS.RESULTS_VISIBLE;
+        this.setStep(SEARCH_STEPS.RESULTS_VISIBLE);
       } else {
-        this.step = SEARCH_STEPS.WELCOME;
+        this.setStep(SEARCH_STEPS.WELCOME);
       }
     },
 
     handlePreviousStep() {
       if (!this.addressesVisible) {
-        this.step = SEARCH_STEPS.WELCOME;
+        this.setStep(SEARCH_STEPS.WELCOME);
         return;
       }
 
-      this.step--;
+      this.setStep(--this.step);
     },
   },
 };

@@ -63,6 +63,7 @@ export default {
   }
 
   &.BottomButtons--with-submit {
+    margin-top: 20px;
     padding-bottom: 0.5rem;
   }
 

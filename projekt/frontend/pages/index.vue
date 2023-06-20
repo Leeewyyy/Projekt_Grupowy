@@ -36,12 +36,11 @@ export default {
 
     async searchPlaces(form) {
       console.log('Searching places!');
-
       // Skip empty form parameters
       const query = Object.keys(form)
         .reduce((obj, key) => {
           const value = form[key];
-          if (value) obj[key] = value;
+          if (value !== null && value !== undefined) obj[key] = value;
           return obj;
         }, {});
       

@@ -226,7 +226,7 @@ export default {
   }
 
   .PlaceDetails_container {
-    max-height: 50vh;
+    max-height: 65vh;
     color: #333;
 
     .container_image {
