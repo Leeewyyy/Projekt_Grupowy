@@ -74,6 +74,7 @@ export default {
     },
 
     closeNavigation() {
+      this.$nuxt.$emit('map:placeClosed');
       this.isNavigationVisible = false;
     },
   },

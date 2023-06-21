@@ -1,7 +1,7 @@
 <template>
   <BoxSection class="account-data">
     <template #header>
-      <h2 class="account-data-title">Dane konta</h2>
+      <h2 class="account-data-title">Zmień dane konta</h2>
     </template>
     <template #body>
       <form class="account-data-container" @submit.prevent="submitSearch">
@@ -15,39 +15,54 @@
           name="email-input"
           v-model="form.email"
           label="Adres e-mail"
-          class="mt-1"
+          class="mt-1 element"
         />
 
-        <div class="account-data-container-inner">
-          <InputText
-            name="current-password-input"
-            v-model="form.currentPassword"
-            label="Obecne hasło"
-            type="password"
-          />
-          <InputText
-            name="new-password-input"
-            v-model="form.newPassword"
-            label="Nowe hasło"
-            type="password"
-            class="mt-1"
-          />
-          <InputText
-            name="new-password-confirmed-input"
-            v-model="form.newPasswordConfirmed"
-            label="Potwierdź nowe hasło"
-            type="password"
-            class="mt-1"
-          />
-        </div>
-
+      <InputText
+          name="current-password-input"
+          v-model="form.currentPassword"
+          label="Obecne hasło"
+          :type="showPass.current ? 'text' : 'password'"
+          :icon="{
+            show: true,
+            name: 'remove_red_eye',
+            size: 23,
+          }"
+          class="element"
+          @iconClicked="showPass.current = !showPass.current"
+        />
+        <InputText
+          name="new-password-input"
+          v-model="form.newPassword"
+          label="Nowe hasło"
+          :type="showPass.new ? 'text' : 'password'"
+          :icon="{
+            show: true,
+            name: 'remove_red_eye',
+            size: 23,
+          }"
+          @iconClicked="showPass.new = !showPass.new"
+          class="mt-1 element"
+        />
+        <InputText
+          name="new-password-confirmed-input"
+          v-model="form.newPasswordConfirmed"
+          label="Potwierdź nowe hasło"
+          :type="showPass.repeat ? 'text' : 'password'"
+          :icon="{
+            show: true,
+            name: 'remove_red_eye',
+            size: 23,
+          }"
+          @iconClicked="showPass.repeat = !showPass.repeat"
+          class="mt-1 element"
+        />
         <div class="buttons">
           <Button
             name="submit-button"
             type="submit"
-            variant="dark"
             :disabled="isButtonDisabled"
-            class="w-100"
+            class="width-100"
           >
             Zapisz
           </Button>
@@ -79,6 +94,11 @@ export default {
         currentPassword: '',
         newPassword: '',
         newPasswordConfirmed: '',
+      },
+      showPass: {
+        current: false,
+        new: false,
+        repeat: false,
       },
       isButtonDisabled: true,
     };
@@ -178,16 +198,10 @@ export default {
   }
 
   .account-data-container {
-    padding: 2rem;
-    padding-bottom: 1rem;
-    background: rgb(var(--color-main));
+    padding: .5rem 2rem 2rem 2rem;
 
-    .account-data-container-inner {
-      box-sizing: border-box;
-      background: rgb(var(--color-side));
-      padding: 20px;
-      border-radius: 10px;
-      margin-top: 20px;
+    .element {
+      margin-top: 10px;
     }
   }
 

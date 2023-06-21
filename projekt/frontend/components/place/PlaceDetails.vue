@@ -11,7 +11,7 @@
       </div>
     </template>
     <template #body>
-      <vue-scroll :ops="scrollOptions">
+      <vue-scroll :ops="scrollOptions" class="scroll">
         <div class="PlaceDetails_container" v-if="place">
           <div class="container_image">
             <ImageSlider
@@ -226,8 +226,11 @@ export default {
     padding: 1rem 0;
   }
 
+  .scroll {
+    height: 65vh !important;
+  }
+
   .PlaceDetails_container {
-    max-height: 65vh;
     color: #333;
 
     .container_image {

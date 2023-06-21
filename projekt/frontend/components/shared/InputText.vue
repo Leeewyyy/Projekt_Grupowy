@@ -65,7 +65,7 @@ export default {
         show: false,
         name: '',
         tooltip: '',
-        size: 27,
+        size: 23,
       }),
     },
   },

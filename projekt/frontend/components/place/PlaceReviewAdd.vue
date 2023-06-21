@@ -127,7 +127,7 @@ export default {
     }
 
     .form_submit {
-      margin-left: auto;
+      float: right;
       padding: 0.5rem 1rem;
       border-radius: 25px;
     }

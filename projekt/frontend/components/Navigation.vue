@@ -12,24 +12,24 @@
     </ul>
     <!-- User panel link -->
     <div class="display-flex align-center justify-center">
-      <div class="search display-flex align-center justify-center">
-        <span>Wyszukaj placówkę (jeszcze nie działa)</span>
-        <InputText
-          name="search-input"
-          v-model="searchValue"
-          placeholder="Wpisz..."
-          style="margin-left: 20px;"
-          class="searchInput"
-        />
-      </div>
-      <Button
+      <form @submit.prevent="handleSearchPlaces" class="search display-flex align-center justify-center">
+          <span>Wyszukaj placówkę</span>
+          <InputText
+            name="search-input"
+            v-model="searchValue"
+            placeholder="Wpisz..."
+            style="margin-left: 20px;"
+            class="searchInput"
+          />
+          <Button type="submit" class="submit-search">Szukaj</Button>
+      </form>
+      <div
         v-if="$route.name === 'user-panel'"
-        variant="light"
-        class="Header_logout-button d-flex-center less-padding cursor-pointer"
+        class="Header_logout-button display-flex align-center less-padding cursor-pointer"
         @click="logout()"
       >
-        Wyloguj się <Icon name="logout" class="ml-1" />
-      </Button>
+        Wyloguj się <Icon name="logout" style="margin-left: 10px;" />
+      </div>
       <div v-else-if="$route.name !== 'login'" class="Header_account">
         <MenuLink
           v-if="!isLoggedIn"
@@ -50,11 +50,11 @@
             <Icon
               v-else
               name="account_circle"
-              :size="40"
+              :size="35"
               color="#8AA9CE"
             />
           </template>
-          Panel użytkownika 
+          <span style="margin-left: 2px;">{{ user.fullName }}</span>
         </MenuLink>
       </div>
       
@@ -68,12 +68,14 @@ import { mapGetters } from 'vuex';
 import Icon from '@/components/shared/Icon';
 import MenuLink from '@/components/MenuLink';
 import InputText from '@/components/shared/InputText';
+import Button from '@/components/shared/Button';
 
 export default {
   components: {
     Icon,
     MenuLink,
     InputText,
+    Button,
   },
 
   computed: {
@@ -87,10 +89,10 @@ export default {
     return {
       searchValue: '',
       menuItems: [
-        {
+        ...(this.$route.name !== 'contact' ? [{
           name: 'Napisz do nas',
           href: '/contact',
-        },
+        }] : []),
       ],
     };
   },
@@ -104,6 +106,10 @@ export default {
         }
       });
     },
+    handleSearchPlaces() {
+      const query = { name: this.searchValue };
+      this.$router.push({ path: '/places', query });
+    },
   },
 };
 </script>
@@ -115,7 +121,12 @@ export default {
   justify-content: space-between;
 
   .search {
-    margin-right: 1rem;
+    margin-right: 2rem;
+
+    .submit-search {
+      padding: 8px 12px !important;
+      margin-left: 1rem !important;
+    }
 
     span {
       font-size: .8rem;
@@ -125,14 +136,23 @@ export default {
       width: 200px;
 
       .input-outer {
-        height: 35px;
+        height: 30px;
         border: none;
+        border-radius: 0;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0, .08);
+        -moz-box-shadow: 0 1px 2px rgba(0,0,0, .08);
+        -o--shadow: 0 1px 2px rgba(0,0,0, .08);
+        box-shadow: 0 1px 2px rgba(0,0,0, .08);
+
+        input {
+          font-size: 13px !important;
+        }
 
         &.focused {
-          -webkit-box-shadow: 0 1px 2px rgba(0,0,0, .125);
-          -moz-box-shadow: 0 1px 2px rgba(0,0,0, .125);
-          -o--shadow: 0 1px 2px rgba(0,0,0, .125);
-          box-shadow: 0 1px 2px rgba(0,0,0, .125);
+          -webkit-box-shadow: 0 1px 2px rgba(0,0,0, .2);
+          -moz-box-shadow: 0 1px 2px rgba(0,0,0, .2);
+          -o--shadow: 0 1px 2px rgba(0,0,0, .2);
+          box-shadow: 0 1px 2px rgba(0,0,0, .2);
         }
       }
 
@@ -166,24 +186,24 @@ export default {
     }
 
     @media screen and (max-width: $desktop_breakpoint) {
-      background: rgb(var(--color-side));
       font-size: 1em;
     }
   }
 
   .flex-panel-button {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    padding: 0 10px;
 
+    .MenuLink_link {
+      display: flex;
+      align-items: center;
+    }
+  
     img, .material-icons {
       margin-right: 7px;
     }
 
     .account_avatar {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       border-radius: 50%;
     }
   }

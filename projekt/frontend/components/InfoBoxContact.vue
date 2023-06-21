@@ -1,19 +1,22 @@
 <template>
   <BoxSection class="info-box-outer main-container wider">
     <template #header>
-      <h2 class="info-box-title">Zadaj nam pytanie</h2>
+      <div class="header_logo mobile-hidden">
+        <Branding
+          id="contactUsBranding"
+          description="Napisz do nas"
+        />
+      </div>
     </template>
     <template #body>
       <div class="info-box">
         <form class="info-box-container-inner" @submit.prevent="sendMessage">
-          <div class="section">
+
             <InputText
-              :tab-index="1"
-              id="name"
+              id="subject"
               name="name-input"
-              v-model="name"
-              label="Imię"
-              :is-flat="true"
+              v-model="subject"
+              label="Temat"
             />
 
             <InputText
@@ -21,46 +24,29 @@
               name="email-input"
               v-model="email"
               label="Adres e-mail"
-              :is-flat="true"
               placeholder="np. jan@kowalski.pl"
-              :tab-index="2"
+              style="margin-top: 20px;"
             />
-
-            <div class="checkbox-label">
-              <Checkbox v-model="agreement" :tab-index="4" class="margin-top">
-                Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
-                zgodnie z
-                <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie 
-                zawarte w tym formularzu i dalszą korespondencję elektroniczą.
-              </Checkbox>
-            </div>
-          </div>
-          <div class="section">
+            
             <InputText
               id="question"
               name="question-area"
               v-model="question"
-              label="Jakie masz pytanie?"
-              :is-flat="true"
-              :is-textarea="true"
-              :tab-index="3"
+              placeholder="Opisz problem, zadaj pytanie"
+              label="Tekst wiadomości"
+              style="margin-top: 20px"
             />
 
-            <div class="checkbox-label mobile">
-              <Checkbox v-model="agreement" :tab-index="4" class="margin-top">
-                Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
-                zgodnie z
-                <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie 
-                zawarte w tym formularzu i dalszą korespondencję elektroniczą.
-              </Checkbox>
-            </div>
+            <SwitchButton id="consent" v-model="agreement" dir="right">
+              Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
+              zgodnie z
+              <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie 
+              zawarte w tym formularzu i dalszą korespondencję elektroniczą.
+            </SwitchButton>
 
-            <div class="buttons">
-              <Button tabindex="6" name="submit-button" type="submit" variant="dark">
-                Wyślij wiadomość
-              </Button>
-            </div>
-          </div>
+            <Button type="submit" class="submit">
+              Wyślij wiadomość
+            </Button>
         </form>
       </div>
     </template>
@@ -73,6 +59,8 @@ import Icon from '@/components/shared/Icon';
 import Button from '@/components/shared/Button';
 import InputText from '@/components/shared/InputText';
 import Checkbox from '@/components/shared/Checkbox';
+import SwitchButton from '@/components/shared/SwitchButton';
+import Branding from './Branding.vue';
 
 export default {
   components: {
@@ -81,10 +69,12 @@ export default {
     Button,
     InputText,
     Checkbox,
+    SwitchButton,
+    Branding,
   },
   data() {
     return {
-      name: '',
+      subject: '',
       email: '',
       question: '',
       agreement: false,
@@ -93,8 +83,9 @@ export default {
   methods: {
     sendMessage() {
       if (this.validate()) {
+        // tu podpiąć api
         this.$notify({ text: 'Wiadomość wysłana pomyślnie', type: 'success' });
-        this.name = '';
+        this.subject = '';
         this.email = '';
         this.question = '';
         this.agreement = false;
@@ -106,7 +97,7 @@ export default {
         return false;
       }
 
-      if (!this.name.length) {
+      if (!this.subject.length) {
         this.$notify({ text: 'Podaj imię', type: 'error' });
         return false;
       }
@@ -136,7 +127,7 @@ code {
 }
 
 .main-container.wider {
-  max-width: 66vw !important;
+  max-width: 40% !important;
   max-height: unset !important;
   
   @media screen and (max-width: $desktop_breakpoint) {
@@ -166,11 +157,22 @@ code {
 
     .info-box-container-inner {
       box-sizing: border-box;
-      padding: 20px 20px 15px 20px;
-      padding-top: 0;
-      border-radius: 10px;
+      width: 70%;
+      margin: auto;
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+
+      .SwitchButton {
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      .submit {
+        width: 100%;
+        margin-top: 20px;
+      }
 
       .section {
         width: 50%;

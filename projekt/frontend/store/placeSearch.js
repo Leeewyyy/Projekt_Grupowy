@@ -4,7 +4,7 @@ export const state = () => ({
   doctor: null,
   placeType: null,
   distance: 50,
-  nfzStatus: true,
+  isNFZ: true,
   tmpPlaceholder: '',
 });
 
@@ -17,7 +17,7 @@ export const getters = {
       doctor: state.doctor,
       placeType: state.placeType,
       distance: state.distance,
-      nfzStatus: state.nfzStatus,
+      isNFZ: state.isNFZ,
     };
   },
   getPlaceholder(state) {

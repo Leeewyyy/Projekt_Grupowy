@@ -23,14 +23,13 @@ $desktop_breakpoint: 1280px;
 .centered-page {
   width: 100vw;
   height: 100vh !important;
-  background: rgb(162, 190, 223);
-  background: radial-gradient(circle, rgba(162, 190, 223, 1) 44%, rgba(255, 255, 255, 1) 86%);
+  background: $extra-light-grey;
   transition: all 0.2s;
 
   .centered-form {
     margin: auto;
     position: relative;
-    top: 20%;
+    top: 12%;
   }
 
   @media screen and (max-width: $desktop_breakpoint) {

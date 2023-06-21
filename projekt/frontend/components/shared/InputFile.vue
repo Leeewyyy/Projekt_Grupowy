@@ -1,6 +1,6 @@
 <template>
-  <div class="w-100">
-    <label for="input-file" :class="['d-flex-center', variant]"><slot /></label>
+  <div class="width-100">
+    <label for="input-file" :class="['display-flex justify-center', variant]"><slot /></label>
     <input
       id="input-file"
       name="photo"

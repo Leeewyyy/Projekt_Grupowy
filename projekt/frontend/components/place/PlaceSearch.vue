@@ -41,7 +41,7 @@
               @input="(value) => setFormState({ key: 'placeType', value })"
               class="select"
             />
-            <SwitchButton id="switch-nfz" :model-value="formState.nfzStatus" @change="(value) => setFormState({ key: 'nfzStatus', value })" description="NFZ" class="switch" />
+            <SwitchButton id="switch-nfz" :model-value="formState.isNFZ" @change="(value) => setFormState({ key: 'isNFZ', value })" description="NFZ" class="switch" />
           </div>
 
           <Select
@@ -67,122 +67,7 @@
           </div>
           <label class="buttons-label">Wybierz max. odległość od wskazanego adresu</label>
         </div>
-        <!-- <BackButton v-if="!showWelcomeBox" /> -->
-        <!-- <div class="buttons">
-          <Button v-if="coords" class="submit-button" type="submit">Szukaj</Button>
-        </div> -->
       </form>
-      <!-- <form v-else class="PlaceSearch_container main-container" @submit.prevent="submitSearch">
-        <div class="PlaceSearch_container_inner">
-          <div class="outer-input">
-            <InputText
-              name="address-input"
-              v-model="search"
-              :placeholder="tmpPlaceholder.length ? tmpPlaceholder : 'np. Gdańsk, al. Zwycięstwa'"
-              :icon="{ 
-                show: true,
-                name: 'my_location',
-                tooltip: 'Wyszukaj lokalizację',
-                size: 23,
-              }"
-              label="Wpisz, aby zobaczyć proponowane adresy"
-              @input="/*getPossibleResults*/"
-            />
-              <vue-scroll 
-                v-if="!moreFiltersOn && possibleAddresses && possibleAddresses.length"
-                class="choose-result"
-                :ops="scrollOptions"
-              >
-                <ul>
-                  <li
-                    v-for="(result, index) in possibleAddresses"
-                    :key="index"
-                    :class="{ active: isActive(result) }"
-                    @click="toggleAddress(result)"
-                  >
-                    {{ buildAddress(result) }}
-                  </li>
-                </ul>
-              </vue-scroll>
-              <div 
-                v-else-if="!moreFiltersOn && search && search.length"
-                class="write-more"
-              ><span>Pisz dalej...</span></div>
-          </div>
-
-          <div class="outer-input">
-            <Select
-              name="doctors-select"
-              v-model="doctor"
-              :options="specialistsTypes"
-              description="Lekarz"
-              style="margin-top: 10px"
-              :tab-index="3"
-            />
-          </div>
-
-          <div class="buttons">
-            <Button
-              tabindex="5"
-              name="clear-button"
-              type="button"
-              variant="light"
-              @click="clearForm()"
-            >
-              Wyczyść
-            </Button>
-
-            <Button 
-              tabindex="6"
-              name="submit-button"
-              type="submit"
-              :disabled="loading"
-              variant="dark"
-            >
-              {{ loading ? 'Ładowanie...' : 'Szukaj' }}
-            </Button>
-          </div>
-        </div>
-
-        <button
-          tabindex="7"
-          type="button"
-          class="filters-label"
-          @click="moreFiltersOn = !moreFiltersOn"
-        >
-          <span class="label">
-            {{ `Pokaż ${ moreFiltersOn ? 'mniej' : 'więcej' } opcji filtrowania` }}
-          </span>
-          <Icon :name="`${moreFiltersOn ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}`" />
-        </button>
-
-        <div v-if="moreFiltersOn" id="bottomFilters" class="PlaceSearch_container_inner">
-          <div class="bottom-filters">
-            <Select
-              name="places-select"
-              v-model="placeType"
-              :options="facilitiesTypes"
-              label="name"
-              description="Typ placówki"
-              :tab-index="8"
-            />
-
-            <Select
-              name="distance-select"
-              v-model="distance"
-              :options="distanceOptionsForSelect"
-              description="Odległość"
-              label="name"
-              :icon-text="`
-                Odległość brana jest pod uwagę dopiero wtedy,<br />
-                gdy wybierzesz adres. Jeśli zostawisz to pole puste <br />
-                system szuka placówek w całej Polsce.
-              `"
-              :tab-index="9"
-            />
-          </div>
-        </div>
-      </form> -->
     </template>
   </BoxSection>
 </template>
@@ -286,7 +171,7 @@ export default {
         doctor: this.formState.doctor?.id ?? null,
         placeType: this.formState.placeType?.id ?? null,
         distance: this.formState.distance,
-        nfzStatus: this.formState.nfzStatus,
+        isNFZ: this.formState.isNFZ,
       };
     },
   },

@@ -95,7 +95,7 @@ export default {
   margin: 1rem;
 
   .PlaceReviews_add-review {
-    padding: 0 1rem 1rem 1rem;
+    padding: 0 1rem 1rem 0;
   }
 
   .PlaceReviews_title {

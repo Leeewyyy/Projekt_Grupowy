@@ -43,7 +43,7 @@ export default {
           if (value !== null && value !== undefined) obj[key] = value;
           return obj;
         }, {});
-      
+        
       this.$router.push({ path: '/places', query });
     },
 

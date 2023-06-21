@@ -3,6 +3,7 @@
     class="PlaceList main-container"
     :class="{
       'PlaceList--selectable': selectable,
+      'account-container': $route.name === 'user-panel',
     }"
     :show-bottom-buttons="closable"
     @onBack="onBack"
@@ -125,6 +126,11 @@ export default {
 </script>
 
 <style lang="scss">
+.account-container {
+  min-height: auto !important;
+  padding-bottom: 20px;
+}
+
 .PlaceList {
   @media screen and (max-width: $desktop_breakpoint) {
     background: #FDFDFD;

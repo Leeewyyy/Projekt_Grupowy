@@ -1,7 +1,12 @@
 <template>
   <BoxSection class="login-form-outer main-container">
     <template #header>
-      <h2 class="login-form-title">Wpisz dane logowania</h2>
+      <div class="header_logo mobile-hidden">
+        <Branding
+          id="loginBranding"
+          description="Wpisz dane logowania"
+        />
+      </div>
     </template>
     <template #body>
       <form class="login-form" @submit.prevent="submitLogin">
@@ -11,7 +16,7 @@
             name="login-input"
             v-model="inputLogin"
             label="Adres e-mail"
-            :is-flat="true"
+            class="element"
           />
 
           <InputText
@@ -19,12 +24,17 @@
             name="password-input"
             v-model="inputPassword"
             label="Hasło"
-            :is-flat="true"
-            type="password"
+            :icon="{
+              show: true,
+              name: 'remove_red_eye',
+              size: 23,
+            }"
+            :type="showPass ? 'text' : 'password'"
+            @iconClicked="showPass = !showPass"
           />
 
           <div class="buttons">
-            <Button name="submit-button" type="submit" variant="dark"> Zaloguj </Button>
+            <Button name="submit-button" type="submit" variant="dark"> Zaloguj się</Button>
           </div>
         </div>
         <NuxtLink to="register" class="register-link"> Nie masz konta? Zarejestruj się! </NuxtLink>
@@ -42,6 +52,7 @@ import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
 import Icon from '@/components/shared/Icon';
+import Branding from './Branding.vue';
 
 export default {
   components: {
@@ -51,12 +62,14 @@ export default {
     Button,
     IconToggleButton,
     Icon,
+    Branding,
   },
 
   data() {
     return {
       inputLogin: '',
       inputPassword: '',
+      showPass: false,
     };
   },
   computed: {
@@ -94,8 +107,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+#loginBranding {
+  max-width: 300px;
+}
+
 .login-form-outer {
+  min-height: 60% !important;
 
   .login-form-title {
     height: 55px;
@@ -118,20 +136,26 @@ export default {
       border-radius: 10px;
     }
 
-    .text-field-outer#password {
-      margin-top: 20px;
+    #password {
+      margin-top: 25px;
     }
   }
 
   .register-link {
     margin-left: 20px;
+    font-size: 13px;
+    font-weight: 400;
+    position: relative;
+    display: block;
+    text-align: center !important;
+    font-weight: 400 !important;
   }
 
   .buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 20px;
 
     button[name='submit-button'] {
       width: 100%;

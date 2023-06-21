@@ -3,8 +3,6 @@
     <div class="centered-page">
       <InfoBoxContact id="info-box-contact" class="centered-form" />
     </div>
-
-     <InfoBoxContact id="info-box-contact" class="centered-form mobile" />
   </AppPage>
 </template>
 

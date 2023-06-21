@@ -83,7 +83,6 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: max-content;
   }
 
   &_description {
@@ -123,7 +122,7 @@ export default {
   &_label {
     display: block;
     position: relative;
-    width: 50px;
+    min-width: 50px;
     height: 25px;
     border-radius: 25px;
     background: $extra-light-grey;

@@ -1,7 +1,12 @@
 <template>
   <BoxSection class="register-form-outer main-container">
     <template #header>
-      <h2 class="register-form-title">Wpisz swoje dane</h2>
+      <div class="header_logo mobile-hidden">
+        <Branding
+          id="registerBranding"
+          description="Utwórz konto w serwisie"
+        />
+      </div>
     </template>
     <template #body>
       <form class="register-form" @submit.prevent="registerAccount">
@@ -11,7 +16,7 @@
             name="fullname-input"
             v-model="form.fullName"
             label="Imię i nazwisko"
-            :is-flat="true"
+            class="element"
             required
           />
 
@@ -21,8 +26,8 @@
             v-model="form.email"
             type="email"
             label="Adres e-mail"
-            :is-flat="true"
             placeholder="np. jan@kowalski.pl"
+            class="element"
             required
           />
 
@@ -31,8 +36,14 @@
             name="password-input"
             v-model="form.password"
             label="Hasło"
-            :is-flat="true"
-            type="password"
+            :type="showPass ? 'text' : 'password'"
+            class="element"
+            :icon="{
+              show: true,
+              name: 'remove_red_eye',
+              size: 23,
+            }"
+            @iconClicked="showPass = !showPass"
             required
           />
 
@@ -41,10 +52,24 @@
             name="password-input-repeat"
             v-model="passwordConfirm"
             label="Powtórz hasło"
-            :is-flat="true"
-            type="password"
+            :type="showConfirmPass ? 'text' : 'password'"
+            class="element"
+            :icon="{
+              show: true,
+              name: 'remove_red_eye',
+              size: 23,
+            }"
+            @iconClicked="showConfirmPass = !showConfirmPass"
             required
           />
+
+          <SwitchButton id="consent-regulations" v-model="form.regulations" dir="right">
+            Akceptuję <a href="#" target="_blank">regulamin</a> serwisu
+          </SwitchButton>
+
+          <SwitchButton id="consent-policy" v-model="form.privatePolicy" dir="right">
+            Akceptuję <a href="#" target="_blank">politykę prywatności</a>
+          </SwitchButton>
 
           <div class="buttons">
             <Button name="submit-button" type="submit" variant="dark">
@@ -64,6 +89,8 @@ import Select from '@/components/shared/Select';
 import Button from '@/components/shared/Button';
 import IconToggleButton from '@/components/shared/IconToggleButton';
 import Icon from '@/components/shared/Icon';
+import Branding from './Branding.vue';
+import SwitchButton from './shared/SwitchButton.vue';
 
 export default {
   components: {
@@ -73,6 +100,8 @@ export default {
     Button,
     IconToggleButton,
     Icon,
+    Branding,
+    SwitchButton,
   },
 
   head() {
@@ -87,13 +116,23 @@ export default {
         fullName: null,
         email: null,
         password: null,
+        regulations: false,
+        privatePolicy: false,
       },
+      showPass: false,
+      showConfirmPass: false,
       passwordConfirm: null,
     };
   },
 
   methods: {
     validate() {
+      // Validate regulations and policy
+      if (!this.form.regulations || !this.form.privatePolicy) {
+        this.$notify({ text: 'Zaznacz zgodę dot. regulaminu i polityki prywatności.', type: 'error' });
+        return false;
+      }
+
       // Validate full name
       if (!this.form.fullName?.length) {
         this.$notify({ text: 'Podaj imię i nazwisko.', type: 'error' });
@@ -131,7 +170,22 @@ export default {
 };
 </script>
 
+<style>
+.SwitchButton {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.SwitchButton_wrapper {
+  justify-content: start !important;
+}
+</style>
+
 <style lang="scss" scoped>
+#registerBranding {
+  max-width: 300px;
+}
+
 .register-form-outer {
   &.main-container {
     max-height: unset !important;
@@ -159,6 +213,10 @@ export default {
 
     .text-field-outer {
       margin-top: 20px;
+    }
+
+    .element {
+      margin-top: 10px;
     }
   }
 
