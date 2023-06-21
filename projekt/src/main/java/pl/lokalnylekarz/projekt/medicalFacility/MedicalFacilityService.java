@@ -85,12 +85,15 @@ public class MedicalFacilityService {
     public void addRatingRatingCountAddedByOpinions(MedicalFacilityDto medicalFacilityDto, Long medicalFacilityId) {
         MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElse(null);
 
+
         Long ratingsSum = opinionRepository.sumRatingsByMedicalFacility(medicalFacilityId);
         Long ratingsCount = opinionRepository.countByMedicalFacility(medicalFacilityId);
-        Float rating = ratingsSum.floatValue() / ratingsCount.floatValue();
+        if (ratingsSum != null && ratingsCount != null) {
+            float rating = ratingsSum.floatValue() / ratingsCount.floatValue();
+            medicalFacilityDto.setRating(rating);
+            medicalFacilityDto.setRatingCount(ratingsCount);
+        }
 
-        medicalFacilityDto.setRating(rating);
-        medicalFacilityDto.setRatingCount(ratingsCount);
         medicalFacilityDto.setAddedBy(UserService.forMedicalDto(medicalFacility.getAddedBy()));
         medicalFacilityDto.setOpinions(
                 medicalFacility.getOpinions().stream().sorted(new Comparator<Opinion>() {
