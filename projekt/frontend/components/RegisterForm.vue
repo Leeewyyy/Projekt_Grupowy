@@ -63,11 +63,11 @@
             required
           />
 
-          <SwitchButton id="consent-regulations" v-model="form.regulations" dir="right">
+          <SwitchButton class="register-switch" id="consent-regulations" v-model="form.regulations" dir="right">
             Akceptuję <a href="#" target="_blank">regulamin</a> serwisu
           </SwitchButton>
 
-          <SwitchButton id="consent-policy" v-model="form.privatePolicy" dir="right">
+          <SwitchButton class="register-switch" id="consent-policy" v-model="form.privatePolicy" dir="right">
             Akceptuję <a href="#" target="_blank">politykę prywatności</a>
           </SwitchButton>
 
@@ -171,12 +171,12 @@ export default {
 </script>
 
 <style>
-.SwitchButton {
+.register-switch.SwitchButton {
   width: 100%;
   margin-top: 20px;
 }
 
-.SwitchButton_wrapper {
+.register-switch .SwitchButton_wrapper {
   justify-content: start !important;
 }
 </style>
