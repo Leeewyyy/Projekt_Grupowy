@@ -15,6 +15,7 @@ import pl.lokalnylekarz.projekt.user.UserService;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,16 @@ public class MedicalFacilityService {
     }
 
     public List<MedicalFacilityListDto> getAll(MedicalFacilityFilter filters) {
-        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findAll(new MedicalFacilitySpecification(filters));
+
+        List<MedicalFacility> medicalFacilities;
+
+        if (filters.isSearch()) {
+            List<MedicalFacility> medicalFacilitiesWithDuplicates = medicalFacilityRepository.findByNameContainingIgnoreCase(filters.getSearch());
+            medicalFacilitiesWithDuplicates.addAll(medicalFacilityRepository.findByAddressContainingIgnoreCase(filters.getSearch()));
+            medicalFacilities = medicalFacilitiesWithDuplicates.stream().distinct().collect(Collectors.toList());
+        }
+        else
+            medicalFacilities = medicalFacilityRepository.findAll(new MedicalFacilitySpecification(filters));
 
         if (filters.isFilterDistance()) {
             return this.filterDistance(
@@ -85,12 +95,15 @@ public class MedicalFacilityService {
     public void addRatingRatingCountAddedByOpinions(MedicalFacilityDto medicalFacilityDto, Long medicalFacilityId) {
         MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElse(null);
 
+
         Long ratingsSum = opinionRepository.sumRatingsByMedicalFacility(medicalFacilityId);
         Long ratingsCount = opinionRepository.countByMedicalFacility(medicalFacilityId);
-        Float rating = ratingsSum.floatValue() / ratingsCount.floatValue();
+        if (ratingsSum != null && ratingsCount != null) {
+            float rating = ratingsSum.floatValue() / ratingsCount.floatValue();
+            medicalFacilityDto.setRating(rating);
+            medicalFacilityDto.setRatingCount(ratingsCount);
+        }
 
-        medicalFacilityDto.setRating(rating);
-        medicalFacilityDto.setRatingCount(ratingsCount);
         medicalFacilityDto.setAddedBy(UserService.forMedicalDto(medicalFacility.getAddedBy()));
         medicalFacilityDto.setOpinions(
                 medicalFacility.getOpinions().stream().sorted(new Comparator<Opinion>() {

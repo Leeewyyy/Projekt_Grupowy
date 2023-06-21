@@ -18,7 +18,7 @@ public class MedicalFacilitySpecification implements Specification<MedicalFacili
     public Predicate toPredicate(Root<MedicalFacility> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (!searchCriteria.getNfzStatus().isEmpty()) {
+        if (searchCriteria.getNfzStatus() != null && !searchCriteria.getNfzStatus().isEmpty()) {
             predicates.add(this.buildNfzPredicate(root, builder));
         }
 

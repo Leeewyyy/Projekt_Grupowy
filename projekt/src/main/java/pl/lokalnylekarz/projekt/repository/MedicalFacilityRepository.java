@@ -11,4 +11,8 @@ public interface MedicalFacilityRepository extends CrudRepository<MedicalFacilit
 
     @Query("select distinct M from MedicalFacility M left join fetch M.favoriteFor F")
     List<MedicalFacility> findAll();
+
+    List<MedicalFacility> findByAddressContainingIgnoreCase(String phrase);
+
+    List<MedicalFacility> findByNameContainingIgnoreCase(String phrase);
 }
