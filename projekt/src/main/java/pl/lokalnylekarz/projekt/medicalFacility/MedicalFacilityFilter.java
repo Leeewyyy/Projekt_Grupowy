@@ -19,12 +19,17 @@ public class MedicalFacilityFilter {
     private Double latitude;
     private Double distance;
     private List<String> nfzStatus;
+    private String search;
 
     public boolean isEmpty() {
-        return type == null && specialization == null && longitude == null && latitude == null && distance == null && nfzStatus == null;
+        return type == null && specialization == null && longitude == null && latitude == null && distance == null && nfzStatus == null && search == null;
     }
 
     public boolean isFilterDistance() {
         return (longitude != null && latitude != null && distance != null);
+    }
+
+    public boolean isSearch() {
+        return search != null;
     }
 }

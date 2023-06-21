@@ -15,6 +15,7 @@ import pl.lokalnylekarz.projekt.user.UserService;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,16 @@ public class MedicalFacilityService {
     }
 
     public List<MedicalFacilityListDto> getAll(MedicalFacilityFilter filters) {
-        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findAll(new MedicalFacilitySpecification(filters));
+
+        List<MedicalFacility> medicalFacilities;
+
+        if (filters.isSearch()) {
+            List<MedicalFacility> medicalFacilitiesWithDuplicates = medicalFacilityRepository.findByNameContainingIgnoreCase(filters.getSearch());
+            medicalFacilitiesWithDuplicates.addAll(medicalFacilityRepository.findByAddressContainingIgnoreCase(filters.getSearch()));
+            medicalFacilities = medicalFacilitiesWithDuplicates.stream().distinct().collect(Collectors.toList());
+        }
+        else
+            medicalFacilities = medicalFacilityRepository.findAll(new MedicalFacilitySpecification(filters));
 
         if (filters.isFilterDistance()) {
             return this.filterDistance(
