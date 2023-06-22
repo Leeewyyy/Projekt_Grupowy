@@ -37,7 +37,7 @@
       <div v-else-if="$route.name !== 'login'" class="Header_account">
         <MenuLink
           v-if="!isLoggedIn"
-          href="login"
+          href="/login"
           class="account_button"
           type="button"
         >
