@@ -52,14 +52,16 @@ export const actions = {
     return filteredResults;
   },
 
-  async searchFacilities({ commit }, params) {
+  async searchFacilities({ commit }, query) {
+    const { isNFZ, ...params } = query;
+
     // Add default distance
     if (!params.distance) {
       params.distance = 1000;
     }
 
     // Filter by NFZ status
-    if (params.isNFZ === 'true') {
+    if (isNFZ === 'true') {
       params.nfzStatus = 'FULL,PARTIAL';
     }
     
