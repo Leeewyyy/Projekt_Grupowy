@@ -17,6 +17,7 @@ import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -551,6 +552,314 @@ public class InitSeeder implements CommandLineRunner {
                     .addedBy(user4)
                     .build();
 
+
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Kosciol_Jana_Bozego.JPG/220px-Kosciol_Jana_Bozego.JPG"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://hotmed.pl/index.php?option=com_jomcomdev&format=raw&task=ajax.image&pr=dz02NDA=&hash=afe9ed&dir=cb&src=1227-swjana.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://hotmed.pl/index.php?option=com_jomcomdev&format=raw&task=ajax.image&pr=dz0xMzAw&hash=a60975&dir=bx&src=1228-swjan.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6T87BchoQmPmeGvvXiA-hwN_FLB-c5jWXTYm4Eep6KOp49HjYZ8SPjxFxV4J1caiOgIw&usqp=CAU"
+            ));
+
+            MedicalFacility medicalFacility11 = MedicalFacility.builder()
+                    .name("Szpital Świętego Jana")
+                    .type(MedicalFacilityTypes.SZPITAL)
+                    .address("ul. Długa 15")
+                    .imageUrl(
+                            "https://example.com/image.jpg")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6T87BchoQmPmeGvvXiA-hwN_FLB-c5jWXTYm4Eep6KOp49HjYZ8SPjxFxV4J1caiOgIw&usqp=CAU")
+                    .description("""
+                                         ### Opis placówki
+                                         Szpital Świętego Jana to renomowany szpital zlokalizowany w centrum Warszawy. Oferujemy wysoką jakość usług medycznych oraz kompleksową opiekę nad pacjentami. Nasz zespół doświadczonych lekarzy i pielęgniarek zapewnia opiekę na najwyższym poziomie. Posiadamy nowoczesny sprzęt medyczny oraz specjalistyczne oddziały, takie jak kardiologia, chirurgia, ortopedia, ginekologia i wiele innych. Naszym celem jest zapewnienie pacjentom pełnego wsparcia i szybkiego powrotu do zdrowia.
+                                         """)
+                    .nfzStatus(NfzStatuses.NONE)
+                    .openFrom(new Timestamp(8))
+                    .openTo(new Timestamp(18))
+                    .location(new Location(52.2319585, 21.0067249))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user3)
+                    .build();
+
+
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://s3-eu-west-1.amazonaws.com/znanylekarz.pl/doctor/5aacf6/5aacf657a136e37f0c72c2ccb55a947a_220_square.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://www.alterida-plus.pl/images/zdjecia/about.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.kliniki.pl/photos/201/klinika-wielospecjalistyczna-plus-med_200776_h500.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://vita.legnica.pl/wp-content/uploads/2021/04/Budynek_1.jpg"
+            ));
+
+
+            MedicalFacility medicalFacility12 = MedicalFacility.builder()
+                    .name("Przychodnia Medyczna Plus")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Warszawska 10")
+                    .imageUrl("https://vita.legnica.pl/wp-content/uploads/2021/04/Budynek_1.jpg")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://przychodniaplus.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Przychodnia Medyczna Plus to nowoczesna placówka medyczna zlokalizowana w centrum Krakowa. Oferujemy szeroki zakres usług medycznych, w tym konsultacje lekarskie, diagnostykę, szczepienia oraz rehabilitację. Nasz wykwalifikowany personel zapewnia profesjonalną i przyjazną opiekę pacjentom w komfortowych warunkach. Dbamy o indywidualne podejście do każdego pacjenta i staramy się zapewnić kompleksową opiekę zdrowotną.
+                                         """)
+                    .nfzStatus(NfzStatuses.NONE)
+                    .openFrom(new Timestamp(9))
+                    .openTo(new Timestamp(17))
+                    .location(new Location(50.0646501, 19.9449799))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user2)
+                    .build();
+
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://www.frelich.pl/gfx/centrum_big.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://www.frelich.pl/gfx/slider/3.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.frelich.pl/gfx/slider/2.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.frelich.pl/gfx/slider/1.jpg"
+            ));
+
+            MedicalFacility medicalFacility13 = MedicalFacility.builder()
+                    .name("Specjalistyczne Centrum Stomatologiczne")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Mickiewicza 5")
+                    .imageUrl("https://example.com/image.jpg")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://stomatologia.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Specjalistyczne Centrum Stomatologiczne to nowoczesna klinika stomatologiczna, która oferuje kompleksowe usługi z zakresu stomatologii zachowawczej, chirurgii stomatologicznej, protetyki, ortodoncji oraz implantologii. Nasz doświadczony zespół lekarzy stomatologów korzysta z najnowocześniejszych technologii i materiałów, aby zapewnić pacjentom najwyższą jakość leczenia. Naszym celem jest zdrowy i piękny uśmiech każdego pacjenta.
+                                         """)
+                    .nfzStatus(NfzStatuses.NONE)
+                    .openFrom(new Timestamp(10))
+                    .openTo(new Timestamp(18))
+                    .location(new Location(52.406374, 16.9251681))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user2)
+                    .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://u.profitroom.com/hotelzawiercie.pl/uploads/Fizjo_w_tekst/Kinezyterapia3HotelZawiercie.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-1.png"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-1.png"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-2.png"
+            ));
+
+            MedicalFacility medicalFacility15 = MedicalFacility.builder()
+                    .name("Centrum Rehabilitacji i Fizjoterapii")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Krakowska 20")
+                    .imageUrl("https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-1.png")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://centrumrehabilitacji.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Centrum Rehabilitacji i Fizjoterapii to miejsce, w którym zapewniamy kompleksową opiekę nad pacjentami z różnymi schorzeniami. Nasz zespół doświadczonych fizjoterapeutów oferuje profesjonalne masaże, ćwiczenia rehabilitacyjne, terapię manualną oraz wiele innych form terapii. Staramy się przywracać sprawność i poprawiać jakość życia naszych pacjentów. Nasza placówka jest wyposażona w nowoczesny sprzęt rehabilitacyjny, który umożliwia skuteczną rehabilitację.
+                                         """)
+                    .nfzStatus(NfzStatuses.FULL)
+                    .openFrom(new Timestamp(8))
+                    .openTo(new Timestamp(16))
+                    .location(new Location(51.107883, 17.038538))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user2)
+                    .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://www.kliniki.pl/photos/11/plastic-surgery-clinic-gabinet-chirurgii-plastycznej-dr-jerzy-m-checinski_10089_h500.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://coit.pl/storage/1001/gchp_raczkowska-003.JPG"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://drolender.pl/wp-content/uploads/2015/12/gabinet-diagnostyczny-w-klinice-chirurgii-plastycznej-dr-olender.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4ANhe3mW30sy7nMkcdloRccTn8_UVj_2BQw&usqp=CAU"
+            ));
+
+            MedicalFacility medicalFacility16 = MedicalFacility.builder()
+                    .name("Gabinet Chirurgii Plastycznej")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Szczecińska 2")
+                    .imageUrl("https://coit.pl/storage/1001/gchp_raczkowska-003.JPG")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://chirurgiaplastyczna.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Gabinet Chirurgii Plastycznej oferuje szeroki zakres zabiegów z zakresu chirurgii plastycznej, estetycznej i rekonstrukcyjnej. Nasz doświadczony zespół chirurgów plastycznych dba o bezpieczeństwo i zadowolenie naszych pacjentów. Oferujemy m.in. operacje powiek, liposukcję, powiększanie piersi, lifting twarzy i wiele innych. Stawiamy na najnowsze techniki i metody leczenia, aby osiągnąć najlepsze rezultaty. Naszym celem jest pomoc pacjentom w osiągnięciu ich estetycznych celów.
+                                         """)
+                    .nfzStatus(NfzStatuses.PARTIAL)
+                    .openFrom(new Timestamp(9))
+                    .openTo(new Timestamp(17))
+                    .location(new Location(54.405832,18.576924))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user3)
+                    .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://nox.olsztyn.pl/app/uploads/2023/03/nox-wejscie-scaled.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://s-trojmiasto.pl/zdj/c/n/9/3148/3000x0/3148082-Otwarcie-oddzialu-diagnostyki-obrazowej-Copernicus-w-Gdansku.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.kliniki.pl/photos/86/klinika-wielospecjalistyczna-starmedica-centrum-diagnostyki-obrazowej-w-legnicy_85086_h500.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://bochnianin.pl/wp-content/uploads/2023/06/259A1839.jpg"
+            ));
+
+            MedicalFacility medicalFacility17 = MedicalFacility.builder()
+                    .name("Centrum Diagnostyki Obrazowej")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Partyzantów 76")
+                    .imageUrl("https://bochnianin.pl/wp-content/uploads/2023/06/259A1839.jpg")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://diagnostykaobrazowa.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Centrum Diagnostyki Obrazowej to nowoczesna placówka, która specjalizuje się w wykonywaniu badań diagnostycznych z wykorzystaniem najnowszych technologii obrazowych. Oferujemy m.in. rezonans magnetyczny, tomografię komputerową, mammografię, ultrasonografię i wiele innych badań. Nasz wykwalifikowany personel i sprzęt medyczny najwyższej jakości zapewniają precyzyjne i wiarygodne wyniki. Naszym celem jest przyczynianie się do wczesnego wykrywania chorób i poprawy zdrowia naszych pacjentów.
+                                         """)
+                    .nfzStatus(NfzStatuses.FULL)
+                    .openFrom(new Timestamp(7))
+                    .openTo(new Timestamp(19))
+                    .location(new Location(54.3783307,18.5814854))
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user4)
+                    .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://stara.wim.mil.pl/images/zlotkowska/06102020daVinci/WIM_7990.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://pliki.rynekzdrowia.pl/i/19/05/91/190591_r2_940.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pliki.rynekzdrowia.pl/i/17/96/34/179634_r2_940.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pliki.rynekzdrowia.pl/i/19/05/91/190591_r2_940.jpg"
+            ));
+
+
+            MedicalFacility medicalFacility18 = MedicalFacility.builder()
+                    .name("Przychodnia Lekarska Nowa Era")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Pohulanka 10a")
+                    .imageUrl("https://pliki.rynekzdrowia.pl/i/17/96/34/179634_r2_940.jpg")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://przychodnianowaera.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Przychodnia Lekarska Nowa Era to nowoczesna i kompleksowa placówka medyczna, która oferuje szeroki zakres usług zdrowotnych. Posiadamy wykwalifikowany zespół lekarzy specjalistów oraz nowoczesny sprzęt medyczny, który umożliwia skuteczną diagnostykę i leczenie. Oferujemy konsultacje lekarskie, badania diagnostyczne, profilaktykę zdrowotną oraz wiele innych usług. Naszym celem jest zapewnienie pacjentom najwyższej jakości opieki medycznej i kompleksowego podejścia do zdrowia.
+                                         """)
+                    .nfzStatus(NfzStatuses.FULL)
+                    .openFrom(new Timestamp(8))
+                    .openTo(new Timestamp(18))
+                    .location(new Location(54.3475666,18.6351057)) // Warsaw coordinates: latitude, longitude
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user1)
+                    .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://www.visionmed-okulistyka.pl/images/design/box-1.webp"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://kolmed.pl/wp-content/uploads/2022/08/OKULISTA-1400.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://klinikazacmy.pl/wp-content/uploads/2019/02/klinika-okulistyczna-operacja-zacmy-1024x577.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://thumbs.dreamstime.com/b/urz%C4%85dzenie-do-badania-okulistycznego-refraktometru-w-klinice-auto-refraktometr-z-monitorem-komputerowym-urz%C4%85dzeniami-medycznymi-167083978.jpg"
+            ));
+
+
+            MedicalFacility medicalFacility19 = MedicalFacility.builder()
+                    .name("Klinika Okulistyczna Vision")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Grunwaldzka 50")
+                    .imageUrl("https://www.visionmed-okulistyka.pl/images/design/box-1.webp")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://visionklinika.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Klinika Okulistyczna Vision specjalizuje się w diagnostyce i leczeniu schorzeń oczu. Nasz zespół doświadczonych okulistów oferuje kompleksowe usługi, w tym badania wzroku, operacje zaćmy, laserową korekcję wzroku, leczenie schorzeń siatkówki i wiele innych. Stosujemy najnowocześniejsze technologie i metody leczenia, aby zapewnić pacjentom najlepsze rezultaty. Naszym celem jest poprawa jakości widzenia i zdrowia oczu naszych pacjentów.
+                                         """)
+                    .nfzStatus(NfzStatuses.NONE)
+                    .openFrom(new Timestamp(9))
+                    .openTo(new Timestamp(17))
+                    .location(new Location(54.4412383,18.5678342)) // Gdańsk coordinates: latitude, longitude
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user1)
+                    .build();
+
+            images = new ArrayList<>();
+
+            images.add(new Image(UUID.randomUUID().toString(), "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-metody-1600x1000-1-1024x640.jpg"));
+            images.add(new Image(UUID.randomUUID().toString(), "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-diagnostyka-1600x1000-1-1024x640.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-terapeuci-1600x1000-1-1024x640.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.zaplanujwczasy.pl/zdjecie-52588-1.jpg"
+            ));
+
+
+            MedicalFacility medicalFacility20 = MedicalFacility.builder()
+                    .name("Ośrodek Zdrowia Naturalnego")
+                    .type(MedicalFacilityTypes.PRZYCHODNIA)
+                    .address("ul. Leśna 10")
+                    .imageUrl("https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-metody-1600x1000-1-1024x640.jpg")
+                    .images(images)
+                    .phone("+48123456789")
+                    .websiteUrl("https://zdrowienaturalne.pl/")
+                    .description("""
+                                         ### Opis placówki
+                                         Ośrodek Zdrowia Naturalnego to miejsce, w którym stawiamy na naturalne metody leczenia i profilaktyki zdrowia. Oferujemy szeroki zakres usług, takich jak akupunktura, homeopatia, fitoterapia, terapia manualna i wiele innych. Nasz zespół specjalistów z dziedziny medycyny naturalnej pracuje holistycznie, zwracając uwagę na całościowy stan zdrowia pacjenta. Dążymy do przywracania równowagi i zdrowia przy minimalnym obciążeniu organizmu. Naszym celem jest wspieranie naturalnych procesów zdrowienia.
+                                         """)
+                    .nfzStatus(NfzStatuses.NONE)
+                    .openFrom(new Timestamp(10))
+                    .openTo(new Timestamp(16))
+                    .location(new Location(54.406957,18.5551332)) // Gdańsk coordinates: latitude, longitude
+                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .addedBy(user1)
+                    .build();
+
+
             medicalFacilityRepository.save(medicalFacility1);
             medicalFacilityRepository.save(medicalFacility2);
             medicalFacilityRepository.save(medicalFacility3);
@@ -561,6 +870,15 @@ public class InitSeeder implements CommandLineRunner {
             medicalFacilityRepository.save(medicalFacility8);
             medicalFacilityRepository.save(medicalFacility9);
             medicalFacilityRepository.save(medicalFacility10);
+            medicalFacilityRepository.save(medicalFacility11);
+            medicalFacilityRepository.save(medicalFacility12);
+            medicalFacilityRepository.save(medicalFacility13);
+            medicalFacilityRepository.save(medicalFacility15);
+            medicalFacilityRepository.save(medicalFacility16);
+            medicalFacilityRepository.save(medicalFacility17);
+            medicalFacilityRepository.save(medicalFacility18);
+            medicalFacilityRepository.save(medicalFacility19);
+            medicalFacilityRepository.save(medicalFacility20);
 
             Opinion opinion1 = Opinion.builder()
                     .addedBy(user1)

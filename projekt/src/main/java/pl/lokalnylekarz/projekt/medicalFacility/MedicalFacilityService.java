@@ -50,16 +50,9 @@ public class MedicalFacilityService {
         else
             medicalFacilities = medicalFacilityRepository.findAll(new MedicalFacilitySpecification(filters));
 
-        if (filters.isFilterDistance()) {
-            return this.filterDistance(
-                    medicalFacilities,
-                    filters.getLatitude(),
-                    filters.getLongitude(),
-                    filters.getDistance()
-            );
-        }
-
-        List<MedicalFacilityListDto> medicalFacilityListDtos = medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).toList();
+        List<MedicalFacilityListDto> medicalFacilityListDtos = filters.isFilterDistance()
+                ? this.filterDistance(medicalFacilities, filters.getLatitude(), filters.getLongitude(), filters.getDistance())
+                : medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).distinct().toList();
 
         for (MedicalFacilityListDto medicalFacilityListDto : medicalFacilityListDtos) {
             addRatingAndRatingCount(medicalFacilityListDto, medicalFacilityListDto.getId());
@@ -89,7 +82,7 @@ public class MedicalFacilityService {
 
         return medicalFacilities.stream().filter(medicalFacility -> {
             return medicalFacility.getLocation().distanceTo(location) <= distance;
-        }).map(medicalFacilityMapper::fromEntityToListDto).toList();
+        }).map(medicalFacilityMapper::fromEntityToListDto).distinct().toList();
     }
 
     public void addRatingRatingCountAddedByOpinions(MedicalFacilityDto medicalFacilityDto, Long medicalFacilityId) {
