@@ -11,7 +11,8 @@
       </li>
     </ul>
     <!-- User panel link -->
-    <div class="display-flex align-center justify-center">
+    <div class="display-flex align-center justify-center end-column">
+    <Branding id="menu-branding" />
       <form @submit.prevent="handleSearchPlaces" class="search display-flex align-center justify-center">
           <span>Wyszukaj placówkę</span>
           <InputText
@@ -69,6 +70,7 @@ import Icon from '@/components/shared/Icon';
 import MenuLink from '@/components/MenuLink';
 import InputText from '@/components/shared/InputText';
 import Button from '@/components/shared/Button';
+import Branding from './Branding.vue';
 
 export default {
   components: {
@@ -76,6 +78,7 @@ export default {
     MenuLink,
     InputText,
     Button,
+    Branding,
   },
 
   computed: {
@@ -120,6 +123,69 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 
+  #menu-branding {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 20%;
+    width: auto;
+    margin-left: 0 !important;
+  }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    .Navigation_list {
+      padding-bottom: 0 !important;
+
+      .list_item {
+        min-width: unset !important;
+      }
+    }
+
+    #menu-branding {
+      display: block;
+    }
+
+    .end-column {
+      margin-top: .5rem;
+      flex-direction: column;
+      align-items: flex-end;
+      padding: 0 2rem 2rem 2rem;
+
+      .search {
+        order: 2;
+        margin-top: 3rem;
+        margin-right: 0;
+        align-self: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        margin-top: 6rem;
+
+        .searchInput {
+          margin-left: 0 !important;
+          width: 80%;
+
+          input {
+            font-size: 1em;
+          }
+        }
+
+        .Button--submit {
+          width: 50%;
+          margin-left: 0 !important;
+          font-size: 1em;
+          padding: 10px 0;
+        }
+      }
+
+      .Header_account {
+        order: 1;
+        padding: 0 !important;
+      }
+    }
+  }
   .search {
     margin-right: 2rem;
 

@@ -148,12 +148,13 @@ export default {
     box-sizing: border-box;
     background: #fff;
     position: relative;
+    padding: 0 1.5rem 0 1.5rem;
 
     &.Header--dark {
-      background: rgb(var(--color-main));
 
-      .Header_navigation-toggle {
-        color: #fff;
+      .Header_navigation-toggle .material-icons {
+        color: $dark-grey !important;
+        cursor: pointer;
       }
 
       .Header_container {
@@ -178,7 +179,7 @@ export default {
       display: none;
       width: 100%;
       height: calc(100vh - 60px);
-      background: rgb(var(--color-main));
+      background: white;
       overflow: hidden;
       z-index: 10;
     }
@@ -201,12 +202,12 @@ export default {
           width: 100%;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: flex-end;
           padding: 2rem 2rem 1rem 2rem;
           
           .list_item {
-            width: 100%;
             margin: 0 0 1rem 0;
+            align-items: end;
           }
         }
       }
@@ -217,7 +218,7 @@ export default {
         .account_button {
           .MenuLink_link {
             color: #fff;
-            background: rgb(var(--color-side));
+            background: $light-grey;
           }
         }
       }
@@ -229,7 +230,7 @@ export default {
       }
 
       .container_wrapper {
-        justify-content: space-between;
+        justify-content: end;
       }
     }
   }
