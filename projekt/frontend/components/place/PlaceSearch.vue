@@ -33,7 +33,7 @@
         <div v-if="step === SEARCH_STEPS.MORE_FILTERS" class="more-filters">
           <div class="display-flex align-center justify-between first-row">
             <Select
-              name="place-type"
+              name="placeType"
               :value="formState.type"
               :options="facilitiesTypes"
               label="name"
@@ -45,11 +45,11 @@
           </div>
 
           <Select
-            name="doctors-select"
-            :value="formState.doctor"
+            name="specialization"
+            :value="formState.specialization"
             :options="specialistsTypes"
             select-label="Wybierz specjalizację lekarza"
-            @input="(value) => setFormState({ key: 'doctor', value })"
+            @input="(value) => setFormState({ key: 'specialization', value })"
             class="second-row"
           />
           
@@ -170,13 +170,20 @@ export default {
     }),
 
     form() {
-      const { latitude, longitude } = this.formState;
+      const {
+        type,
+        specialization,
+        distance,
+        isNFZ,
+        latitude,
+        longitude,
+      } = this.formState;
 
       const form = {
-        doctor: this.formState.doctor?.id ?? null,
-        type: this.formState.type?.name ?? null,
-        distance: this.formState.distance,
-        isNFZ: this.formState.isNFZ,
+        specialization: specialization?.name,
+        type: type?.name,
+        distance,
+        isNFZ,
       };
 
       if (latitude && longitude) {
