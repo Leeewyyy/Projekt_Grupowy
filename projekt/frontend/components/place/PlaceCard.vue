@@ -30,7 +30,7 @@
         </div>
         <div
           class="details_specialists"
-          v-if="specialists.length"
+          v-if="specialists && specialists.length"
         >
           <ul class="specialists_list">
             <li

@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0 2rem; box-sizing: border-box">
+  <div class="SearchInput" style="padding: 0 2rem; box-sizing: border-box">
     <InputText
       v-model="value"
       name="search-address"
@@ -122,6 +122,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.SearchInput {
+  min-width: 400px;
+}
+
 .single-search-result {
   box-sizing: border-box;
   padding: .8rem .8rem;

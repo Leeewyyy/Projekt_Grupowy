@@ -54,8 +54,6 @@ export default {
 .BoxSection {
   overflow: hidden;
   background: rgb(var(--color-white));
-  border-radius: 10px;
-  box-shadow: 0px 2px 4px rgba(var(--color-black), 0.125);
 
   .BoxSection_header {
     position: relative;
@@ -77,6 +75,11 @@ export default {
 
   @media screen and (max-width: $desktop_breakpoint) {
     border-radius: 0 0 10px 10px;
+  }
+
+  @media screen and (min-width: $desktop_breakpoint) {
+    border-radius: 10px;
+    box-shadow: 0px 2px 4px rgba(var(--color-black), 0.125);
   }
 }
 </style>

@@ -7,7 +7,7 @@
     @onSubmit="submitSearch"
   >
     <template #header>
-      <div class="header_logo mobile-hidden">
+      <div class="header_logo">
         <Branding
           id="placeSearchBranding"
           description="Placówki medyczne w Twojej okolicy"
@@ -27,18 +27,18 @@
           @resultsLength="handleAddresses"
           @loading="setStep(SEARCH_STEPS.RESULTS_VISIBLE)"
           @iconClicked="getCurrentPosition()"
-          style="margin-bottom: .5rem;"
+          style="margin-bottom: 0.5rem;"
         />
         <WelcomeBox v-if="step === SEARCH_STEPS.WELCOME" />
         <div v-if="step === SEARCH_STEPS.MORE_FILTERS" class="more-filters">
           <div class="display-flex align-center justify-between first-row">
             <Select
               name="place-type"
-              :value="formState.placeType"
+              :value="formState.type"
               :options="facilitiesTypes"
               label="name"
               select-label="Wybierz typ placówki"
-              @input="(value) => setFormState({ key: 'placeType', value })"
+              @input="(value) => setFormState({ key: 'type', value })"
               class="select"
             />
             <SwitchButton id="switch-nfz" :model-value="formState.isNFZ" @change="(value) => setFormState({ key: 'isNFZ', value })" description="NFZ" class="switch" />
@@ -155,24 +155,38 @@ export default {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
     }
   },
+
   computed: {
     ...mapGetters('facilitiesSearch', {
       possibleAddresses: 'getPossibleAddresses',
       facilitiesTypes: 'getFacilitiesTypes',
       specialistsTypes: 'getSpecialistsTypes',
     }),
+    
     ...mapGetters('placeSearch', {
       formState: 'getFormState',
       step: 'getStep',
       placeholder: 'getPlaceholder',
     }),
+
     form() {
-      return {
+      const { latitude, longitude } = this.formState;
+
+      const form = {
         doctor: this.formState.doctor?.id ?? null,
-        placeType: this.formState.placeType?.id ?? null,
+        type: this.formState.type?.name ?? null,
         distance: this.formState.distance,
         isNFZ: this.formState.isNFZ,
       };
+
+      if (latitude && longitude) {
+        Object.assign(form, {
+          longitude,
+          latitude,
+        });
+      }
+
+      return form;
     },
   },
   watch: {
@@ -183,6 +197,7 @@ export default {
   },
   methods: {
     ...mapActions('placeSearch', ['setStep', 'setFormState', 'resetFormState', 'setPlaceholder']),
+    
     resetForm() {
       this.resetFormState();
       this.activeAddress = null;
@@ -193,12 +208,9 @@ export default {
       this.$emit('getCoords', null);
       this.setStep(SEARCH_STEPS.WELCOME);
     },
-
+    
     submitSearch() {
-      this.$emit('onSearch', {
-        ...this.form,
-        ...this.coords,
-      });
+      this.$emit('onSearch', this.form);
     },
 
     getCurrentPosition() {
@@ -214,6 +226,7 @@ export default {
         this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
         this.$nextTick(() => {
           this.$emit('getCoords', this.coords);
+          this.updateCoordsInFormState();
           this.setStep(SEARCH_STEPS.MORE_FILTERS);
           this.addressesVisible = false;
           this.$notify({ text: 'Ustawiono Twoją lokalizację, jako domyślny adres wyszukiwania', type: 'success' });
@@ -242,6 +255,7 @@ export default {
       }
 
       this.$emit('getCoords', this.coords);
+      this.updateCoordsInFormState();
     },
 
     isActive(address) {
@@ -273,20 +287,24 @@ export default {
 
       this.setStep(--this.step);
     },
+
+    updateCoordsInFormState() {
+      this.setFormState({ key: 'latitude', value: this.coords.latitude });
+      this.setFormState({ key: 'longitude', value: this.coords.longitude });
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .PlaceSearch {
+  width: 100%;
   
   @media screen and (max-width: $desktop_breakpoint) {
     display: flex;
     align-items: center;  
     justify-content: center;
     flex-direction: column;
-    background: rgb(var(--color-main));
-    min-height: 80vh;
 
     .BoxSection_body, .BoxSection_header {
       width: 100%;
@@ -352,7 +370,6 @@ export default {
 
   .PlaceSearch_container {
     // Temporary only for placeholder
-
     padding: 2rem;
     padding-bottom: 1rem;
     background: rgb(var(--color-main));
