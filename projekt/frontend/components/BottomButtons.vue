@@ -56,6 +56,7 @@ export default {
   bottom: 0;
   left: 0;
   background: $white;
+  z-index: 10;
 
   @media screen and (min-width: $desktop_breakpoint) {
     position: static;
@@ -76,7 +77,6 @@ export default {
     font-size: 1rem;
     cursor: pointer;
     background: $white;
-    z-index: 10;
   }
 
   .BottomButtons_icon {

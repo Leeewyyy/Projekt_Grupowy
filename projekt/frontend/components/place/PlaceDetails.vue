@@ -226,8 +226,10 @@ export default {
     padding: 1rem 0;
   }
 
-  .scroll {
-    height: 65vh !important;
+  @media screen and (min-width: $desktop_breakpoint) {
+    .scroll {
+      height: 65vh !important;
+    }
   }
 
   .PlaceDetails_container {

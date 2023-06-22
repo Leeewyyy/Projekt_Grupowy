@@ -32,14 +32,14 @@ export default {
     places() {
       return this.$store.getters['facilitiesSearch/getFacilities'] || [];
     },
+
+    placesQuery() {
+      return this.$route.query;
+    },
   },
 
   async fetch() {
-    const { query } = this.$route;
-    this.query = { ...query };
-
-    await this.loadPlaces();
-    await this.$store.dispatch('facilitiesQuery/setQuery', this.query);
+    await this.loadPlaces(true);
   },
 
   data() {
@@ -50,14 +50,15 @@ export default {
   },
 
   methods: {
-    async loadPlaces() {
-      // Facilities already loaded
-      if (this.$store.getters['facilitiesSearch/getFacilities'] !== null) return;
-      
+    async loadPlaces(showPreviouslyLoaded = false) {
+      // Show previously loaded facilities
+      if (showPreviouslyLoaded && this.$store.getters['facilitiesSearch/getFacilities'] !== null) return;
+
       this.isLoading = true;
 
       try {
-        await this.$store.dispatch('facilitiesSearch/searchFacilities', this.query);
+        await this.$store.dispatch('facilitiesSearch/searchFacilities', this.placesQuery);
+        await this.$store.dispatch('facilitiesQuery/setQuery', this.placesQuery);
       } catch (error) {
         if (process.client) this.$notify({ text: 'Nie udało się pobrać placówek.', type: 'error' });
         console.error(error);
@@ -77,6 +78,17 @@ export default {
 
     hideBox() {
       this.$nuxt.$emit('map:toggleBoxExpand');
+    },
+  },
+
+  watch: {
+    '$route.query': {
+      deep: true,
+      // eslint-disable-next-line
+      handler: async function(oldValue, newValue) {
+        if (oldValue === newValue) return;
+        await this.loadPlaces(false);
+      },
     },
   },
 };

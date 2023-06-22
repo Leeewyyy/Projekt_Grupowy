@@ -10,15 +10,16 @@
         </MenuLink>
       </li>
     </ul>
-    <!-- User panel link -->
-    <div class="display-flex align-center justify-center">
-      <form @submit.prevent="handleSearchPlaces" class="search display-flex align-center justify-center">
-          <span>Wyszukaj placówkę</span>
+    <div class="Navigation_content">
+      <form
+        class="Navigation_search search display-flex align-center justify-center"
+        @submit.prevent="handleSearchPlaces"
+      >
+          <span class="mobile-hidden">Wyszukaj placówkę</span>
           <InputText
             name="search-input"
             v-model="searchValue"
             placeholder="Wpisz..."
-            style="margin-left: 20px;"
             class="searchInput"
           />
           <Button type="submit" class="submit-search">Szukaj</Button>
@@ -83,17 +84,32 @@ export default {
       isLoggedIn: 'isLoggedIn',
       user: 'getUser',
     }),
-  },
 
+    menuItems() {
+      const { name } = this.$route;
+      const items = [];
+
+      if (name !== 'index') {
+        items.push({
+          name: 'Strona główna',
+          href: '/',
+        });
+      }
+      
+      if (name !== 'contact') {
+        items.push({
+          name: 'Napisz do nas',
+          href: '/contact',
+        });
+      }
+
+      return items;
+    },
+  },
+  
   data() {
     return {
       searchValue: '',
-      menuItems: [
-        ...(this.$route.name !== 'contact' ? [{
-          name: 'Napisz do nas',
-          href: '/contact',
-        }] : []),
-      ],
     };
   },
 
@@ -106,9 +122,21 @@ export default {
         }
       });
     },
+
     handleSearchPlaces() {
-      const query = { name: this.searchValue };
-      this.$router.push({ path: '/places', query });
+      // Skip if empty search
+      if (!this.searchValue) return;
+      
+      this.$router.push({
+        path: '/places',
+        query: {
+          search: this.searchValue,
+        },
+      });
+
+      // Reset input text
+      this.searchValue = '';
+      this.$parent.toggleNavigation();
     },
   },
 };
@@ -134,6 +162,7 @@ export default {
 
     .searchInput {
       width: 200px;
+      margin-left: 20px;
 
       .input-outer {
         height: 30px;
@@ -160,6 +189,72 @@ export default {
         padding-top: 0;
         padding-bottom: 0; 
       }
+    }
+  }
+
+  .Navigation_content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    .Navigation_list {
+      .list_item {
+        .item_link {
+          width: 100%;
+          background: $white;
+          border-radius: 4px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+          a {
+            display: block;
+            width: 100%;
+            padding: 1rem 0;
+          }
+        }
+      }
+    }
+
+    .Navigation_content {
+      flex-direction: column;
+    }
+
+    .search {
+      width: 100%;
+      margin: 0;
+      padding: 0 2rem;
+
+      .searchInput {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+
+    .Header_account {
+      .account_avatar {
+        margin-left: 1rem;
+      }
+
+      .account_link  {
+        width: 100%;
+        margin-top: 1rem;
+        background: $white;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+        a {
+          padding: 1rem 2rem;
+          width: 100%;
+        }
+      }
+    }
+
+    .Header_logout-button {
+      margin-top: 1rem !important;
+      background: $white;
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
     }
   }
 

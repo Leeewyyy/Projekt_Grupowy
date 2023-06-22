@@ -7,12 +7,6 @@
     }">
     <div class="Header_container">
       <div class="container_wrapper">
-        <!-- Logo -->
-        <div v-if="$route.name !== 'index'" class="Header_logo">
-          <nuxtLink to="/" class="logo_link" @click.native="closeNavigation">
-            Strona główna
-          </nuxtLink>
-        </div>
         <!-- Main navigation -->
         <Navigation
           class="Header_navigation"
@@ -124,10 +118,10 @@ export default {
 
     .Header_logo {
       min-width: 120px;
-      margin-right: .5rem;
+      margin-right: 0.5rem;
+
       .logo_link {
         font-weight: bold;
-        
       }
     }
 
@@ -153,6 +147,7 @@ export default {
       background: rgb(var(--color-main));
 
       .Header_navigation-toggle {
+        margin-left: auto;
         color: #fff;
       }
 

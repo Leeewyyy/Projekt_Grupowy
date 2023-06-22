@@ -53,8 +53,16 @@ export const actions = {
   },
 
   async searchFacilities({ commit }, params) {
-    if (!params.distance) params.distance = 1000;
-    if (params.isNFZ) params.nfzStatus = 'FULL,PARTIAL';
+    // Add default distance
+    if (!params.distance) {
+      params.distance = 1000;
+    }
+
+    // Filter by NFZ status
+    if (params.isNFZ === 'true') {
+      params.nfzStatus = 'FULL,PARTIAL';
+    }
+    
     const results = await this.$axios.$get('/api/medical-facilities', { params }) ?? [];
     commit('setFacilities', results);
   },

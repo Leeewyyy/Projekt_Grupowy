@@ -2,9 +2,11 @@ export const state = () => ({
   step: 0,
   placeholder: '',
   doctor: null,
-  placeType: null,
+  type: null,
   distance: 50,
   isNFZ: true,
+  latitude: null,
+  longitude: null,
   tmpPlaceholder: '',
 });
 
@@ -15,9 +17,11 @@ export const getters = {
   getFormState(state) {
     return {
       doctor: state.doctor,
-      placeType: state.placeType,
+      type: state.type,
       distance: state.distance,
       isNFZ: state.isNFZ,
+      latitude: state.latitude,
+      longitude: state.longitude,
     };
   },
   getPlaceholder(state) {
@@ -49,8 +53,10 @@ export const actions = {
   },
   resetFormState({ commit }) {
     commit('setFormState', { key: 'doctor', value: null });
-    commit('setFormState', { key: 'placeType', value: null });
+    commit('setFormState', { key: 'type', value: null });
     commit('setFormState', { key: 'distance', value: 50 });
     commit('setFormState', { key: 'nfzStatus', value: true });
+    commit('setFormState', { key: 'latitude', value: null });
+    commit('setFormState', { key: 'longitude', value: null });
   },
 };
