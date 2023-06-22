@@ -170,6 +170,10 @@ export default {
     isLogged() {
       return this.$store.getters['user/isLoggedIn'];
     },
+
+    prevRoutePath() {
+      return this.$nuxt.context.from;
+    },
   },
 
   data() {
@@ -201,6 +205,11 @@ export default {
     },
 
     onBack() {
+      if (this.prevRoutePath?.name === 'user-panel') {
+        this.$router.push({ name: 'user-panel' });
+        return;
+      }
+
       this.$nuxt.$emit('map:placeClosed');
       this.$emit('onClose');
     },

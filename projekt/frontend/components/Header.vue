@@ -210,8 +210,9 @@ export default {
         padding: 0 2rem;
 
         .account_button {
-          .MenuLink_link {
-            color: #fff;
+          .MenuLink_link, div {
+            font-weight: 600;
+            color: $dark-grey;
             background: $light-grey;
           }
         }

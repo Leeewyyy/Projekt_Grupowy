@@ -12,7 +12,33 @@
         @input="toggleSection"
         :style="index && !section.isOpen ? 'margin-top: 1rem' : null"
       >
-        <p v-if="section.isOpen">{{ section.fullValue }}</p>
+        <div v-if="section.isOpen">
+          <div v-if="section.name === 'how-to'">
+            <p>
+              To proste! Potrzebujesz udać się do lekarza, ale nie wiesz, gdzie znajdziesz najbliższą placówkę?
+              <b>Po to jest LokalnyLekarz.pl</b> Wpisz w powyższym polu wyszukiwania oczekiwany adres i wybierz z dostępnych pól
+              lub naciśnij ikonkę lokalizacji, a system sam Cię znajdzie. Następnie wybierz dostępne filtry i naciśnij Szukaj. Pokażą Ci się
+              wszystkie placówki medyczne o wybranych parametrach.
+            </p>
+          </div>
+          <div v-else-if="section.name === 'no-place'">
+            <p>
+              W najbliższym czasie dodamy specjalny formularz zgłaszania placówki medycznej do naszego systemu.
+              Jeżeli znasz jakąś placówkę zachęcamy do napisania do nas <NuxtLink :to="{ name: 'contact'}">(kliknij tu)</NuxtLink> 
+            </p>
+          </div>
+          <div v-else-if="section.name === 'account'">
+            <p>
+              Konto w systemie otwiera drzwi do świata zarządzania placówkami.
+              Główne funkcjonalnosci to:
+            </p>
+            <ul class="list">
+              <li>Dodawanie placówek do ulubionych</li>
+              <li>Wystawianie opinii placówkom</li>
+              <li>Dostęp do panelu użytkownika</li>
+            </ul>
+          </div>
+        </div>
       </SingleWelcomeBox>
     </div>
   </div>
@@ -29,23 +55,23 @@ export default {
     return {
       sections: [
         {
+          name: 'how-to',
           header: 'Jak to działa?',
           description: 'Dowiedz się więcej, jak korzystać z aplikacji',
-          fullValue: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam iaculis lorem in ligula blandit, a ultricies neque pulvinar. Sed semper faucibus nibh sit amet rhoncus. Maecenas at augue iaculis, commodo ex eu, tincidunt dui. Aenean rhoncus, erat quis viverra egestas, dui ex interdum nisi, vitae convallis odio sapien non elit',
           isOpen: false,
           visible: true,
         },
         {
+          name: 'no-place',
           header: 'Brak placówki?',
           description: 'Dodaj ją ręcznie przy pomocy prostego formularza',
-          fullValue: 'Morbi quam massa, pulvinar vel orci nec, fermentum feugiat dui. Donec venenatis nisi vel velit scelerisque pulvinar. Aliquam fermentum elit neque, ac pellentesque tellus porttitor eget.',
           isOpen: false,
           visible: true,
         },
         {
+          name: 'account',
           header: 'Co mi daje konto w systemie?',
           description: 'Zobacz możliwości, jakie daje konto użytkownika',
-          fullValue: 'Donec tincidunt sed nunc ut sollicitudin. Vestibulum iaculis maximus nulla nec rutrum. Phasellus elit justo, semper eu orci sit amet, sollicitudin placerat augue. In dignissim dolor et tincidunt pulvinar. Aliquam dapibus faucibus',
           isOpen: false,
           visible: true,
         },
@@ -83,3 +109,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.list {
+  padding-left: 20px;
+  margin-top: 20px;
+}
+</style>

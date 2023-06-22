@@ -25,10 +25,14 @@
       </form>
       <div
         v-if="$route.name === 'user-panel'"
-        class="Header_logout-button display-flex align-center less-padding cursor-pointer"
+        class="Header_account display-flex align-center less-padding cursor-pointer"
         @click="logout()"
       >
-        Wyloguj się <Icon name="logout" style="margin-left: 10px;" />
+        <div class="account_button">
+          <div>
+            Wyloguj się <Icon name="logout" style="margin-left: 10px;" class="mobile-hidden" />
+          </div>
+        </div>
       </div>
       <div v-else-if="$route.name !== 'login'" class="Header_account">
         <MenuLink
@@ -297,18 +301,18 @@ export default {
 
     .Header_account {
       .account_avatar {
-        margin-left: 1rem;
+        width: 50px !important;
       }
 
       .account_link  {
         width: 100%;
-        margin-top: 1rem;
         background: $white;
         border-radius: 4px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        padding: 5px 10px;
 
         a {
-          padding: 1rem 2rem;
+          padding: 0;
           width: 100%;
         }
       }

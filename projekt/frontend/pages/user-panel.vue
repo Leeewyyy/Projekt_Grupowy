@@ -13,8 +13,9 @@
           class="container_column"
           customTitle="Ulubione placówki"
           :places="favouritePlaces"
-          :selectable="false"
+          :selectable="true"
           :closable="false"
+          @onPlaceSelected="(place) => $router.push({ name: 'place-id', params: { id: place.id } })"
         />
       </div>
     </div>

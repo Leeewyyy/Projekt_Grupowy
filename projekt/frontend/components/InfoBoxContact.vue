@@ -117,6 +117,13 @@ export default {
 };
 </script>
 
+<style lang="scss">
+@media screen and (max-width: $desktop_breakpoint) {
+  #info-box-contact {
+    margin-top: 0;
+  }
+}
+</style>
 <style lang="scss" scoped>
 code {
   background: rgba(221, 221, 221, 0.6);
@@ -126,7 +133,7 @@ code {
 }
 
 .main-container.wider {
-  max-width: 40% !important;
+  max-width: 35% !important;
   max-height: unset !important;
   
   @media screen and (max-width: $desktop_breakpoint) {
@@ -150,8 +157,7 @@ code {
   }
 
   .info-box {
-    padding: 0 2rem;
-    padding-bottom: 1rem;
+    padding: 0 0 2rem 0;
     background: #fff;
 
     .info-box-container-inner {
@@ -192,11 +198,18 @@ code {
     }
 
     @media screen and (max-width: $desktop_breakpoint) {
-      background: transparent;  
+      background: transparent;
+      padding: 0 2rem !important;
+
+      #info-box-contact {
+        margin-top: 0;
+      }
 
       .info-box-container-inner {
         padding-left: 0;
         padding-right: 0;
+        margin: auto;
+        width: 100%;
 
         .section {
           width: 100%;

@@ -1,7 +1,7 @@
 <template>
   <BoxSection class="login-form-outer main-container">
     <template #header>
-      <div class="header_logo mobile-hidden">
+      <div class="header_logo">
         <Branding
           id="loginBranding"
           description="Wpisz dane logowania"

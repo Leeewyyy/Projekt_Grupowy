@@ -1,7 +1,7 @@
 <template>
   <div class="single-welcome-box cursor-pointer bg-extra-light-grey
     display-flex flex-column border-rounded"
-    :style="isOpen ? 'min-height: 300px' : null"
+    :class="{ 'open': isOpen }"
     @click="isOpen = !isOpen"
   >
     <h2>{{ header }}</h2>
@@ -36,11 +36,16 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .single-welcome-box {
   box-sizing: border-box;
   padding: 1rem 1.5rem;
   position: relative;
+
+  &.open {
+    min-height: 300px;
+    padding-bottom: 40px;
+  }
 }
 
 h2 {
@@ -50,7 +55,7 @@ h2 {
 p {
   margin-top: .5rem;
   font-size: 1rem;
-  padding-right: 4rem;
+  padding-right: 2rem;
 }
 
 .label-span {
