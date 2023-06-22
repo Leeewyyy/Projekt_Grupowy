@@ -154,7 +154,7 @@ export default {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 20%;
+    top: 27%;
     width: auto;
     margin-left: 0 !important;
   }
@@ -187,7 +187,8 @@ export default {
         align-items: center;
         gap: 20px;
         width: 100%;
-        margin-top: 6rem;
+        margin-top: 8rem;
+        padding: 0;
 
         .searchInput {
           margin-left: 0 !important;
@@ -264,17 +265,16 @@ export default {
 
   @media screen and (max-width: $desktop_breakpoint) {
     .Navigation_list {
+      margin-bottom: 0 !important;
       .list_item {
         .item_link {
           width: 100%;
-          background: $white;
           border-radius: 4px;
-          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 
           a {
             display: block;
             width: 100%;
-            padding: 1rem 0;
+            padding: 0;
           }
         }
       }
