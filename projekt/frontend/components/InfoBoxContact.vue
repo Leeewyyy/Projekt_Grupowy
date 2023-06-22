@@ -1,7 +1,7 @@
 <template>
   <BoxSection class="info-box-outer main-container wider">
     <template #header>
-      <div class="header_logo mobile-hidden">
+      <div class="header_logo">
         <Branding
           id="contactUsBranding"
           description="Napisz do nas"
@@ -11,7 +11,6 @@
     <template #body>
       <div class="info-box">
         <form class="info-box-container-inner" @submit.prevent="sendMessage">
-
             <InputText
               id="subject"
               name="name-input"

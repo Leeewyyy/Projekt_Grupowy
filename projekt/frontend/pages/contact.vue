@@ -23,19 +23,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.mobile {
-  display: none;
-}
-
-@media screen and (max-width: $desktop_breakpoint) {
-  .centered-page {
-    display: none;
-  }
-
-  .mobile {
-    display: block;
-  }
-}
-</style>
