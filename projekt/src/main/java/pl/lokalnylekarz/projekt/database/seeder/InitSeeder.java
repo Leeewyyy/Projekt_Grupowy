@@ -169,7 +169,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.365000, 18.635410))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user1)
                     .favoriteFor(users)
                     .build();
@@ -211,7 +211,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.377320, 18.608100))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user2)
                     .build();
 
@@ -244,7 +244,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.366310, 18.625540))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user3)
                     .favoriteFor(users)
                     .build();
@@ -283,7 +283,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3739, 18.6214))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
@@ -327,7 +327,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.4029503, 18.6126574))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
@@ -379,7 +379,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3512137, 18.6387727))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
@@ -428,7 +428,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3421424, 18.5510178))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
@@ -472,7 +472,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3439, 18.6487))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
@@ -514,7 +514,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.391661, 18.5997536))
-                    .specialist(getRandomElement((List<Specialist>) specialistRepository.findAll()))
+                    .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
                     .build();
 
@@ -548,7 +548,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(12))
                     .openTo(new Timestamp(12345))
                     .location(new Location(54.3376318, 18.6125888))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
                     .build();
 
@@ -584,7 +584,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(8))
                     .openTo(new Timestamp(18))
                     .location(new Location(52.2319585, 21.0067249))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
                     .build();
 
@@ -620,7 +620,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(9))
                     .openTo(new Timestamp(17))
                     .location(new Location(50.0646501, 19.9449799))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
                     .build();
 
@@ -654,7 +654,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(10))
                     .openTo(new Timestamp(18))
                     .location(new Location(52.406374, 16.9251681))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
                     .build();
 
@@ -687,7 +687,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(8))
                     .openTo(new Timestamp(16))
                     .location(new Location(51.107883, 17.038538))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
                     .build();
 
@@ -720,7 +720,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(9))
                     .openTo(new Timestamp(17))
                     .location(new Location(54.405832,18.576924))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
                     .build();
 
@@ -753,7 +753,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(7))
                     .openTo(new Timestamp(19))
                     .location(new Location(54.3783307,18.5814854))
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
                     .build();
 
@@ -787,7 +787,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(8))
                     .openTo(new Timestamp(18))
                     .location(new Location(54.3475666,18.6351057)) // Warsaw coordinates: latitude, longitude
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
                     .build();
 
@@ -821,7 +821,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(9))
                     .openTo(new Timestamp(17))
                     .location(new Location(54.4412383,18.5678342)) // Gdańsk coordinates: latitude, longitude
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
                     .build();
 
@@ -855,7 +855,7 @@ public class InitSeeder implements CommandLineRunner {
                     .openFrom(new Timestamp(10))
                     .openTo(new Timestamp(16))
                     .location(new Location(54.406957,18.5551332)) // Gdańsk coordinates: latitude, longitude
-                    .specialist((List<Specialist>) specialistRepository.findAll())
+                    .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
                     .build();
 

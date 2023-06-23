@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +27,8 @@ public class Specialist {
     @Column
     @Enumerated(EnumType.ORDINAL)
     private Specialization specialization;
+
+    @Column
+    @ManyToMany(mappedBy = "specialists")
+    private List<MedicalFacility> medicalFacilities;
 }

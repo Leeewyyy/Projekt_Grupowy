@@ -2,7 +2,9 @@ package pl.lokalnylekarz.projekt.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.User;
@@ -30,6 +32,7 @@ public class UserService {
     private final MedicalFacilityRepository medicalFacilityRepository;
     private final OpinionService opinionService;
     private final MedicalFacilityMapper medicalFacilityMapper;
+    private final MedicalFacilityService medicalFacilityService;
 
     private UserDto forDetails(User user) {
         return new UserDto(
@@ -106,7 +109,7 @@ public class UserService {
                 userLoginPOJO.password
         ).orElse(new User());
 
-        if (user.getId()!=null) return fromEntityToDto(user);
+        if (user.getId() != null) return fromEntityToDto(user);
         return null;
     }
 
@@ -184,8 +187,15 @@ public class UserService {
         return removed;
     }
 
-    public List<MedicalFacility> findFavoriteFacilitiesForUser(Long userId) {
-        return userRepository.findById(userId).get().getFavoriteFacilities();
+    public List<MedicalFacilityListDto> findFavoriteFacilitiesForUser(Long userId) {
+        List<MedicalFacility> medicalFacilities = userRepository.findFavoriteFacilitiesForUser(userId);
+        List<MedicalFacilityListDto> medicalFacilityListDtos = medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).toList();
+        for (MedicalFacilityListDto medicalFacilityListDto : medicalFacilityListDtos) {
+            medicalFacilityService.addRatingAndRatingCount(medicalFacilityListDto, medicalFacilityListDto.getId());
+            medicalFacilityListDto.setSpecialists(medicalFacilityService.addSpecialists(medicalFacilityListDto.getId()));
+        }
+
+        return medicalFacilityListDtos;
     }
 
     public InputStream getUserImage(Long userId) {
@@ -228,11 +238,11 @@ public class UserService {
             return null;
         }
 
-         return user.getOpinions().stream().sorted(new Comparator<Opinion>() {
-             @Override
-             public int compare(Opinion o1, Opinion o2) {
-                 return -o1.getAddedAt().compareTo(o2.getAddedAt());
-             }
-         }).map(opinionService::fromOpinionToOpinionWithMedicalFacilityDTO).toList();
+        return user.getOpinions().stream().sorted(new Comparator<Opinion>() {
+            @Override
+            public int compare(Opinion o1, Opinion o2) {
+                return -o1.getAddedAt().compareTo(o2.getAddedAt());
+            }
+        }).map(opinionService::fromOpinionToOpinionWithMedicalFacilityDTO).toList();
     }
 }

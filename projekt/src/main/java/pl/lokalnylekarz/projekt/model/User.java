@@ -46,7 +46,7 @@ public class User {
     @JsonIgnore
     private List<MedicalFacility> addedMedicalFacilities;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "favoriteFor")
     @JsonIgnore
     private List<MedicalFacility> favoriteFacilities;
 

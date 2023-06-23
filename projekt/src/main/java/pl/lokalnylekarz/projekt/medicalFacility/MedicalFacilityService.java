@@ -127,7 +127,7 @@ public class MedicalFacilityService {
 
         MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElse(null);
 
-        List<Specialist> specialistList = medicalFacility.getSpecialist();
+        List<Specialist> specialistList = medicalFacility.getSpecialists();
 
         for (Specialist specialist : specialistList) {
             String specialization = specialist.getSpecialization().toString();

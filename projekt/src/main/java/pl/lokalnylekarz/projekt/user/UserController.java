@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.lokalnylekarz.projekt.api.Endpoint;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.User;
 import pl.lokalnylekarz.projekt.opinion.OpinionWithMedicalFacilityDTO;
@@ -89,7 +90,7 @@ public class UserController {
     }
 
     @GetMapping("{userId}/favorite-facilities")
-    public ResponseEntity<List<MedicalFacility>> favoriteFacilities(@PathVariable Long userId) {
+    public ResponseEntity<List<MedicalFacilityListDto>> favoriteFacilities(@PathVariable Long userId) {
         return new ResponseEntity<>(userService.findFavoriteFacilitiesForUser(userId), HttpStatus.OK);
     }
 

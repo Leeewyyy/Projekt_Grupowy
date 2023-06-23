@@ -74,7 +74,7 @@ public class MedicalFacility {
 
     @ManyToMany
     @JoinColumn(name = "id")
-    private List<Specialist> specialist;
+    private List<Specialist> specialists;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
