@@ -7,9 +7,10 @@
   >
     <Icon
       class="CollapseButton_icon"
-      name="expand_less"
+      name="keyboard_arrow_left"
       :size="24"
     />
+    <span class="collapse-text">Zwiń</span>
   </button>
 </template>
 
@@ -36,9 +37,21 @@ export default {
   right: 0.5rem;
   cursor: pointer;
   background: none;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
 
-  .CollapseButton_icon {
-    
+  .collapse-text {
+    width: 0;
+    opacity: 0;
+    transition: 0.2s all;
+  }
+
+  &:hover {
+    .collapse-text {
+      width: auto;
+      opacity: 1;
+    }
   }
 }
 </style>

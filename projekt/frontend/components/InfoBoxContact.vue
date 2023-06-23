@@ -53,6 +53,8 @@
 </template>
 
 <script>
+// eslint-disable-next-line
+import { mapActions } from 'vuex';
 import BoxSection from '@/components/BoxSection';
 import Icon from '@/components/shared/Icon';
 import Button from '@/components/shared/Button';
@@ -80,14 +82,17 @@ export default {
     };
   },
   methods: {
+    ...mapActions('mailSender', ['sendMail']),
     sendMessage() {
       if (this.validate()) {
-        // tu podpiąć api
-        this.$notify({ text: 'Wiadomość wysłana pomyślnie', type: 'success' });
-        this.subject = '';
-        this.email = '';
-        this.question = '';
-        this.agreement = false;
+        this.sendMail({ fromEmail: this.email, subject: this.subject, text: this.question })
+          .then(() => {
+            this.$notify({ text: 'Wiadomość wysłana pomyślnie', type: 'success' });
+            this.subject = '';
+            this.email = '';
+            this.question = '';
+            this.agreement = false;
+          });
       }
     },
     validate() {
