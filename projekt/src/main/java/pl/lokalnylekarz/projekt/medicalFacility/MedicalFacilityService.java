@@ -67,7 +67,6 @@ public class MedicalFacilityService {
 
         MedicalFacilityDto medicalFacilityDto = medicalFacilityMapper.fromEntityToDto(medicalFacility);
         addRatingRatingCountAddedByOpinions(medicalFacilityDto, medicalFacility.getId());
-        medicalFacilityDto.setSpecialists(addSpecialists(medicalFacilityDto.getId()));
 
         return medicalFacilityDto;
     }

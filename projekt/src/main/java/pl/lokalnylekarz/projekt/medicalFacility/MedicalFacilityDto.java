@@ -37,8 +37,7 @@ public class MedicalFacilityDto {
     private Timestamp openTo;
     private Location location;
     private Date addedAt;
-    private List<SpecialistDto> specialist;
+    private List<SpecialistDto> specialists;
     private UserAddedByDto addedBy;
     private List<OpinionDto> opinions;
-    private List<String> specialists;
 }
