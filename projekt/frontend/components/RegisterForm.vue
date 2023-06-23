@@ -63,11 +63,11 @@
             required
           />
 
-          <SwitchButton class="register-switch" id="consent-regulations" v-model="form.regulations" dir="right">
+          <SwitchButton class="register-switch" id="consent-regulations" v-model="regulations" dir="right">
             Akceptuję <a href="#" target="_blank">regulamin</a> serwisu
           </SwitchButton>
 
-          <SwitchButton class="register-switch" id="consent-policy" v-model="form.privatePolicy" dir="right">
+          <SwitchButton class="register-switch" id="consent-policy" v-model="privatePolicy" dir="right">
             Akceptuję <a href="#" target="_blank">politykę prywatności</a>
           </SwitchButton>
 
@@ -116,9 +116,9 @@ export default {
         fullName: null,
         email: null,
         password: null,
-        regulations: false,
-        privatePolicy: false,
       },
+      regulations: false,
+      privatePolicy: false,
       showPass: false,
       showConfirmPass: false,
       passwordConfirm: null,
@@ -128,7 +128,7 @@ export default {
   methods: {
     validate() {
       // Validate regulations and policy
-      if (!this.form.regulations || !this.form.privatePolicy) {
+      if (!this.regulations || !this.privatePolicy) {
         this.$notify({ text: 'Zaznacz zgodę dot. regulaminu i polityki prywatności.', type: 'error' });
         return false;
       }
