@@ -1,32 +1,32 @@
 <template>
-  <AppPage class="Users" name="admin-users">
-    <BoxSection class="Users_box">
+  <AppPage class="Facilities" name="admin-facilities">
+    <BoxSection class="Facilities_box">
       <template #header>
-        Admin: Zarządzanie użytkownikami
+        Admin: Zarządzanie placówkami
       </template>
       <template #body>
-        <div class="Users_box-body">
+        <div class="Facilities_box-body">
           <InputText
-            id="userSearch"
-            name="userSearch"
+            id="facilitySearch"
+            name="facilitySearch"
             v-model="searchTemp"
-            placeholder="Wyszukaj użytkownika..."
+            placeholder="Wyszukaj placówkę..."
             @input="onSearch"
           />
         </div>
       </template>
     </BoxSection>
-    <BoxSection class="Users_box Users_results">
+    <BoxSection class="Facilities_box Facilities_results">
       <template #header>
         <span v-if="searchValue">
           Wyniki wyszukiwania: "{{ searchValue }}"
         </span>
         <span v-else>
-          Lista użytkowników
+          Lista placówek
         </span>
       </template>
       <template #body>
-        <div class="Users_box-body">
+        <div class="Facilities_box-body">
           <Table
             :columns="columns"
             :rows="filteredRows"
@@ -34,20 +34,46 @@
             <template #imageUrl="{ value }">
               <Avatar
                 size="small"
-                placeholderIcon="person"
+                placeholderIcon="place"
                 :imageUrl="value"
               />
             </template>
-            <template #email="{ row }">
+            <template #name="{ row }">
               <nuxt-link
-                class="Users_link"
-                :to="`/admin/users/${row.id}`"
+                class="Facilities_link"
+                :to="`/admin/facilities/${row.id}`"
               >
-                {{ row.email }}
+                {{ row.name }}
               </nuxt-link>
             </template>
-            <template #createdAt="{ value }">
-              {{ new Date(value).toLocaleString('pl') }}
+            <template #nfzStatus="{ value }">
+              <NFZStatus :status="value" hide-label />
+            </template>
+            <template #rating="{ row }">
+              <span v-if="row.rating">
+                {{ row.rating.toFixed(2) }} (z {{ row.ratingCount }} ocen)
+              </span>
+              <span v-else class="Facilities_missing-data">
+                brak ocen
+              </span>
+            </template>
+            <template #websiteUrl="{ value }">
+              <a
+                class="Facilities_link"
+                :href="value"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                {{ value }}
+              </a>
+            </template>
+            <template #addedAt="{ value }">
+              <span v-if="value">
+                {{ new Date(value).toLocaleString('pl') }}
+              </span>
+              <span v-else class="Facilities_missing-data">
+                brak danych
+              </span>
             </template>
           </Table>
         </div>
@@ -61,6 +87,7 @@ import AppPage from '@/components/AppPage';
 import BoxSection from '@/components/BoxSection';
 import InputText from '@/components/shared/InputText';
 import Table from '@/components/shared/Table';
+import NFZStatus from '@/components/NFZStatus';
 import Avatar from '@/components/shared/Avatar';
 
 export default {
@@ -69,12 +96,13 @@ export default {
     BoxSection,
     InputText,
     Table,
+    NFZStatus,
     Avatar,
   },
 
   head() {
     return {
-      title: 'Zarządzanie użytkownikami',
+      title: 'Zarządzanie placówkami',
     };
   },
 
@@ -83,14 +111,17 @@ export default {
       // eslint-disable-next-line
       return this.rows.filter((row) => {
         return !this.searchValue || [
-          row.fullName,
-          row.email,
+          row.name,
+          row.type,
+          row.address,
         ].some((v) => v.toLowerCase().includes(this.searchValue));
       });
     },
   },
 
   data() {
+    const rows = this.$store.getters['facility/getFacilities'];
+    
     return {
       columns: {
         id: {
@@ -100,57 +131,34 @@ export default {
           name: '',
           inline: true,
         },
-        email: {
-          name: 'Adres e-mail',
+        name: {
+          name: 'Nazwa',
         },
-        fullName: {
-          name: 'Imię i nazwisko',
+        type: {
+          name: 'Typ',
         },
-        createdAt: {
-          name: 'Data rejestracji',
+        nfzStatus: {
+          name: 'NFZ',
+        },
+        address: {
+          name: 'Adres',
+        },
+        rating: {
+          name: 'Ocena',
+        },
+        websiteUrl: {
+          name: 'Witryna',
+        },
+        addedAt: {
+          name: 'Data dodania',
         },
       },
 
-      // Temporary data
-      rows: [
-        {
-          id: 1,
-          email: 'alan@example.com',
-          fullName: 'Alan',
-          imageUrl: null,
-          createdAt: new Date(),
-        },
-        {
-          id: 2,
-          email: 'jakub@example.com',
-          fullName: 'Jakub',
-          imageUrl: null,
-          createdAt: new Date(),
-        },
-        {
-          id: 3,
-          email: 'adam@example.com',
-          fullName: 'Adam',
-          imageUrl: null,
-          createdAt: new Date(),
-        },
-        {
-          id: 4,
-          email: 'mateusz@example.com',
-          fullName: 'Mateusz',
-          imageUrl: null,
-          createdAt: new Date(),
-        },
-      ],
-
+      rows,
       searchTemp: null,
       searchValue: null,
       searchTimeout: null,
     };
-  },
-
-  async fetch() {
-    // Fetch user list
   },
 
   methods: {
@@ -167,23 +175,28 @@ export default {
 </script>
 
 <style lang="scss">
-.Users {
+.Facilities {
   padding: 2rem;
   background: #fafafa;
 
-  .Users_box {
+  .Facilities_box {
     padding: 1rem;
   }
 
-  .Users_box-body {
+  .Facilities_box-body {
     margin-top: 1rem;
   }
 
-  .Users_results {
+  .Facilities_results {
     margin-top: 2rem;
   }
 
-  .Users_link {
+  .Facilities_missing-data {
+    color: rgb(var(--color-text), 0.6);
+    font-style: italic;
+  }
+
+  .Facilities_link {
     font-weight: 400 !important;
     text-decoration: underline;
   }

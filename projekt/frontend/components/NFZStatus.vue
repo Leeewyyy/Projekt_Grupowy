@@ -9,7 +9,10 @@
       :name="iconName"
       :size="20"
     />
-    <div class="NFZStatus_label">
+    <div
+      v-if="!hideLabel"
+      class="NFZStatus_label"
+    >
       NFZ
     </div>
   </div>
@@ -28,6 +31,10 @@ export default {
       type: String,
       default: '',
       validator: (value) => ['full', 'partial', 'none'].includes(value.toLowerCase()),
+    },
+    hideLabel: {
+      type: Boolean,
+      default: false,
     },
   },
 
