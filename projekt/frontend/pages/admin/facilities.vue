@@ -1,29 +1,74 @@
 <template>
   <AppPage class="Facilities" name="admin-facilities">
-    <BoxSection class="Facilities_box">
+    <AdminNavigation />
+
+    <BoxSection
+      class="Facilities_box Facilities_search"
+      :noOverflow="false"
+    >
       <template #header>
-        Admin: Zarządzanie placówkami
+        <div class="Facilities_header">
+          Wyszukaj placówkę
+        </div>
       </template>
       <template #body>
-        <div class="Facilities_box-body">
-          <InputText
-            id="facilitySearch"
-            name="facilitySearch"
-            v-model="searchTemp"
-            placeholder="Wyszukaj placówkę..."
-            @input="onSearch"
-          />
+        <div class="Facilities_search-content">
+          <div class="Facilities_search-group">
+            <div class="Facilities_search-name">
+              Nazwa placówki
+            </div>
+            <InputText
+              id="searchName"
+              class="Facilities_search-input"
+              name="searchName"
+              v-model="searchNameTemp"
+              placeholder="np. Szpital im. Mikołaja Kopernika"
+              @input="onSearchUpdated"
+            />
+          </div>
+          <div class="Facilities_search-group">
+            <div class="Facilities_search-name">
+              Typ placówki
+            </div>
+            <Select
+              name="placeType"
+              class="Facilities_search-input"
+              label="name"
+              trackBy="type"
+              placeholder="np. SZPITAL"
+              :options="facilityTypeOptions"
+              v-model="searchType"
+            />
+          </div>
+          <div class="Facilities_search-group">
+            <div class="Facilities_search-name">
+              Pełne finansowanie przez NFZ
+            </div>
+            <SwitchButton
+              id="nfzSwitch"
+              v-model="searchNFZ"
+            />
+          </div>
         </div>
       </template>
     </BoxSection>
     <BoxSection class="Facilities_box Facilities_results">
       <template #header>
-        <span v-if="searchValue">
-          Wyniki wyszukiwania: "{{ searchValue }}"
-        </span>
-        <span v-else>
-          Lista placówek
-        </span>
+        <div class="Facilities_header-wrapper">
+          <div class="Facilities_header">
+            Lista placówek
+          </div>
+          <ActionButton
+            element="nuxt-link"
+            class="Facilities_add-button"
+            to="/facilities/add"
+            icon="add"
+            backgroundColor="#333"
+            textColor="#fff"
+          >
+            Dodaj
+          </ActionButton>
+        </div>
       </template>
       <template #body>
         <div class="Facilities_box-body">
@@ -41,7 +86,7 @@
             <template #name="{ row }">
               <nuxt-link
                 class="Facilities_link"
-                :to="`/admin/facilities/${row.id}`"
+                :to="`/place/${row.id}`"
               >
                 {{ row.name }}
               </nuxt-link>
@@ -75,6 +120,25 @@
                 brak danych
               </span>
             </template>
+            <template #actions="{ row }">
+              <div class="Facilities_actions">
+                <ActionButton
+                  element="nuxt-link"
+                  :to="`/facilities/edit/${row.id}`"
+                  icon="edit"
+                >
+                  Edytuj
+                </ActionButton>
+                <ActionButton
+                  icon="delete"
+                  backgroundColor="#f00"
+                  textColor="#fff"
+                  @click.native="deleteFacility(row)"
+                >
+                  Usuń
+                </ActionButton>
+              </div>
+            </template>
           </Table>
         </div>
       </template>
@@ -84,8 +148,12 @@
 
 <script>
 import AppPage from '@/components/AppPage';
+import AdminNavigation from '@/components/admin/AdminNavigation';
+import ActionButton from '@/components/admin/ActionButton';
 import BoxSection from '@/components/BoxSection';
 import InputText from '@/components/shared/InputText';
+import Select from '@/components/shared/Select';
+import SwitchButton from '@/components/shared/SwitchButton';
 import Table from '@/components/shared/Table';
 import NFZStatus from '@/components/NFZStatus';
 import Avatar from '@/components/shared/Avatar';
@@ -93,8 +161,12 @@ import Avatar from '@/components/shared/Avatar';
 export default {
   components: {
     AppPage,
+    AdminNavigation,
+    ActionButton,
     BoxSection,
     InputText,
+    Select,
+    SwitchButton,
     Table,
     NFZStatus,
     Avatar,
@@ -107,14 +179,21 @@ export default {
   },
 
   computed: {
+    facilityTypeOptions() {
+      const facilityTypes = this.$store.getters['facilitiesSearch/getFacilitiesTypes'];
+      return facilityTypes.map(({ name }) => ({ name, type: name }));
+    },
+
     filteredRows() {
       // eslint-disable-next-line
       return this.rows.filter((row) => {
-        return !this.searchValue || [
-          row.name,
-          row.type,
-          row.address,
-        ].some((v) => v.toLowerCase().includes(this.searchValue));
+        const { name, type, nfzStatus } = row;
+        const nameSearch = this.searchName?.toLowerCase();
+        const typeSearch = this.searchType?.type;
+        if (nameSearch && !name.toLowerCase().includes(nameSearch)) return false;
+        if (typeSearch && type !== typeSearch) return false;
+        if (this.searchNFZ && nfzStatus !== 'FULL') return false;
+        return true;
       });
     },
   },
@@ -152,23 +231,52 @@ export default {
         addedAt: {
           name: 'Data dodania',
         },
+        actions: {
+          name: 'Akcje',
+        },
       },
 
       rows,
-      searchTemp: null,
-      searchValue: null,
+      searchNameTemp: null,
+      searchName: null,
+      searchType: null,
+      searchNFZ: false,
       searchTimeout: null,
     };
   },
 
+  async fetch() {
+    try {
+      await this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
+    } catch (error) {
+      this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
+      console.error(error);
+    }
+  },
+  
   methods: {
-    onSearch() {
+    onSearchUpdated() {
       // Debounce search
       if (this.searchTimeout) clearTimeout(this.searchTimeout);
 
       this.searchTimeout = setTimeout(() => {
-        this.searchValue = this.searchTemp;
+        this.searchName = this.searchNameTemp;
       }, 1000);
+    },
+
+    async deleteFacility(facility) {
+      const { id, name } = facility;
+      const confirm = window.confirm(`Potwierdź usunięcie placówki #${id} "${name}"...`); // eslint-disable-line
+      if (!confirm) return;
+
+      try {
+        // TODO: Send delete request to backend
+        await this.$store.dispatch('facility/deleteFacilityById', id);
+        this.$notify({ text: `Placówka "${name}" została usunięta.`, type: 'success' });
+      } catch (error) {
+        this.$notify({ text: 'Wystąpił błąd podczas usuwania placówki.', type: 'error' });
+        console.error(error);
+      }
     },
   },
 };
@@ -180,11 +288,30 @@ export default {
   background: #fafafa;
 
   .Facilities_box {
-    padding: 1rem;
+    padding: 1.5rem 2rem;
+  }
+  
+  .Facilities_search-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
   }
 
-  .Facilities_box-body {
-    margin-top: 1rem;
+  .Facilities_search-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .Facilities_search-name {
+    width: max-content;
+    min-width: 100px;
+  }
+
+  .Facilities_search-input {
+    max-width: 400px;
   }
 
   .Facilities_results {
@@ -201,12 +328,27 @@ export default {
     text-decoration: underline;
   }
 
-  @media screen and (min-width: $tablet_breakpoint) {
-
+  .Facilities_actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
   }
 
   @media screen and (min-width: $desktop_breakpoint) {
     padding: 6rem;
+
+    .Facilities_search-name {
+      min-width: 260px;
+    }
+
+    .Facilities_header-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
   }
 }
 </style>

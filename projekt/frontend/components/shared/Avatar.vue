@@ -79,6 +79,11 @@ export default {
     height: 64px;
   }
 
+  &.Avatar--huge {
+    width: 128px;
+    height: 128px;
+  }
+
   .Avatar_image {
     width: 100%;
     height: 100%;

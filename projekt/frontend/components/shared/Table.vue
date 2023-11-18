@@ -95,7 +95,8 @@ export default {
 .Table {
   border: 1px solid rgba(var(--color-text), 0.1);
   border-radius: 0.5rem;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 
   .Table_header, .Table_footer {
     display: flex;

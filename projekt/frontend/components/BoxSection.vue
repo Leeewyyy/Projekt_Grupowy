@@ -1,5 +1,10 @@
 <template>
-  <section class="BoxSection">
+  <section
+    class="BoxSection"
+    :class="{
+      'BoxSection--no-overflow': noOverflow,
+    }"
+  >
     <header class="BoxSection_header">
       <slot name="header"></slot>
     </header>
@@ -36,6 +41,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    noOverflow: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   methods: {
@@ -52,8 +61,11 @@ export default {
 
 <style lang="scss">
 .BoxSection {
-  overflow: hidden;
   background: rgb(var(--color-white));
+
+  &.BoxSection--no-overflow {
+    overflow: hidden;
+  }
 
   .BoxSection_header {
     position: relative;
