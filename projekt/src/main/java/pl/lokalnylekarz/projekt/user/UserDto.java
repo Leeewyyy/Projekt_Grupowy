@@ -23,6 +23,7 @@ public class UserDto {
     private List<OpinionDto> opinions;
     private List<MedicalFacilityListDto> addedMedicalFacilities;
     private List<MedicalFacilityListDto> favoriteMedicalFacilities;
+    private String role;
 
     public UserDto(
             Long id,

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import pl.lokalnylekarz.projekt.user.UserRoleEnum;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -49,6 +50,9 @@ public class User {
     @ManyToMany(mappedBy = "favoriteFor")
     @JsonIgnore
     private List<MedicalFacility> favoriteFacilities;
+
+    @Column
+    private UserRoleEnum role;
 
 
     public User(String fullName, String email, String password) {

@@ -48,7 +48,8 @@ public class UserService {
                     }
                 }).map(OpinionService::forUser).toList(),
                 user.getAddedMedicalFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList(),
-                user.getFavoriteFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList()
+                user.getFavoriteFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList(),
+                user.getRole().toString()
         );
     }
 
@@ -113,12 +114,17 @@ public class UserService {
         return null;
     }
 
-    public User update(UserDtoForRegister userDtoForRegister, Long id) { //IFY DO ZMIANY JAK BĘDZIE CZAS
+    public User update(UserDtoForRegister userDtoForRegister, Long id) {
         if (userRepository.findById(id).isEmpty()) throw new IllegalStateException("No user with id " + id);
         User user = userRepository.findById(id).get();
         if (userDtoForRegister.getFullName() != null) user.setFullName(userDtoForRegister.getFullName());
         if (userDtoForRegister.getEmail() != null) user.setEmail(userDtoForRegister.getEmail());
         if (userDtoForRegister.getPassword() != null) user.setPassword(userDtoForRegister.getPassword());
+        if (userDtoForRegister.getRole() != null) {
+            String predictedRole = userDtoForRegister.getRole().toUpperCase();
+            UserRoleEnum roleEnum = UserRoleEnum.valueOf(predictedRole);
+            user.setRole(roleEnum);
+        }
         return userRepository.save(user);
     }
 

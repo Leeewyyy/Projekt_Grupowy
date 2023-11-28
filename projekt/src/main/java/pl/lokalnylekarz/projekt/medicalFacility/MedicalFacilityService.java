@@ -71,6 +71,15 @@ public class MedicalFacilityService {
         return medicalFacilityDto;
     }
 
+    public void create(MedicalFacilityDto medicalFacilityDto){
+
+    }
+
+    public void delete(Long id) {
+        MedicalFacility medicalFacility = medicalFacilityRepository.findById(id).orElseThrow();
+        medicalFacilityRepository.deleteById(id);
+    }
+
     protected List<MedicalFacilityListDto> filterDistance(
             List<MedicalFacility> medicalFacilities,
             double lat,

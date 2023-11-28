@@ -2,6 +2,8 @@ package pl.lokalnylekarz.projekt.medicalFacility;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
@@ -33,5 +35,16 @@ public class MedicalFacilityController {
     @ResponseBody
     public List<MedicalFacilityTypes> getMedicalFacilityTypes() {
         return List.of(MedicalFacilityTypes.values());
+    }
+
+    @PostMapping()
+    public ResponseEntity<Object> createMedicalFacility(@RequestBody MedicalFacilityDto medicalFacilityDto) {
+        service.create(medicalFacilityDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteMedicalFacility(@PathVariable(value = "id") Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
