@@ -15,4 +15,9 @@ public interface MedicalFacilityRepository extends CrudRepository<MedicalFacilit
     List<MedicalFacility> findByAddressContainingIgnoreCase(String phrase);
 
     List<MedicalFacility> findByNameContainingIgnoreCase(String phrase);
+
+    @Query("select distinct M from MedicalFacility M " +
+            "left join fetch M.addedBy A " +
+            "where A.id = ?1")
+    List<MedicalFacility> findByUserId(Long userId);
 }

@@ -18,11 +18,13 @@ public class MedicalFacilityController {
 
     private final MedicalFacilityService service;
 
-    @GetMapping()
+    @GetMapping
     @ResponseBody
     @JsonIgnoreProperties("specialist")
-    public List<MedicalFacilityListDto> getMedicalFacilities(MedicalFacilityFilter filters) {
-        return filters.isEmpty() ? service.getAll() : service.getAll(filters);
+    public List<MedicalFacilityListDto> getMedicalFacilities(@RequestBody(required = false) MedicalFacilityFilter filters,
+                                                             @RequestParam(name = "addedBy", required = false) Long userId) {
+        if (userId != null) return service.getAllAddedByUser(userId);
+        else return filters.isEmpty() ? service.getAll() : service.getAll(filters);
     }
 
     @GetMapping("/{id}")
@@ -40,6 +42,11 @@ public class MedicalFacilityController {
     @PostMapping()
     public MedicalFacilityDto createMedicalFacility(@RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
         return service.create(medicalFacilityForRegisterDto);
+    }
+
+    @PatchMapping("/{id}")
+    public MedicalFacilityDto editMedicalFacility(@PathVariable(value = "id") Long id, @RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+        return service.edit(id, medicalFacilityForRegisterDto);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicalFacility(@PathVariable(value = "id") Long id) {

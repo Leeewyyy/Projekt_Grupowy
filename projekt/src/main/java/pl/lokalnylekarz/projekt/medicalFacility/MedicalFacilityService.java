@@ -67,6 +67,11 @@ public class MedicalFacilityService {
         return medicalFacilityListDtos;
     }
 
+    public List<MedicalFacilityListDto> getAllAddedByUser(Long userId) {
+        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findByUserId(userId);
+        return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).toList();
+    }
+
     public MedicalFacilityDto get(Long id) {
         MedicalFacility medicalFacility = medicalFacilityRepository.findById(id).orElse(new MedicalFacility());
 
@@ -76,7 +81,7 @@ public class MedicalFacilityService {
         return medicalFacilityDto;
     }
 
-    public MedicalFacilityDto create(MedicalFacilityForRegisterDto mDto){
+    public MedicalFacilityDto create(MedicalFacilityForRegisterDto mDto) {
         User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();
 
         MedicalFacility newFacility = MedicalFacility.builder()
@@ -92,6 +97,31 @@ public class MedicalFacilityService {
                 .location(new Location(mDto.getLat(), mDto.getLon()))
                 .addedBy(addedBy)
                 .imageUrl(mDto.getImageUrl())
+                .build();
+
+        MedicalFacility addedFacility = medicalFacilityRepository.save(newFacility);
+        return medicalFacilityMapper.fromEntityToDto(addedFacility);
+    }
+
+    public MedicalFacilityDto edit(Long id, MedicalFacilityForRegisterDto mDto) {
+        MedicalFacility oldFacility = medicalFacilityRepository.findById(id).orElseThrow();
+        User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();
+
+        MedicalFacility newFacility = MedicalFacility.builder()
+                .id(oldFacility.getId())
+                .name(mDto.getName())
+                .type(MedicalFacilityTypes.valueOf(mDto.getType().toUpperCase()))
+                .address(mDto.getAddress())
+                .phone(mDto.getPhone())
+                .websiteUrl(mDto.getWebsiteUrl())
+                .description(mDto.getDescription())
+                .nfzStatus(NfzStatuses.valueOf(mDto.getNfzStatus().toUpperCase()))
+                .openFrom(mDto.getOpenFrom())
+                .openTo(mDto.getOpenTo())
+                .location(new Location(mDto.getLat(), mDto.getLon()))
+                .addedBy(addedBy)
+                .imageUrl(mDto.getImageUrl())
+                .images(oldFacility.getImages())
                 .build();
 
         MedicalFacility addedFacility = medicalFacilityRepository.save(newFacility);
