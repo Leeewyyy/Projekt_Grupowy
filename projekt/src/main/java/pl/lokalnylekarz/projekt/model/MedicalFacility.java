@@ -14,6 +14,7 @@ import pl.lokalnylekarz.projekt.persistence.LocationConverter;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -59,10 +60,10 @@ public class MedicalFacility {
     private NfzStatuses nfzStatus;
 
     @Column
-    private Timestamp openFrom;
+    private LocalTime openFrom;
 
     @Column
-    private Timestamp openTo;
+    private LocalTime openTo;
 
     @Column
     @Convert(converter = LocationConverter.class)

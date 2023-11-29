@@ -14,6 +14,7 @@ import pl.lokalnylekarz.projekt.user.UserAddedByDto;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 
 @Data
@@ -33,8 +34,8 @@ public class MedicalFacilityDto {
     private NfzStatuses nfzStatus;
     private Float rating;
     private Long ratingCount;
-    private Timestamp openFrom;
-    private Timestamp openTo;
+    private LocalTime openFrom;
+    private LocalTime openTo;
     private Location location;
     private Date addedAt;
     private List<SpecialistDto> specialists;

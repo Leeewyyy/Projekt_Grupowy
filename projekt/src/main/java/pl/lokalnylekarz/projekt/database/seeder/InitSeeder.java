@@ -19,6 +19,7 @@ import pl.lokalnylekarz.projekt.repository.UserRepository;
 
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -166,8 +167,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Zapewniamy pełną opiekę: ambulatoryjną, diagnostyczną, rehabilitacyjną, szpitalną i długoterminową dla ponad 2 500 000 Pacjentów.
                                                       """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.365000, 18.635410))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user1)
@@ -208,8 +209,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Klientom indywidualnym oferujemy prywatne pakiety opieki medycznej, badania laboratoryjne i diagnostyczne oraz jednorazowe konsultacje lekarzy różnych specjalizacji.
                                          """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.377320, 18.608100))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user2)
@@ -241,8 +242,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Uniwersyteckie Centrum Kliniczne – jeden z największych szpitali w Polsce, funkcjonujący wcześniej pod nazwą Akademickie Centrum Kliniczne – zostało  utworzone przez Gdański Uniwersytet Medyczny w 1945 roku. Od tego czasu świadczymy usługi medyczne, oferując naszym pacjentom kompleksową diagnostykę i leczenie. Współpraca z uczelnią daje nam dostęp do najnowocześniejszych technologii, światowej wiedzy medycznej i badań klinicznych. Oddając się w ręce naszego zespołu, mogą Państwo czuć się bezpiecznie – w UCK pracują wybitni specjaliści, którzy do swojej dyspozycji mają nowoczesne zaplecze diagnostyczne i kliniczne.
                                                       """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.366310, 18.625540))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user3)
@@ -280,8 +281,8 @@ public class InitSeeder implements CommandLineRunner {
                                          ### Opis placówki
                                          Najlepsza uczelnia w Polsce, która oferuje wiele nowocześnie wyposażonych laboratoriów.""")
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3739, 18.6214))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
@@ -324,8 +325,8 @@ public class InitSeeder implements CommandLineRunner {
                                          tel.: 58 768 45 50
                                          """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.4029503, 18.6126574))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
@@ -376,8 +377,8 @@ public class InitSeeder implements CommandLineRunner {
                                          zapisy na zabiegi planowe: 58 764 05 10
                                                                      """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3512137, 18.6387727))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
@@ -425,8 +426,8 @@ public class InitSeeder implements CommandLineRunner {
                             a także skuteczną i profesjonalną profilaktyką.
                             """))
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3421424, 18.5510178))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
@@ -469,8 +470,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Świadczymy również odpłatne specjalistyczne konsultacje medyczne, posiadamy ofertę skierowaną do klubów sportowych, ale też dla osób fizycznych i firm.
                                                  """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3439, 18.6487))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
@@ -511,8 +512,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Apteka internetowa www.apte.pl to apteka, w której kupisz leki i kosmetyki przez internet z dostawą do domu. U nas możesz zamówić niezbędne leki dostępne bez recepty, suplementy diety, kosmetyki i sprzęt medyczny. Apteka internetowa nie jest jedyną formą działalności naszej firmy. Oprócz tego serwisu nasza firma prowadzi również "tradycyjne" apteki. Informację o nich znajdziesz w dziale Nasze apteki. Dzięki ponad 20-letniemu doświadczeniu zdobytemu w trakcie ich prowadzenia, w ofercie internetowej umieściliśmy produkty, które sprawdziły się już w praktyce, posiadają najwyższą skuteczność w działaniu i cieszą się uznaniem naszych pacjentów.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.391661, 18.5997536))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
@@ -545,8 +546,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Apteki Dom Leków związane są z polskim rynkiem farmaceutycznym od 30 lat. Pierwsza Apteka pod szyldem "Dom Leków" została otwarta w Gdyni w 1990 roku i nadal nieprzerwanie prowadzi swoją działalność. Kolejne Apteki powstały w oparciu o tradycję i doświadczenie farmaceutyczne zdobyte na przestrzeni lat, aktualizowane o zmieniające się warunki podstawowej opieki farmaceutycznej. W chwili obecnej na terenie Polski jest otwartych 68 Aptek Dom Leków, w tym apteki całodobowe i otwarte przez 7 dni w tygodniu.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(12))
-                    .openTo(new Timestamp(12345))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3376318, 18.6125888))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
@@ -581,8 +582,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Szpital Świętego Jana to renomowany szpital zlokalizowany w centrum Warszawy. Oferujemy wysoką jakość usług medycznych oraz kompleksową opiekę nad pacjentami. Nasz zespół doświadczonych lekarzy i pielęgniarek zapewnia opiekę na najwyższym poziomie. Posiadamy nowoczesny sprzęt medyczny oraz specjalistyczne oddziały, takie jak kardiologia, chirurgia, ortopedia, ginekologia i wiele innych. Naszym celem jest zapewnienie pacjentom pełnego wsparcia i szybkiego powrotu do zdrowia.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(8))
-                    .openTo(new Timestamp(18))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(52.2319585, 21.0067249))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
@@ -617,8 +618,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Przychodnia Medyczna Plus to nowoczesna placówka medyczna zlokalizowana w centrum Krakowa. Oferujemy szeroki zakres usług medycznych, w tym konsultacje lekarskie, diagnostykę, szczepienia oraz rehabilitację. Nasz wykwalifikowany personel zapewnia profesjonalną i przyjazną opiekę pacjentom w komfortowych warunkach. Dbamy o indywidualne podejście do każdego pacjenta i staramy się zapewnić kompleksową opiekę zdrowotną.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(9))
-                    .openTo(new Timestamp(17))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(50.0646501, 19.9449799))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
@@ -651,8 +652,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Specjalistyczne Centrum Stomatologiczne to nowoczesna klinika stomatologiczna, która oferuje kompleksowe usługi z zakresu stomatologii zachowawczej, chirurgii stomatologicznej, protetyki, ortodoncji oraz implantologii. Nasz doświadczony zespół lekarzy stomatologów korzysta z najnowocześniejszych technologii i materiałów, aby zapewnić pacjentom najwyższą jakość leczenia. Naszym celem jest zdrowy i piękny uśmiech każdego pacjenta.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(10))
-                    .openTo(new Timestamp(18))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(52.406374, 16.9251681))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
@@ -684,8 +685,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Centrum Rehabilitacji i Fizjoterapii to miejsce, w którym zapewniamy kompleksową opiekę nad pacjentami z różnymi schorzeniami. Nasz zespół doświadczonych fizjoterapeutów oferuje profesjonalne masaże, ćwiczenia rehabilitacyjne, terapię manualną oraz wiele innych form terapii. Staramy się przywracać sprawność i poprawiać jakość życia naszych pacjentów. Nasza placówka jest wyposażona w nowoczesny sprzęt rehabilitacyjny, który umożliwia skuteczną rehabilitację.
                                          """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(8))
-                    .openTo(new Timestamp(16))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(51.107883, 17.038538))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
@@ -717,8 +718,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Gabinet Chirurgii Plastycznej oferuje szeroki zakres zabiegów z zakresu chirurgii plastycznej, estetycznej i rekonstrukcyjnej. Nasz doświadczony zespół chirurgów plastycznych dba o bezpieczeństwo i zadowolenie naszych pacjentów. Oferujemy m.in. operacje powiek, liposukcję, powiększanie piersi, lifting twarzy i wiele innych. Stawiamy na najnowsze techniki i metody leczenia, aby osiągnąć najlepsze rezultaty. Naszym celem jest pomoc pacjentom w osiągnięciu ich estetycznych celów.
                                          """)
                     .nfzStatus(NfzStatuses.PARTIAL)
-                    .openFrom(new Timestamp(9))
-                    .openTo(new Timestamp(17))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.405832,18.576924))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
@@ -750,8 +751,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Centrum Diagnostyki Obrazowej to nowoczesna placówka, która specjalizuje się w wykonywaniu badań diagnostycznych z wykorzystaniem najnowszych technologii obrazowych. Oferujemy m.in. rezonans magnetyczny, tomografię komputerową, mammografię, ultrasonografię i wiele innych badań. Nasz wykwalifikowany personel i sprzęt medyczny najwyższej jakości zapewniają precyzyjne i wiarygodne wyniki. Naszym celem jest przyczynianie się do wczesnego wykrywania chorób i poprawy zdrowia naszych pacjentów.
                                          """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(7))
-                    .openTo(new Timestamp(19))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3783307,18.5814854))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
@@ -784,8 +785,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Przychodnia Lekarska Nowa Era to nowoczesna i kompleksowa placówka medyczna, która oferuje szeroki zakres usług zdrowotnych. Posiadamy wykwalifikowany zespół lekarzy specjalistów oraz nowoczesny sprzęt medyczny, który umożliwia skuteczną diagnostykę i leczenie. Oferujemy konsultacje lekarskie, badania diagnostyczne, profilaktykę zdrowotną oraz wiele innych usług. Naszym celem jest zapewnienie pacjentom najwyższej jakości opieki medycznej i kompleksowego podejścia do zdrowia.
                                          """)
                     .nfzStatus(NfzStatuses.FULL)
-                    .openFrom(new Timestamp(8))
-                    .openTo(new Timestamp(18))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.3475666,18.6351057)) // Warsaw coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
@@ -818,8 +819,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Klinika Okulistyczna Vision specjalizuje się w diagnostyce i leczeniu schorzeń oczu. Nasz zespół doświadczonych okulistów oferuje kompleksowe usługi, w tym badania wzroku, operacje zaćmy, laserową korekcję wzroku, leczenie schorzeń siatkówki i wiele innych. Stosujemy najnowocześniejsze technologie i metody leczenia, aby zapewnić pacjentom najlepsze rezultaty. Naszym celem jest poprawa jakości widzenia i zdrowia oczu naszych pacjentów.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(9))
-                    .openTo(new Timestamp(17))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.4412383,18.5678342)) // Gdańsk coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
@@ -852,8 +853,8 @@ public class InitSeeder implements CommandLineRunner {
                                          Ośrodek Zdrowia Naturalnego to miejsce, w którym stawiamy na naturalne metody leczenia i profilaktyki zdrowia. Oferujemy szeroki zakres usług, takich jak akupunktura, homeopatia, fitoterapia, terapia manualna i wiele innych. Nasz zespół specjalistów z dziedziny medycyny naturalnej pracuje holistycznie, zwracając uwagę na całościowy stan zdrowia pacjenta. Dążymy do przywracania równowagi i zdrowia przy minimalnym obciążeniu organizmu. Naszym celem jest wspieranie naturalnych procesów zdrowienia.
                                          """)
                     .nfzStatus(NfzStatuses.NONE)
-                    .openFrom(new Timestamp(10))
-                    .openTo(new Timestamp(16))
+                    .openFrom(LocalTime.parse("09:00"))
+                    .openTo(LocalTime.parse("18:00"))
                     .location(new Location(54.406957,18.5551332)) // Gdańsk coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)

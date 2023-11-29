@@ -3,12 +3,16 @@ package pl.lokalnylekarz.projekt.medicalFacility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
+import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
+import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.Specialist;
+import pl.lokalnylekarz.projekt.model.User;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
+import pl.lokalnylekarz.projekt.repository.UserRepository;
 import pl.lokalnylekarz.projekt.specification.MedicalFacilitySpecification;
 import pl.lokalnylekarz.projekt.user.UserService;
 
@@ -22,6 +26,7 @@ import java.util.stream.Collectors;
 public class MedicalFacilityService {
 
     private final MedicalFacilityRepository medicalFacilityRepository;
+    private final UserRepository userRepository;
     private final OpinionRepository opinionRepository;
     private final MedicalFacilityMapper medicalFacilityMapper;
 
@@ -71,8 +76,26 @@ public class MedicalFacilityService {
         return medicalFacilityDto;
     }
 
-    public void create(MedicalFacilityDto medicalFacilityDto){
+    public MedicalFacilityDto create(MedicalFacilityForRegisterDto mDto){
+        User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();
 
+        MedicalFacility newFacility = MedicalFacility.builder()
+                .name(mDto.getName())
+                .type(MedicalFacilityTypes.valueOf(mDto.getType().toUpperCase()))
+                .address(mDto.getAddress())
+                .phone(mDto.getPhone())
+                .websiteUrl(mDto.getWebsiteUrl())
+                .description(mDto.getDescription())
+                .nfzStatus(NfzStatuses.valueOf(mDto.getNfzStatus().toUpperCase()))
+                .openFrom(mDto.getOpenFrom())
+                .openTo(mDto.getOpenTo())
+                .location(new Location(mDto.getLat(), mDto.getLon()))
+                .addedBy(addedBy)
+                .imageUrl(mDto.getImageUrl())
+                .build();
+
+        MedicalFacility addedFacility = medicalFacilityRepository.save(newFacility);
+        return medicalFacilityMapper.fromEntityToDto(addedFacility);
     }
 
     public void delete(Long id) {

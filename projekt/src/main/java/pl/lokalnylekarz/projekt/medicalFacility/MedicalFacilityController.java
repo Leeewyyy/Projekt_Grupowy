@@ -38,9 +38,8 @@ public class MedicalFacilityController {
     }
 
     @PostMapping()
-    public ResponseEntity<Object> createMedicalFacility(@RequestBody MedicalFacilityDto medicalFacilityDto) {
-        service.create(medicalFacilityDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public MedicalFacilityDto createMedicalFacility(@RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+        return service.create(medicalFacilityForRegisterDto);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicalFacility(@PathVariable(value = "id") Long id) {

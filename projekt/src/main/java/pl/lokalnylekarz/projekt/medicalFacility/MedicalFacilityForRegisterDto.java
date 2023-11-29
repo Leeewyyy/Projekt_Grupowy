@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.lokalnylekarz.projekt.user.UserAddedByDto;
 
 import java.sql.Timestamp;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -20,9 +20,10 @@ public class MedicalFacilityForRegisterDto {
     private String websiteUrl;
     private String description;
     private String nfzStatus;
-    private Timestamp openFrom;
-    private Timestamp openTo;
+    private LocalTime openFrom;
+    private LocalTime openTo;
     private Double lat;
     private Double lon;
-    private UserAddedByDto addedBy;
+    private Long addedBy;
+    private String imageUrl;
 }
