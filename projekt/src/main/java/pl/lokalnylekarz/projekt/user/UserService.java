@@ -19,6 +19,7 @@ import pl.lokalnylekarz.projekt.services.ServerInfo;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -49,7 +50,8 @@ public class UserService {
                 }).map(OpinionService::forUser).toList(),
                 user.getAddedMedicalFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList(),
                 user.getFavoriteFacilities().stream().map(medicalFacilityMapper::fromEntityToListDto).toList(),
-                user.getRole().toString()
+                user.getRole().toString(),
+                user.getVerificationDate()
         );
     }
 
@@ -90,7 +92,11 @@ public class UserService {
     public List<UserDto> getAll() {
         List<User> users = (List<User>) userRepository.findAll();
 
-        return users.stream().map(UserService::fromEntityToDto).toList();
+        List<UserDto> userDtos = new ArrayList<>();
+        users.forEach(user -> {
+            userDtos.add(forDetails(user));
+        });
+        return userDtos;
     }
 
     public UserDto get(long id) {

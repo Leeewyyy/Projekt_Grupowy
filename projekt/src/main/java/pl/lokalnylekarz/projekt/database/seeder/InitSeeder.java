@@ -17,13 +17,13 @@ import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
-import java.nio.file.Paths;
-import java.sql.Timestamp;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import static pl.lokalnylekarz.projekt.user.UserRoleEnum.*;
 
 @Component
 public class InitSeeder implements CommandLineRunner {
@@ -51,24 +51,28 @@ public class InitSeeder implements CommandLineRunner {
                     .fullName("John Smith")
                     .email("john.smitch1@gmail.com")
                     .password("cGFzc3dvcmQ=")
+                    .role(ADMIN)
                     .build();
 
             User user2 = User.builder()
                     .fullName("John Smith")
                     .email("john.smitch2@gmail.com")
                     .password("cGFzc3dvcmQ=")
+                    .role(VERIFIED)
                     .build();
 
             User user3 = User.builder()
                     .fullName("John Smith")
                     .email("john.smitch3@gmail.com")
                     .password("cGFzc3dvcmQ=")
+                    .role(USER)
                     .build();
 
             User user4 = User.builder()
                     .fullName("John Smith")
                     .email("john.smitch4@gmail.com")
                     .password("cGFzc3dvcmQ=")
+                    .role(USER)
                     .build();
 
             userRepository.save(user1);

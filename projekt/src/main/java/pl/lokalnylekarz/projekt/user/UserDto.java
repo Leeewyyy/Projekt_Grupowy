@@ -24,6 +24,7 @@ public class UserDto {
     private List<MedicalFacilityListDto> addedMedicalFacilities;
     private List<MedicalFacilityListDto> favoriteMedicalFacilities;
     private String role;
+    private Timestamp verificationDate;
 
     public UserDto(
             Long id,

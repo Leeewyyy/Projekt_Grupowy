@@ -54,6 +54,9 @@ public class User {
     @Column
     private UserRoleEnum role;
 
+    @Column
+    private Timestamp verificationDate;
+
 
     public User(String fullName, String email, String password) {
         this.fullName = fullName;
