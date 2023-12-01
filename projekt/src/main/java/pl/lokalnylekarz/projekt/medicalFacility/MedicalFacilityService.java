@@ -29,6 +29,7 @@ public class MedicalFacilityService {
     private final UserRepository userRepository;
     private final OpinionRepository opinionRepository;
     private final MedicalFacilityMapper medicalFacilityMapper;
+    private final OpinionService opinionService;
 
     public List<MedicalFacilityListDto> getAll() {
         List<MedicalFacility> medicalFacilities = (List<MedicalFacility>) medicalFacilityRepository.findAll();
@@ -165,7 +166,7 @@ public class MedicalFacilityService {
                     public int compare(Opinion o1, Opinion o2) {
                         return -o1.getAddedAt().compareTo(o2.getAddedAt());
                     }
-                }).map(OpinionService::fromEntityToDto).toList()
+                }).map(opinionService::fromEntityToDto).toList()
         );
     }
 

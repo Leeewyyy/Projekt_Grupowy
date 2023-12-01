@@ -2,7 +2,9 @@ package pl.lokalnylekarz.projekt.opinion;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.model.User;
@@ -10,6 +12,9 @@ import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 import pl.lokalnylekarz.projekt.user.UserService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -26,10 +31,22 @@ public class OpinionService {
         return opinionRepository.save(fromOpinionFromFrontDtoToEntity(opinionFromFrontDto, addedBy, medicalFacility));
     }
 
-    public static OpinionDto fromEntityToDto(Opinion opinion) {
+    public List<OpinionDto> getAll() {
+        Iterable<Opinion> opinionsIterable = opinionRepository.findAll();
+        List<Opinion> opinions = new ArrayList<>();
+        opinionsIterable.forEach(opinions::add);
+        return opinions.stream().map(this::fromEntityToDto).toList();
+    }
+
+    public void deleteOpinion(Long id) {
+        opinionRepository.deleteById(id);
+    }
+
+    public OpinionDto fromEntityToDto(Opinion opinion) {
         return new OpinionDto(
                 opinion.getId(),
                 UserService.forMedicalDto(opinion.getAddedBy()),
+                medicalFacilityMapper.fromEntityToListDto(opinion.getMedicalFacility()),
                 opinion.getRating(),
                 opinion.getDescription(),
                 opinion.getAddedAt()

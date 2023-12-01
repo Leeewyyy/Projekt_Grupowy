@@ -3,6 +3,7 @@ package pl.lokalnylekarz.projekt.opinion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.user.UserAddedByDto;
 
 import java.sql.Timestamp;
@@ -13,6 +14,7 @@ import java.sql.Timestamp;
 public class OpinionDto {
     private Long id;
     private UserAddedByDto addedBy;
+    private MedicalFacilityListDto medicalFacility;
     private Integer rating;
     private String description;
     private Timestamp addedAt;

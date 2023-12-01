@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 import pl.lokalnylekarz.projekt.model.Opinion;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(Endpoint.OPINIONS_BASE_ROUTE)
@@ -20,6 +22,17 @@ public class OpinionController {
         if (opinionFromFrontDto.getText() == null || opinionFromFrontDto.getText().equals("")) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
         Opinion opinion = opinionService.save(userId, facilityId, opinionFromFrontDto);
-        return new ResponseEntity<>(OpinionService.fromEntityToDto(opinion), HttpStatus.CREATED);
+        return new ResponseEntity<>(opinionService.fromEntityToDto(opinion), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<OpinionDto>> getAll() {
+        return new ResponseEntity<>(opinionService.getAll(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteOpinion(@PathVariable Long id) {
+        opinionService.deleteOpinion(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
