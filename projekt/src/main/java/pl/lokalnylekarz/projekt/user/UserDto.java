@@ -9,6 +9,7 @@ import pl.lokalnylekarz.projekt.model.Opinion;
 import pl.lokalnylekarz.projekt.opinion.OpinionDto;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -24,7 +25,7 @@ public class UserDto {
     private List<MedicalFacilityListDto> addedMedicalFacilities;
     private List<MedicalFacilityListDto> favoriteMedicalFacilities;
     private String role;
-    private Timestamp verificationDate;
+    private LocalDate verificationDate;
 
     public UserDto(
             Long id,

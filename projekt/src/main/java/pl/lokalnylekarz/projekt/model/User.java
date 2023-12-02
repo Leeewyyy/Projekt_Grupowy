@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import pl.lokalnylekarz.projekt.user.UserRoleEnum;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class User {
     private UserRoleEnum role;
 
     @Column
-    private Timestamp verificationDate;
+    private LocalDate verificationDate;
 
 
     public User(String fullName, String email, String password) {

@@ -17,11 +17,10 @@ import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.time.Month;
+import java.util.*;
 
 import static pl.lokalnylekarz.projekt.user.UserRoleEnum.*;
 
@@ -52,6 +51,7 @@ public class InitSeeder implements CommandLineRunner {
                     .email("john.smitch1@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .role(ADMIN)
+                    .verificationDate(LocalDate.of(2023, Month.DECEMBER,01))
                     .build();
 
             User user2 = User.builder()
@@ -59,6 +59,7 @@ public class InitSeeder implements CommandLineRunner {
                     .email("john.smitch2@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .role(VERIFIED)
+                    .verificationDate(LocalDate.of(2023, Month.DECEMBER,02))
                     .build();
 
             User user3 = User.builder()

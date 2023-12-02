@@ -12,8 +12,7 @@ import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.persistence.ImagesConverter;
 import pl.lokalnylekarz.projekt.persistence.LocationConverter;
 
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -69,9 +68,9 @@ public class MedicalFacility {
     @Convert(converter = LocationConverter.class)
     private Location location;
 
-    @Column
+    @Column(updatable = false)
     @CreationTimestamp
-    private Date addedAt;
+    private LocalDate addedAt;
 
     @ManyToMany
     @JoinColumn(name = "id")
@@ -82,7 +81,7 @@ public class MedicalFacility {
     @JsonIgnore
     private User addedBy;
 
-    @OneToMany(mappedBy = "medicalFacility")
+    @OneToMany(mappedBy = "medicalFacility", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<Opinion> opinions;
 

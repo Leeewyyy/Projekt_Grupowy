@@ -24,7 +24,7 @@ public class MedicalFacilityController {
     public List<MedicalFacilityListDto> getMedicalFacilities(@RequestBody(required = false) MedicalFacilityFilter filters,
                                                              @RequestParam(name = "addedBy", required = false) Long userId) {
         if (userId != null) return service.getAllAddedByUser(userId);
-        else return filters.isEmpty() ? service.getAll() : service.getAll(filters);
+        else return (filters == null || filters.isEmpty()) ? service.getAll() : service.getAll(filters);
     }
 
     @GetMapping("/{id}")

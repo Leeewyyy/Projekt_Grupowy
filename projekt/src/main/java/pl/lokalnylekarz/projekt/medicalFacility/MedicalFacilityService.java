@@ -148,7 +148,7 @@ public class MedicalFacilityService {
     }
 
     public void addRatingRatingCountAddedByOpinions(MedicalFacilityDto medicalFacilityDto, Long medicalFacilityId) {
-        MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElse(null);
+        MedicalFacility medicalFacility = medicalFacilityRepository.findById(medicalFacilityId).orElseThrow();
 
 
         Long ratingsSum = opinionRepository.sumRatingsByMedicalFacility(medicalFacilityId);
