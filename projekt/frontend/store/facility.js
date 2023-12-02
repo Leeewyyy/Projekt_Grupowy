@@ -31,6 +31,7 @@ export const actions = {
   },
 
   async deleteFacilityById({ commit }, facilityId) {
+    await this.$axios.$delete(`/api/medical-facilities/${facilityId}`);
     commit('deleteFacilityById', facilityId);
   },
 };
