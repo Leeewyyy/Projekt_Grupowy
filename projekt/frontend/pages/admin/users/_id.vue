@@ -9,16 +9,24 @@
           </template>
           <template #body>
             <div class="User_box-content User_name">
-              Marek Antoniusz
+              {{
+                user
+                ? user.fullName
+                : 'Nie znaleziono użytkownika'
+              }}
             </div>
           </template>
         </BoxSection>
         <UserReviews
+          v-if="user"
           class="User_box"
           :userId="user.id"
         />
       </div>
-      <div class="User_column">
+      <div
+        v-if="user"
+        class="User_column"
+      >
         <BoxSection class="User_box">
           <template #header>
             Szczegóły użytkownika
@@ -38,7 +46,7 @@
                   <div class="User_details-row">
                     <div class="User_details-name">Data rejestracji</div>
                     <div class="User_details-value">
-                      {{ new Date(user.createdAt).toLocaleString('pl') }}
+                      {{ new Date(user.registrationDate).toLocaleString('pl') }}
                     </div>
                   </div>
                 </div>
@@ -130,29 +138,22 @@ export default {
 
   data() {
     return {
-      user: {
-        id: 1,
-        fullName: 'Marek Antoniusz',
-        email: 'marek.antoniusz@gmail.com',
-        imageUrl: null,
-        role: 'logged',
-        createdAt: new Date(),
-      },
+      user: null,
 
       roleOptions: [
         {
-          name: 'LOGGED',
-          value: 'logged',
+          name: 'USER',
+          value: 'USER',
           description: 'przeglądanie i wyszukiwanie placówek, dodawanie do ulubionych, wystawianie opinii',
         },
         {
           name: 'VERIFIED',
-          value: 'verified',
-          description: 'LOGGED + tworzenie, edycja i usuwanie swoich placówek',
+          value: 'VERIFIED',
+          description: 'USER + dodatkowo tworzenie, edycja i usuwanie swoich placówek',
         },
         {
           name: 'ADMIN',
-          value: 'admin',
+          value: 'ADMIN',
           description: 'pełna kontrola i dostęp do panelu administratora',
         },
       ],
@@ -163,7 +164,9 @@ export default {
 
   async fetch() {
     try {
-      // TODO: Fetch user data
+      const id = +this.$route.params.id;
+      this.user = await this.$axios.$get(`/api/users/${id}`);
+      this.updateSelectedRole();
     } catch (error) {
       this.$notify({ text: 'Nie udało się pobrać szczegółów użytkownika.', type: 'error' });
       console.error(error);
@@ -171,13 +174,17 @@ export default {
   },
 
   methods: {
+    updateSelectedRole() {
+      this.selectedRole = this.roleOptions.find((role) => this.user.role === role.value);
+    },
+
     async deleteUser() {
       const { id, fullName } = this.user;
       const confirm = window.confirm(`Potwierdź usunięcie użytkownika #${id} "${fullName}"...`); // eslint-disable-line
       if (!confirm) return;
 
       try {
-        // TODO: Send delete request to backend
+        await this.$axios.$delete(`/api/users/${id}`);
         this.$notify({ text: `Użytkownik "${fullName}" został usunięty.`, type: 'success' });
         this.$router.push('/admin/users');
       } catch (error) {
@@ -187,18 +194,18 @@ export default {
     },
 
     async updateRole() {
+      const payload = {
+        role: this.selectedRole?.value,
+      };
+
       try {
+        await this.$axios.$patch(`/api/users/edit/${this.user.id}`, payload);
         this.$notify({ text: 'Zaktualizowano rolę użytkownika.', type: 'success' });
       } catch (error) {
         this.$notify({ text: 'Wystąpił błąd podczas aktualizacji roli.', type: 'error' });
         console.error(error);
       }
     },
-  },
-
-  mounted() {
-    // Update role select input
-    this.selectedRole = this.roleOptions.find((role) => this.user.role === role.value);
   },
 };
 </script>
