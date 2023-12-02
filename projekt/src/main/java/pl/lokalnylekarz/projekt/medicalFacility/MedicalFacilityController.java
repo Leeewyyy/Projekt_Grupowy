@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
-
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +27,12 @@ public class MedicalFacilityController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public MedicalFacilityDto getMedicalFacilityDetails(@PathVariable(value = "id") Long id) {
-        return service.get(id);
+    public ResponseEntity<MedicalFacilityDto> getMedicalFacilityDetails(@PathVariable(value = "id") Long id) {
+        try {
+            return ResponseEntity.ok(service.get(id));
+        }    catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/types")
@@ -40,17 +42,31 @@ public class MedicalFacilityController {
     }
 
     @PostMapping()
-    public MedicalFacilityDto createMedicalFacility(@RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
-        return service.create(medicalFacilityForRegisterDto);
+    public ResponseEntity<MedicalFacilityDto> createMedicalFacility(@RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+        try {
+            return ResponseEntity.ok(service.create(medicalFacilityForRegisterDto));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PatchMapping("/{id}")
-    public MedicalFacilityDto editMedicalFacility(@PathVariable(value = "id") Long id, @RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
-        return service.edit(id, medicalFacilityForRegisterDto);
+    public ResponseEntity<MedicalFacilityDto> editMedicalFacility(@PathVariable(value = "id") Long id, @RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+        try {
+            return ResponseEntity.ok(service.edit(id, medicalFacilityForRegisterDto));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicalFacility(@PathVariable(value = "id") Long id) {
-        service.delete(id);
+        try {
+            service.delete(id);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

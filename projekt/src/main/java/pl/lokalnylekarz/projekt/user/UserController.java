@@ -38,8 +38,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public UserDto getUserDetails(@PathVariable(value = "id") Long id) {
-        return userService.get(id);
+    public ResponseEntity<UserDto> getUserDetails(@PathVariable(value = "id") Long id) {
+        try {
+            return ResponseEntity.ok(userService.get(id));
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/{id}")
@@ -69,8 +73,12 @@ public class UserController {
 
     @PatchMapping("/edit/{id}")
     public ResponseEntity<User> editUser(@RequestBody UserDtoForRegister userDtoForRegister, @PathVariable Long id) {
-        User updatedUser = userService.update(userDtoForRegister, id);
-        return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
+        try {
+            User updatedUser = userService.update(userDtoForRegister, id);
+            return new ResponseEntity<>(updatedUser, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/{userId}/add-favourite")
