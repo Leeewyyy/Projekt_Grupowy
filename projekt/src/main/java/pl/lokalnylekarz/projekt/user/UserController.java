@@ -42,6 +42,12 @@ public class UserController {
         return userService.get(id);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> saveUser(@RequestBody UserDtoForRegister userDtoForRegister) throws IllegalAccessException {
 

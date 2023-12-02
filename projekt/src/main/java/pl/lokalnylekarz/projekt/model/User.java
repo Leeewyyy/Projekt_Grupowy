@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import pl.lokalnylekarz.projekt.user.UserRoleEnum;
 
 import java.sql.Timestamp;
@@ -41,6 +43,7 @@ public class User {
     private Timestamp registrationDate;
 
     @OneToMany(mappedBy = "addedBy")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Opinion> opinions;
 
@@ -49,6 +52,7 @@ public class User {
     private List<MedicalFacility> addedMedicalFacilities;
 
     @ManyToMany(mappedBy = "favoriteFor")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<MedicalFacility> favoriteFacilities;
 

@@ -19,8 +19,7 @@ public class Opinion {
     @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private User addedBy;
 
     @Column
@@ -30,7 +29,6 @@ public class Opinion {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medical_facilities_id")
     @JsonIgnore
     private MedicalFacility medicalFacility;
 

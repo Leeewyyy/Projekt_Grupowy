@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
@@ -72,20 +74,21 @@ public class MedicalFacility {
     @CreationTimestamp
     private LocalDate addedAt;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinColumn(name = "id")
     private List<Specialist> specialists;
 
-    @ManyToOne
+    @ManyToOne()
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User addedBy;
 
-    @OneToMany(mappedBy = "medicalFacility", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "medicalFacility")
     @JsonIgnore
     private List<Opinion> opinions;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JsonIgnore
     private List<User> favoriteFor;
 }

@@ -72,13 +72,16 @@ public class UserService {
     }
 
     public static UserAddedByDto forMedicalDto(User user) {
-        return new UserAddedByDto(
-                user.getId(),
-                user.getFullName(),
-                user.getEmail(),
-                (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
-                user.getRegistrationDate()
-        );
+        if (user != null) {
+            return new UserAddedByDto(
+                    user.getId(),
+                    user.getFullName(),
+                    user.getEmail(),
+                    (user.getImage() != null) ? ServerInfo.getBaseUrl() + "/users/" + user.getId() + "/image" : null,
+                    user.getRegistrationDate()
+            );
+        }
+        else return null;
     }
 
     public static User fromRegisterDtoToEntity(UserDtoForRegister userDtoForRegister) {
@@ -108,6 +111,10 @@ public class UserService {
     public User save(UserDtoForRegister userDtoForRegister) {
         if (userRepository.findByEmail(userDtoForRegister.getEmail()).isPresent()) return null;
         return userRepository.save(fromRegisterDtoToEntity(userDtoForRegister));
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     public UserDto loggInUser(UserLoginPOJO userLoginPOJO) {
