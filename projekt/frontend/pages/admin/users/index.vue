@@ -49,7 +49,7 @@
         <div class="Users_results-content">
           <Table
             :columns="columns"
-            :rows="filteredRows"
+            :rows="filteredUsers"
           >
             <template #imageUrl="{ value }">
               <Avatar
@@ -66,7 +66,7 @@
                 {{ row.email }}
               </nuxt-link>
             </template>
-            <template #createdAt="{ value }">
+            <template #registrationDate="{ value }">
               {{ new Date(value).toLocaleString('pl') }}
             </template>
             <template #actions="{ row }">
@@ -112,9 +112,9 @@ export default {
   },
 
   computed: {
-    filteredRows() {
+    filteredUsers() {
       // eslint-disable-next-line
-      return this.rows.filter((row) => {
+      return this.users.filter((row) => {
         const { fullName, email } = row;
         const nameSearch = this.searchName?.toLowerCase();
         const emailSearch = this.searchEmail?.toLowerCase();
@@ -144,7 +144,7 @@ export default {
         role: {
           name: 'Rola (uprawnienia)',
         },
-        createdAt: {
+        registrationDate: {
           name: 'Data rejestracji',
         },
         actions: {
@@ -152,41 +152,7 @@ export default {
         },
       },
 
-      // Temporary data
-      rows: [
-        {
-          id: 1,
-          email: 'alan@example.com',
-          fullName: 'Alan',
-          imageUrl: null,
-          role: 'logged',
-          createdAt: new Date(),
-        },
-        {
-          id: 2,
-          email: 'jakub@example.com',
-          fullName: 'Jakub',
-          imageUrl: null,
-          role: 'admin',
-          createdAt: new Date(),
-        },
-        {
-          id: 3,
-          email: 'adam@example.com',
-          fullName: 'Adam',
-          imageUrl: null,
-          role: 'verified',
-          createdAt: new Date(),
-        },
-        {
-          id: 4,
-          email: 'mateusz@example.com',
-          fullName: 'Mateusz',
-          imageUrl: null,
-          role: 'logged',
-          createdAt: new Date(),
-        },
-      ],
+      users: [],
 
       searchNameTemp: null,
       searchEmailTemp: null,
@@ -198,7 +164,11 @@ export default {
   },
 
   async fetch() {
-    // Fetch user list
+    try {
+      this.users = await this.$axios.$get('/api/users');
+    } catch (error) {
+      console.error(error);
+    }
   },
 
   methods: {

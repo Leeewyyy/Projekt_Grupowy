@@ -95,6 +95,7 @@ export default {
       if (!confirm) return;
 
       try {
+        await this.$axios.$delete(`/api/opinions/${id}`);
         const reviewIdx = this.reviews.findIndex((review) => review.id === id);
         if (reviewIdx > -1) this.reviews.splice(reviewIdx, 1);
         this.$notify({ text: 'Opinia została usunięta pomyślnie.', type: 'success' });
@@ -109,7 +110,7 @@ export default {
 
 <style lang="scss">
 .UserReviews {
-  .UserReviews_list {
+  .UserReviews_reviews-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
