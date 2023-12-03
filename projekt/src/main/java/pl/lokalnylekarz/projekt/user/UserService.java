@@ -127,8 +127,7 @@ public class UserService {
 
         List<Opinion> opinions = user.getOpinions();
         opinions.forEach(opinion -> {
-            opinion.setAddedBy(null);
-            opinionRepository.save(opinion);
+            opinionRepository.deleteById(opinion.getId());
         });
 
         List<MedicalFacility> facilities = user.getFavoriteFacilities();
