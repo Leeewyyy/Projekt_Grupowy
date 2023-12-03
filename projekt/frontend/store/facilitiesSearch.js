@@ -63,6 +63,8 @@ export const actions = {
     // Filter by NFZ status
     if (isNFZ === 'true') {
       params.nfzStatus = 'FULL,PARTIAL';
+    } else {
+      params.nfzStatus = 'NONE';
     }
     
     const results = await this.$axios.$get('/api/medical-facilities', { params }) ?? [];

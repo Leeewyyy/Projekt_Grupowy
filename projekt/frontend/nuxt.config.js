@@ -17,7 +17,7 @@ export default {
 
   modules: ['@nuxtjs/style-resources', '@nuxtjs/axios', 'nuxt-leaflet', 'cookie-universal-nuxt'],
 
-  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/google-fonts', '@nuxtjs/device'],
+  buildModules: ['@nuxtjs/eslint-module', '@nuxtjs/google-fonts', '@nuxtjs/device', '@nuxtjs/pwa'],
 
   css: ['~/assets/scss/index.scss'],
 

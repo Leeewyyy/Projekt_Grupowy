@@ -270,7 +270,6 @@ export default {
       if (!confirm) return;
 
       try {
-        // TODO: Send delete request to backend
         await this.$store.dispatch('facility/deleteFacilityById', id);
         this.$notify({ text: `Placówka "${name}" została usunięta.`, type: 'success' });
       } catch (error) {
