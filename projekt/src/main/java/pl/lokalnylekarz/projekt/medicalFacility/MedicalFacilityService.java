@@ -19,6 +19,7 @@ import pl.lokalnylekarz.projekt.user.UserService;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -131,6 +132,10 @@ public class MedicalFacilityService {
 
     public void delete(Long id) {
         MedicalFacility medicalFacility = medicalFacilityRepository.findById(id).orElseThrow();
+        List<Opinion> opinions = medicalFacility.getOpinions();
+        opinions.forEach(opinion -> {
+            opinionRepository.deleteById(opinion.getId());
+        });
         medicalFacilityRepository.deleteById(id);
     }
 

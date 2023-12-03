@@ -43,7 +43,6 @@ public class User {
     private Timestamp registrationDate;
 
     @OneToMany(mappedBy = "addedBy")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Opinion> opinions;
 
@@ -52,7 +51,6 @@ public class User {
     private List<MedicalFacility> addedMedicalFacilities;
 
     @ManyToMany(mappedBy = "favoriteFor")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<MedicalFacility> favoriteFacilities;
 

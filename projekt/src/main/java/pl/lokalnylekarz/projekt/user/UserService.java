@@ -1,6 +1,7 @@
 package pl.lokalnylekarz.projekt.user;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.control.MappingControl;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
@@ -13,6 +14,7 @@ import pl.lokalnylekarz.projekt.opinion.OpinionWithMedicalFacilityDTO;
 import pl.lokalnylekarz.projekt.pojo.FavouriteMedicalFacilityPOJO;
 import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
+import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
 import pl.lokalnylekarz.projekt.services.ServerInfo;
 
@@ -31,6 +33,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MedicalFacilityRepository medicalFacilityRepository;
+    private final OpinionRepository opinionRepository;
     private final OpinionService opinionService;
     private final MedicalFacilityMapper medicalFacilityMapper;
     private final MedicalFacilityService medicalFacilityService;
@@ -114,6 +117,26 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+
+        List<MedicalFacility> medicalFacilities = user.getAddedMedicalFacilities();
+        medicalFacilities.forEach(medicalFacility -> {
+            medicalFacility.setAddedBy(null);
+            medicalFacilityRepository.save(medicalFacility);
+        });
+
+        List<Opinion> opinions = user.getOpinions();
+        opinions.forEach(opinion -> {
+            opinion.setAddedBy(null);
+            opinionRepository.save(opinion);
+        });
+
+        List<MedicalFacility> facilities = user.getFavoriteFacilities();
+        facilities.forEach(medicalFacility -> {
+            medicalFacility.getFavoriteFor().remove(user);
+            medicalFacilityRepository.save(medicalFacility);
+        });
+
         userRepository.deleteById(id);
     }
 

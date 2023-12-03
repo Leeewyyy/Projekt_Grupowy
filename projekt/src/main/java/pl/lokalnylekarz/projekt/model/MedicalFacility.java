@@ -74,12 +74,11 @@ public class MedicalFacility {
     @CreationTimestamp
     private LocalDate addedAt;
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany()
     @JoinColumn(name = "id")
     private List<Specialist> specialists;
 
     @ManyToOne()
-    @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User addedBy;
@@ -88,7 +87,7 @@ public class MedicalFacility {
     @JsonIgnore
     private List<Opinion> opinions;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany()
     @JsonIgnore
     private List<User> favoriteFor;
 }
