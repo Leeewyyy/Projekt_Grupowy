@@ -91,7 +91,8 @@ public class UserService {
         return new User(
                 userDtoForRegister.getFullName(),
                 userDtoForRegister.getEmail(),
-                userDtoForRegister.getPassword()
+                userDtoForRegister.getPassword(),
+                userDtoForRegister.getRole() == null ? UserRoleEnum.USER : UserRoleEnum.valueOf(userDtoForRegister.getRole().toUpperCase())
         );
     }
 
