@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static pl.lokalnylekarz.projekt.user.UserRoleEnum.USER;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -60,11 +62,18 @@ public class User {
     @Column
     private LocalDate verificationDate;
 
-
-    public User(String fullName, String email, String password) {
+    public User(String fullName, String email, String password ) {
         this.fullName = fullName;
         this.email = email;
         this.password = password;
+        this.registrationDate = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public User(String fullName, String email, String password, UserRoleEnum role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
         this.registrationDate = Timestamp.valueOf(LocalDateTime.now());
     }
 }
