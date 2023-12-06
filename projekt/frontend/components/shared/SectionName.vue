@@ -16,7 +16,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #333;
+    color: $dark-grey-lighten;
     white-space: nowrap;
     
     &::before {

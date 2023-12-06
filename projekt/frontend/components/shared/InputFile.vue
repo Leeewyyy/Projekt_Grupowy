@@ -1,14 +1,30 @@
 <template>
   <div class="width-100">
-    <label for="input-file" :class="['display-flex justify-center', variant]"><slot /></label>
+    <label for="input-file" :class="['display-flex justify-center', variant, { 'w-110px': showImages }]"><slot /></label>
     <input
       id="input-file"
       name="photo"
       ref="file"
       type="file"
       accept=".png,.jpg,.jpeg"
+      :multiple="multiple"
       @input="$emit('fileUploaded', $event)"
     />
+
+    <div v-if="showImages">
+      <div
+        v-for="image in images" 
+        :key="image.lastModified"
+        class="display-flex align-center picture-row"
+      >
+        <span class="material-icons image">image</span>
+        <span class="text">{{ image.name }}</span>
+        <div class="liner"></div>
+        <button type="button" @click="$emit('delete', image)">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -18,6 +34,18 @@ export default {
     variant: {
       type: String,
       default: 'dark',
+    },
+    showImages: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    images: {
+      type: Array,
+      default: () => ([]),
     },
   },
 };
@@ -43,7 +71,7 @@ label {
   }
 
   &.light {
-    background-color: #dddd dd;
+    background-color: #dddddd;
     color: #333333;
 
     &:hover,
@@ -57,5 +85,33 @@ input {
   opacity: 0;
   position: absolute;
   z-index: -10;
+}
+
+.picture-row {
+  gap: 10px;
+  margin-top: 1em;
+
+  .text {
+    min-width: fit-content;
+  }
+
+  .liner {
+    height: 1px;
+    background-color: $grey;
+    width: 100%;
+  }
+
+  button {
+    background: none !important;
+    cursor: pointer;
+  }
+
+  .material-icons.image {
+    color: $grey;
+  }
+}
+
+.w-110px {
+  width: 110px !important;
 }
 </style>

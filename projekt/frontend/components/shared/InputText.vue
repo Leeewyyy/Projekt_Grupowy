@@ -1,6 +1,18 @@
 <template>
   <div class="width-100">
-    <div :class="[`input-outer bg-white
+    <textarea 
+      v-if="isTextArea"
+      :name="name"
+      :placeholder="placeholder"
+      :required="required"
+      class="width-100"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+      :class="[`input-outer textarea bg-white width-100
+        border border-rounded 
+        display-flex align-center justify-center`, { 'focused': isFocused }]"
+      />
+    <div v-else :class="[`input-outer bg-white
       border border-rounded 
       display-flex align-center justify-center`, { 'focused': isFocused }]"
     >
@@ -68,6 +80,10 @@ export default {
         size: 23,
       }),
     },
+    isTextArea: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: { 
     IconToggleButton,
@@ -93,9 +109,16 @@ export default {
 @import "~/assets/scss/colors.scss";
 
 .input-outer {
-  height: 45px;
+  min-height: 45px;
   box-sizing: border-box;
   padding-right: 10px;
+
+  &.textarea {
+    padding-top: 10px;
+    padding-left: 10px;
+    min-height: 200px !important;
+    font-size: 15px;
+  }
 
   input {
     box-sizing: border-box;

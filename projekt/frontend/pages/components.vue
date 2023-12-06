@@ -10,7 +10,12 @@
       <Button type="submit" disabled>Button akcji - disabled</Button>
       <br /><br /><h2>SwitchButton</h2><br />
       <SwitchButton id="switch1" v-model="s1" /> <br />
-      <SwitchButton id="switch2" v-model="s2">Opcja po lewej</SwitchButton> <br />
+      <SwitchButton id="switch2" v-model="s2">
+        Opcja po lewej
+        <template #right>
+          Opcja po prawej
+        </template>
+      </SwitchButton> <br />
       <SwitchButton id="switch3" v-model="s3" dir="right">Opcja po prawej</SwitchButton> <br />
       <SwitchButton id="switch4" v-model="s4" :description="desc" /> <br />
       {{ [s1, s2, s3, s4].map((value, idx) => `switch ${idx + 1}: ${value}`).join(' // ') }}

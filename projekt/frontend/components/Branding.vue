@@ -1,14 +1,15 @@
 <template>
-  <div class="Branding">
+  <div :class="['Branding', { 'left': alignLeft }]">
     <div class="Branding_logo">
       <img
+        v-if="withImage" 
         class="logo_image"
         src="/images/logo.png"
         alt=""
         loading="lazy"
       />
       <h1 class="logo_text">
-        LokalnyLekarz
+        {{ customText || 'LokalnyLekarz' }}
       </h1>
     </div>
     <div v-if="description" class="Branding_description">
@@ -30,6 +31,18 @@ export default {
       type: String,
       default: null,
     },
+    withImage: {
+      type: Boolean,
+      default: true,
+    },
+    alignLeft: {
+      type: Boolean,
+      default: false,
+    },
+    customText: {
+      type: String,
+      default: '',
+    },
   },
 };
 </script>
@@ -42,6 +55,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &.left {
+    align-items: flex-start !important;
+  }
 
   .Branding_logo {
     width: max-content;

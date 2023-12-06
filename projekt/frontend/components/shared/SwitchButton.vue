@@ -20,6 +20,9 @@
         :disabled="disabled"
       />
       <label class="SwitchButton_label" :for="id"></label>
+      <div class="SwitchButton_title left-margin" v-if="$slots.right">
+        <slot name="right"></slot>
+      </div>
     </div>
     <div class="SwitchButton_description" v-if="description">
       {{ description }}
@@ -79,6 +82,10 @@ export default {
 .SwitchButton {
   font-size: 0.8rem;
 
+  .SwitchButton_title.left-margin {
+        margin-left: 0.5rem !important;
+  };
+  
   &_wrapper {
     display: flex;
     flex-direction: row;

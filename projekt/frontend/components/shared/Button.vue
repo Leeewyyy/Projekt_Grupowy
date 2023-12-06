@@ -3,6 +3,7 @@
     class="Button"
     :class="{
       'Button--active': active,
+      'active-dark': dark && active,
       'Button--submit': type === 'submit',
     }"
     :type="type"
@@ -25,6 +26,10 @@ export default {
       default: false,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    dark: {
       type: Boolean,
       default: false,
     },
@@ -55,6 +60,16 @@ export default {
     &:hover {
       background: $light-blue-darken;
     }
+
+    &.active-dark {
+      background: $dark-grey-lighten;
+      color: white !important;
+
+      &:hover {
+        background: $dark-grey-darken;
+      }
+    }
+
   }
 
   &--submit {
