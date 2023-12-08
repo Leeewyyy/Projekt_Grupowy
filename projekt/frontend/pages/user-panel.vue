@@ -17,6 +17,13 @@
           :closable="false"
           @onPlaceSelected="(place) => $router.push({ name: 'place-id', params: { id: place.id } })"
         />
+        <PlaceList
+          class="container_column"
+          customTitle="Moje placówki"
+          :places="myPlaces"
+          :selectable="false"
+          :closable="false"
+        />
       </div>
     </div>
   </AppPage>
@@ -47,6 +54,9 @@ export default {
   computed: {
     favouritePlaces() {
       return this.$store.getters['favouriteFacility/getFacilities'];
+    },
+    myPlaces() {
+      return this.$store.getters['myFacility/getFacilities'];
     },
     user() {
       return this.$store.getters['user/getUser'];

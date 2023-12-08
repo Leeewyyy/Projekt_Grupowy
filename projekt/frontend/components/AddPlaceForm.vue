@@ -13,7 +13,7 @@
     <template #body>
       <div class="info-box">
 
-          <form class="add-place-container-inner" @submit.prevent="sendMessage">
+          <form class="add-place-container-inner" @submit.prevent="save">
             <section name="basic-information">
               <SectionName>Informacje podstawowe</SectionName>
 
@@ -183,12 +183,10 @@
 
 <script>
 // eslint-disable-next-line
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import BoxSection from '@/components/BoxSection';
-import Icon from '@/components/shared/Icon';
 import Button from '@/components/shared/Button';
 import InputText from '@/components/shared/InputText';
-import Checkbox from '@/components/shared/Checkbox';
 import SwitchButton from '@/components/shared/SwitchButton';
 import Branding from './Branding';
 import SectionName from '@/components/shared/SectionName';
@@ -198,10 +196,8 @@ import InputFile from '@/components/shared/InputFile';
 export default {
   components: {
     BoxSection,
-    Icon,
     Button,
     InputText,
-    Checkbox,
     SwitchButton,
     Branding,
     SectionName,
@@ -223,12 +219,15 @@ export default {
       isNFZ: true,
       services: [],
       images: [],
+      facility: null,
     };
   },
   async mounted() {
     try {
       await this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
       await this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
+
+      //this.facility = await this.$store.dispatch('facility/fetchDetails', placeid);
     } catch (e) {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
     }
@@ -247,44 +246,21 @@ export default {
     servicesSelected() {
       return this.services.filter((service) => service.active);
     },
+    payload() {
+      return {
+        name: this.name,
+        type: this.placeType?.type || null,
+        address: `${this.address.main}, ${this.address.city}`,
+        images: this.images,
+        phone: this.phone,
+        websiteUrl: this.websiteUrl,
+        description: this.description,
+        nfzStatus: this.isNFZ ? 'FULL' : 'NONE',
+        specialists: this.services,
+      };
+    },
   },
   methods: {
-    ...mapActions('mailSender', ['sendMail']),
-    sendMessage() {
-      if (this.validate()) {
-        this.sendMail({ fromEmail: this.email, subject: this.subject, text: this.question })
-          .then(() => {
-            this.$notify({ text: 'Wiadomość wysłana pomyślnie', type: 'success' });
-            this.subject = '';
-            this.email = '';
-            this.question = '';
-            this.agreement = false;
-          });
-      }
-    },
-    validate() {
-      if (!/[A-Za-z0-9]*@[A-Za-z0-9]*\.[A-Za-z]*/.test(this.email)) {
-        this.$notify({ text: 'Podaj prawidłowy adres e-mail', type: 'error' });
-        return false;
-      }
-
-      if (!this.subject.length) {
-        this.$notify({ text: 'Podaj imię', type: 'error' });
-        return false;
-      }
-
-      if (!this.question.length) {
-        this.$notify({ text: 'Podaj treść wiadomości', type: 'error' });
-        return false;
-      }
-
-      if (!this.agreement) {
-        this.$notify({ text: 'Zaznacz zgodę na przetwarzanie danych osobowych.', type: 'error' });
-        return false;
-      }
-
-      return true;
-    },
     goBack() {
       // eslint-disable-next-line
       if (confirm("Czy na pewno chcesz powrócić? Utracisz niezapisane dane.")) {
@@ -309,6 +285,13 @@ export default {
     deleteImage(image) {
       const fileIndex = this.images.findIndex(({ lastModified }) => lastModified === image.lastModified);
       this.images.splice(fileIndex, 1);
+    },
+    async save() {
+      try {
+        await this.$store.dispatch('myFacility/add', this.payload);
+      } catch (e) {
+        this.$notify({ text: 'Wystąpił problem przy zapisywaniu placówki.', type: 'error' });
+      }
     },
   },
 };
