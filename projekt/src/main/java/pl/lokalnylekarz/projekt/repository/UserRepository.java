@@ -14,4 +14,5 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findByEmail(String email);
     @Query("select u.favoriteFacilities from User u where u.id=?1")
     List<MedicalFacility> findFavoriteFacilitiesForUser(Long userId);
+    List<User> findByVerificationDateIsNotNull();
 }

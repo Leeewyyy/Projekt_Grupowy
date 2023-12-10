@@ -5,21 +5,19 @@ import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
-import pl.lokalnylekarz.projekt.model.MedicalFacility;
-import pl.lokalnylekarz.projekt.model.Opinion;
-import pl.lokalnylekarz.projekt.model.Specialist;
-import pl.lokalnylekarz.projekt.model.User;
+import pl.lokalnylekarz.projekt.model.*;
 import pl.lokalnylekarz.projekt.opinion.OpinionService;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
+import pl.lokalnylekarz.projekt.services.SearchStatisticsService;
 import pl.lokalnylekarz.projekt.specification.MedicalFacilitySpecification;
 import pl.lokalnylekarz.projekt.user.UserService;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +29,7 @@ public class MedicalFacilityService {
     private final OpinionRepository opinionRepository;
     private final MedicalFacilityMapper medicalFacilityMapper;
     private final OpinionService opinionService;
+    private final SearchStatisticsService searchStatisticsService;
 
     public List<MedicalFacilityListDto> getAll() {
         List<MedicalFacility> medicalFacilities = (List<MedicalFacility>) medicalFacilityRepository.findAll();
@@ -49,16 +48,23 @@ public class MedicalFacilityService {
 
         List<MedicalFacility> medicalFacilities;
 
+        updateSearchStatistics(filters);
+
         if (filters.isSearch()) {
-            List<MedicalFacility> medicalFacilitiesWithDuplicates = medicalFacilityRepository.findByNameContainingIgnoreCase(filters.getSearch());
+            List<MedicalFacility> medicalFacilitiesWithDuplicates = medicalFacilityRepository.findByNameContainingIgnoreCase(
+                    filters.getSearch());
             medicalFacilitiesWithDuplicates.addAll(medicalFacilityRepository.findByAddressContainingIgnoreCase(filters.getSearch()));
             medicalFacilities = medicalFacilitiesWithDuplicates.stream().distinct().collect(Collectors.toList());
-        }
-        else
+        } else
             medicalFacilities = medicalFacilityRepository.findAll(new MedicalFacilitySpecification(filters));
 
         List<MedicalFacilityListDto> medicalFacilityListDtos = filters.isFilterDistance()
-                ? this.filterDistance(medicalFacilities, filters.getLatitude(), filters.getLongitude(), filters.getDistance())
+                ? this.filterDistance(
+                medicalFacilities,
+                filters.getLatitude(),
+                filters.getLongitude(),
+                filters.getDistance()
+        )
                 : medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).distinct().toList();
 
         for (MedicalFacilityListDto medicalFacilityListDto : medicalFacilityListDtos) {
@@ -69,19 +75,26 @@ public class MedicalFacilityService {
         return medicalFacilityListDtos;
     }
 
+    public List<MedicalFacilityStatisticsDTO> getAllForStatistics() {
+        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findAll();
+
+        return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToStatisticsDto).toList();
+    }
+
     public List<MedicalFacilityListDto> getAllAddedByUser(Long userId) {
         List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findByUserId(userId);
         return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).toList();
     }
 
     public MedicalFacilityDto get(Long id) {
-        MedicalFacility medicalFacility = medicalFacilityRepository.findById(id).orElse(new MedicalFacility());
+        MedicalFacility medicalFacility = findAndUpdateStatistics(id);
 
         MedicalFacilityDto medicalFacilityDto = medicalFacilityMapper.fromEntityToDto(medicalFacility);
         addRatingRatingCountAddedByOpinions(medicalFacilityDto, medicalFacility.getId());
 
         return medicalFacilityDto;
     }
+
 
     public MedicalFacilityDto create(MedicalFacilityForRegisterDto mDto) {
         User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();
@@ -202,5 +215,40 @@ public class MedicalFacilityService {
         }
 
         return specialists;
+    }
+
+    private MedicalFacility findAndUpdateStatistics(Long id) {
+        MedicalFacility facility = medicalFacilityRepository.findById(id).orElse(new MedicalFacility());
+
+        if (facility.getId() == null) {
+            return facility;
+        }
+
+        facility.setHits(1 + facility.getHits());
+
+        medicalFacilityRepository.save(facility);
+
+        return facility;
+    }
+
+    private void updateSearchStatistics(MedicalFacilityFilter filters) {
+        searchStatisticsService.updateGlobalSearch();
+
+        for (Field field : filters.getClass().getDeclaredFields()) {
+            SearchDetails details = new SearchDetails();
+            details.setSearchType(field.getName());
+            try {
+                field.setAccessible(true);
+
+                if (field.get(filters) == null || field.get(filters).toString().isEmpty()) {
+                    continue;
+                }
+
+                details.setValue(field.get(filters).toString());
+            } catch (IllegalAccessException ignored) {
+            }
+
+            searchStatisticsService.addOrUpdateSearchDetail(details);
+        }
     }
 }

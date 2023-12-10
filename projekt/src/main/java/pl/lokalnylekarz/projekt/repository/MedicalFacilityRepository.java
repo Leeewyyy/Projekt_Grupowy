@@ -3,6 +3,7 @@ package pl.lokalnylekarz.projekt.repository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityStatisticsDTO;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 
 import java.util.List;

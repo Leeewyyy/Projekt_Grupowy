@@ -8,4 +8,5 @@ public class Endpoint {
     public static final String LOCATION_AUTOCOMPLETE_BASE_ROUTE = "/ajax/locations";
     public static final String SPECIALISTS = "/specialists";
     public static final String SEND_MESSAGE = "/send-message";
+    public static final String STATISTICS = "/statistics";
 }
