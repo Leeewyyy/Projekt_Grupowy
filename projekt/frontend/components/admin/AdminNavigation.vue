@@ -51,6 +51,10 @@ export default {
           name: 'Zarządzanie placówkami',
           to: '/admin/facilities',
         },
+        {
+          name: 'Statystyki',
+          to: '/admin/statistics',
+        },
       ],
     };
   },

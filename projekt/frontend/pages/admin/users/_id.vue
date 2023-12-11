@@ -8,12 +8,21 @@
             Karta użytkownika
           </template>
           <template #body>
-            <div class="User_box-content User_name">
-              {{
-                user
-                ? user.fullName
-                : 'Nie znaleziono użytkownika'
-              }}
+            <div class="User_box-content">
+              <div class="User_name">
+                {{ user?.fullName || 'Nie znaleziono użytkownika' }}
+              </div>
+              <SectionName class="User_section">
+                Statystyki
+              </SectionName>
+              <div
+                v-if="userStatistics"
+                class="User_statistics"
+              >
+                <div>Dodanych placówek: {{ userStatistics.addedMedicalFacilities }}</div>
+                <div>Ulubionych placówek: {{ userStatistics.favoriteMedicalFacilities }}</div>
+                <div>Dodanych opinii: {{ userStatistics.addedOpinions }}</div>
+              </div>
             </div>
           </template>
         </BoxSection>
@@ -139,6 +148,7 @@ export default {
   data() {
     return {
       user: null,
+      userStatistics: null,
 
       roleOptions: [
         {
@@ -166,6 +176,7 @@ export default {
     try {
       const id = +this.$route.params.id;
       this.user = await this.$axios.$get(`/api/users/${id}`);
+      this.userStatistics = await this.$axios.$get(`/api/users/${id}/statistics`);
       this.updateSelectedRole();
     } catch (error) {
       this.$notify({ text: 'Nie udało się pobrać szczegółów użytkownika.', type: 'error' });
@@ -301,6 +312,10 @@ export default {
 
   .User_roles-title {
     margin-bottom: 0.5rem;
+  }
+
+  .User_section {
+    margin: 1rem 0;
   }
 
   @media screen and (min-width: $desktop_breakpoint) {
