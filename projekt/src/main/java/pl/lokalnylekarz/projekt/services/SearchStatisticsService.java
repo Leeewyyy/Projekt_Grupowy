@@ -21,8 +21,8 @@ public class SearchStatisticsService {
         Optional<SearchDetails> existingSearch = repository.findBySearchTypeAndValue(searchDetail.getSearchType(), searchDetail.getValue());
 
         if (existingSearch.isPresent()) {
-            SearchDetails existingDetail = existingSearch.get();
-            existingDetail.setHits(existingDetail.getHits() + 1);
+            searchDetail = existingSearch.get();
+            searchDetail.setHits(searchDetail.getHits() + 1);
         } else {
             searchDetail.setHits(1);
         }
