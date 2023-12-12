@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class MedicalFacilityStatisticsDTO {
     private Long id;
     private String name;
+    private String imageUrl;
     private int hits;
 }

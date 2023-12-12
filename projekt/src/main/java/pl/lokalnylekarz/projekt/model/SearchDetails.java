@@ -21,6 +21,8 @@ public class SearchDetails {
     @Column(name = "`value`")
     private String value;
 
+    private String name;
+
     @Column
     private int hits;
 }

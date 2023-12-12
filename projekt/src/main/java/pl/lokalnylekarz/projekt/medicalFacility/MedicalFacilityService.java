@@ -81,6 +81,16 @@ public class MedicalFacilityService {
         return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToStatisticsDto).toList();
     }
 
+    public List<MedicalFacilityStatisticsDTO> getAllForStatisticsTop15() {
+        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findAll()
+                .stream()
+                .sorted((o1, o2) -> o2.getHits() - o1.getHits())
+                .limit(15)
+                .toList();
+
+        return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToStatisticsDto).toList();
+    }
+
     public List<MedicalFacilityListDto> getAllAddedByUser(Long userId) {
         List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findByUserId(userId);
         return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToListDto).toList();
@@ -94,7 +104,6 @@ public class MedicalFacilityService {
 
         return medicalFacilityDto;
     }
-
 
     public MedicalFacilityDto create(MedicalFacilityForRegisterDto mDto) {
         User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();

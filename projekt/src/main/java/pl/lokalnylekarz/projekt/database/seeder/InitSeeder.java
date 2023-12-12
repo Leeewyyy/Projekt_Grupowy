@@ -178,6 +178,7 @@ public class InitSeeder implements CommandLineRunner {
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user1)
                     .favoriteFor(users)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -219,6 +220,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.377320, 18.608100))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -253,6 +255,7 @@ public class InitSeeder implements CommandLineRunner {
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user3)
                     .favoriteFor(users)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -291,6 +294,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -335,6 +339,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.4029503, 18.6126574))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -387,6 +392,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3512137, 18.6387727))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -436,6 +442,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3421424, 18.5510178))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -480,6 +487,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3439, 18.6487))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -522,6 +530,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.391661, 18.5997536))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -556,6 +565,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3376318, 18.6125888))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
 
@@ -592,6 +602,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(52.2319585, 21.0067249))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
+                    .hits(generateHits())
                     .build();
 
 
@@ -628,6 +639,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(50.0646501, 19.9449799))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
 
@@ -662,6 +674,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(52.406374, 16.9251681))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -695,6 +708,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(51.107883, 17.038538))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -728,6 +742,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.405832,18.576924))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -761,6 +776,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3783307,18.5814854))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -795,6 +811,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3475666,18.6351057)) // Warsaw coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -829,6 +846,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.4412383,18.5678342)) // Gdańsk coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -863,6 +881,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.406957,18.5551332)) // Gdańsk coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .hits(generateHits())
                     .build();
 
 
@@ -919,6 +938,11 @@ public class InitSeeder implements CommandLineRunner {
             opinionRepository.save(opinion3);
             opinionRepository.save(opinion4);
         }
+    }
+
+    private int generateHits() {
+        Random r = new Random();
+        return r.nextInt(100-10) + 10;
     }
 
     public List<Specialist> getRandomElement(List<Specialist> list) {

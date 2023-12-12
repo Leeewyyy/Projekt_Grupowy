@@ -56,4 +56,9 @@ public class StatisticsController {
     public ResponseEntity<List<MedicalFacilityStatisticsDTO>> getMedicalFacilitiesStatistics() {
         return new ResponseEntity<>(medicalFacilityService.getAllForStatistics(), HttpStatus.OK);
     }
+
+    @GetMapping("/medical-facilities/top-15")
+    public ResponseEntity<List<MedicalFacilityStatisticsDTO>> getMedicalFacilitiesStatisticsTop15() {
+        return new ResponseEntity<>(medicalFacilityService.getAllForStatisticsTop15(), HttpStatus.OK);
+    }
 }
