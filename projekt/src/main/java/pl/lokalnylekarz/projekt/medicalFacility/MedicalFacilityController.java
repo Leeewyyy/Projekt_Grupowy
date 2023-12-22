@@ -41,7 +41,7 @@ public class MedicalFacilityController {
     }
 
     @PostMapping()
-    public ResponseEntity<MedicalFacilityDto> createMedicalFacility(@RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+    public ResponseEntity<MedicalFacilityDto> createMedicalFacility(MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
         try {
             return ResponseEntity.ok(service.create(medicalFacilityForRegisterDto));
         } catch (Exception e) {
