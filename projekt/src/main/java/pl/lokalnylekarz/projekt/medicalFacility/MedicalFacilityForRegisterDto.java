@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -25,5 +27,6 @@ public class MedicalFacilityForRegisterDto {
     private Double lat;
     private Double lon;
     private Long addedBy;
-    private String imageUrl;
+    private MultipartFile image;
+    private List<MultipartFile> additionalImages;
 }

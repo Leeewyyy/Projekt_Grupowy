@@ -50,13 +50,14 @@ public class MedicalFacilityController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<MedicalFacilityDto> editMedicalFacility(@PathVariable(value = "id") Long id, @RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+    public ResponseEntity<MedicalFacilityDto> editMedicalFacility(@PathVariable(value = "id") Long id, MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
         try {
             return ResponseEntity.ok(service.edit(id, medicalFacilityForRegisterDto));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicalFacility(@PathVariable(value = "id") Long id) {
         try {
