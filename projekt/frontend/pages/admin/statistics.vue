@@ -37,8 +37,15 @@
             <div class="Statistics_box-body">
               <Table
                 :columns="facilitiesColumns"
-                :rows="facilitiesStatistics"
+                :rows="mappedFacilities"
               >
+                <template #imageUrl="{ value }">
+                  <Avatar
+                    size="small"
+                    placeholderIcon="place"
+                    :imageUrl="value"
+                  />
+                </template>
                 <template #name="{ row }">
                   <nuxt-link
                     class="Statistics_link"
@@ -51,6 +58,19 @@
                   {{ value || 0 }}
                 </template>
               </Table>
+              <div
+                v-if="!isLoadedAllFacilities && mappedFacilities.length >= 15"
+                class="Statistics_load-all"
+              >
+                <ActionButton
+                  icon="refresh"
+                  backgroundColor="#333"
+                  textColor="#fff"
+                  @click.native="loadAllPlaces"
+                >
+                  Wczytaj wszystkie placówki
+                </ActionButton>
+              </div>
             </div>
           </template>
         </BoxSection>
@@ -67,11 +87,8 @@
             <div class="Statistics_box-body">
               <Table
                 :columns="searchColumns"
-                :rows="searchStatistics"
+                :rows="mappedSearchs"
               >
-                <template>
-
-                </template>
                 <template #value="{ value }">
                   {{ value || 'N/A' }}
                 </template>
@@ -119,11 +136,30 @@ export default {
     };
   },
 
+  computed: {
+    mappedFacilities() {
+      return this.facilitiesStatistics.map((row, idx) => ({
+        num: this.facilitiesStatistics.length - idx,
+        ...row,
+      }));
+    },
+
+    mappedSearchs() {
+      return this.searchStatistics.map((row, idx) => ({
+        num: this.searchStatistics.length - idx,
+        ...row,
+      }));
+    },
+  },
+
   data() {
     return {
       facilitiesColumns: {
-        id: {
-          name: 'ID',
+        num: {
+          name: 'L.p.',
+        },
+        imageUrl: {
+          name: '',
         },
         name: {
           name: 'Nazwa placówki',
@@ -134,8 +170,8 @@ export default {
       },
 
       searchColumns: {
-        id: {
-          name: 'ID',
+        num: {
+          name: 'L.p.',
         },
         name: {
           name: 'Rodzaj filtra',
@@ -151,18 +187,32 @@ export default {
       userStatistics: null,
       facilitiesStatistics: null,
       searchStatistics: null,
+
+      isLoadedAllFacilities: false,
     };
   },
 
   async fetch() {
     try {
       this.userStatistics = await this.$axios.$get('/api/statistics/users');
-      this.facilitiesStatistics = await this.$axios.$get('/api/statistics/medical-facilities');
+      this.facilitiesStatistics = await this.$axios.$get('/api/statistics/medical-facilities/top-15');
       this.searchStatistics = await this.$axios.$get('/api/statistics/search/details');
     } catch (error) {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
       console.error(error);
     }
+  },
+
+  methods: {
+    async loadAllPlaces() {
+      try {
+        this.isLoadedAllFacilities = true;
+        this.facilitiesStatistics = await this.$axios.$get('/api/statistics/medical-facilities');
+      } catch (error) {
+        this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
+        console.error(error);
+      }
+    },
   },
 };
 </script>
@@ -206,6 +256,13 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 2rem;
+  }
+
+  .Statistics_load-all {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 1rem;
   }
 
   @media screen and (min-width: $desktop_breakpoint) {
