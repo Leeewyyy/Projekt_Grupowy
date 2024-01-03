@@ -2,7 +2,7 @@
   <div class="LayoutMap">
     <Header />
 
-    <main class="LayoutMap_main">
+    <main :class="['LayoutMap_main', {'map-open': isMapOpened}]">
       <Map
         :key="mapKey"
         ref="map"
@@ -139,6 +139,10 @@ export default {
     isBoxExpanded() {
       return this.$store.getters['boxExpand/getExpanded'];
     },
+
+    isMapOpened() {
+      return this.$store.getters['map/isMapOpened'];
+    },
   },
 
   data() {
@@ -156,12 +160,15 @@ export default {
   methods: {
     onPlaceSelected({ id }) {
       this.$router.push(`/place/${id}`);
+      this.onMapToggled(false);
     },
 
     showPlaceCard(place, point) {
-      this.hoveredPlace = place;
-      this.hoveredPlacePoint = point;
-      this.isHoveredPlaceCardVisible = true;
+      if (window.innerWidth > 1280) {
+        this.hoveredPlace = place;
+        this.hoveredPlacePoint = point;
+        this.isHoveredPlaceCardVisible = true;
+      }
     },
 
     hidePlaceCard() {
@@ -174,35 +181,64 @@ export default {
     },
 
     onPlaceClosed() {
-      console.log('closed');
       this.zoomCords = null;
     },
     
-    toggleBoxExpand() {
-      this.$store.dispatch('boxExpand/setExpanded', !this.isBoxExpanded);
+    toggleBoxExpand(val = null) {
+      this.$store.dispatch('boxExpand/setExpanded', val !== null ? val : !this.isBoxExpanded);
     },
 
     resetBoxExpand() {
       this.$store.dispatch('boxExpand/setExpanded', true);
     },
-  },
 
+    onMapToggled(val = null) {
+      this.$store.dispatch('map/setMapState', val === null ? !this.isMapOpened : val);
+      if (window.innerWidth >= 1280) {
+        this.toggleBoxExpand(true);
+      } else if (!this.isMapOpened) {
+        this.toggleBoxExpand(true);
+      } else {
+        this.toggleBoxExpand(false);
+      }
+      
+      if (val !== null) this.$store.dispatch('map/setIsMapHeaderTitle', !val);
+      this.$store.dispatch('map/incrementKey');
+    },
+  },
+  mounted() {
+    if (window.innerWidth >= 1280) {
+      this.onMapToggled(true);
+    } else {
+      this.$store.dispatch('map/setIsMapHeaderTitle', true);
+    }
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1280) {
+        this.onMapToggled(true);
+      } else if (this.isMapOpened) {
+        this.onMapToggled(false);
+      }
+    });
+  },
   created() {
     this.$nuxt.$on('map:toggleBoxExpand', this.toggleBoxExpand);
     this.$nuxt.$on('map:placeOpened', this.onPlaceOpened);
     this.$nuxt.$on('map:placeClosed', this.onPlaceClosed);
+    this.$nuxt.$on('map:toggleMap', this.onMapToggled);
   },
 
   destroyed() {
     this.$nuxt.$off('map:toggleBoxExpand', this.toggleBoxExpand);
     this.$nuxt.$off('map:placeOpened', this.onPlaceOpened);
     this.$nuxt.$off('map:placeClosed', this.onPlaceClosed);
+    this.$nuxt.$off('map:toggleMap', this.onMapToggled);
   },
   
   watch: {
     $route: {
       // eslint-disable-next-line
-      handler: function () {
+      handler: function (to, from) {
         this.resetBoxExpand();
       },
     },
@@ -259,15 +295,23 @@ html {
     min-height: 100vh;
     position: relative;
 
-    @media screen and (max-width: $desktop_breakpoint) {
-      min-height: unset;
-    }
-
     .main_map {
       width: 100vw;
       height: 100vh;
       display: none;
       z-index: 1;
+    }
+
+     @media screen and (max-width: $desktop_breakpoint) {
+      &:not(.map-open) {
+        min-height: unset;
+      }
+
+      &.map-open {
+        .main_map {
+          display: block !important;
+        }
+      }
     }
 
     .main_headline {

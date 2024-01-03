@@ -25,7 +25,6 @@ export default {
       title: 'Wyszukaj placówki',
     };
   },
-
   methods: {
     updateMapCoords(coords) {
       if (!coords) return;
@@ -35,7 +34,6 @@ export default {
     },
 
     async searchPlaces(form) {
-      console.log('Searching places!');
       // Skip empty form parameters
       const query = Object.keys(form)
         .reduce((obj, key) => {

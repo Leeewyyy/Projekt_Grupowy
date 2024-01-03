@@ -5,6 +5,7 @@
         <MenuLink
           class="item_link"
           :href="item.href"
+          @closeNavigation="handleCloseNavigation(item)"
         >
           {{ item.name }}
         </MenuLink>
@@ -83,12 +84,19 @@ export default {
     Button,
     Branding,
   },
-
   computed: {
     ...mapGetters('user', {
       isLoggedIn: 'isLoggedIn',
       user: 'getUser',
     }),
+
+    isMapOpened() {
+      return this.$store.getters['map/isMapOpened'];
+    },
+
+    isMapHeaderTitle() {
+      return this.$store.getters['map/isMapHeaderTitle'];
+    },
 
     menuItems() {
       const { name } = this.$route;
@@ -107,7 +115,15 @@ export default {
           href: '/contact',
         });
       }
-
+      
+      if (['index', 'places', 'place-id'].includes(name) && this.isMapHeaderTitle) {
+        items.push({
+          name: this.isMapOpened ? 'Zamknij mapę' : 'Otwórz mapę',
+          href: this.$route.fullPath,
+          key: 'map',
+        });
+      }
+      
       return items;
     },
   },
@@ -141,7 +157,15 @@ export default {
 
       // Reset input text
       this.searchValue = '';
-      this.$parent.toggleNavigation();
+      this.$emit('toggleNavigation');
+    },
+
+    handleCloseNavigation({ key }) {
+      if (key === 'map') {
+        this.$nuxt.$emit('map:toggleMap');
+      }
+
+      this.$emit('toggleNavigation');
     },
   },
 };

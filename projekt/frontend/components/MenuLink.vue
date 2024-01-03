@@ -5,6 +5,7 @@
       <component
         :is="element"
         :to="href"
+        @click.native="myFunction" 
       >
         <slot></slot>
       </component>
@@ -22,6 +23,12 @@ export default {
     href: {
       type: String,
       default: '#',
+    },
+  },
+  methods: {
+    myFunction(e) {
+      e.preventDefault();
+      this.$emit('closeNavigation');
     },
   },
 };

@@ -9,8 +9,8 @@
       <div class="container_wrapper">
         <!-- Main navigation -->
         <Navigation
-          class="Header_navigation"
-          @onItemClick="closeNavigation"
+          class="Header_navigation" 
+          @toggleNavigation="toggleNavigation"
         />
         <button
           id="navigationToggle"
@@ -61,7 +61,7 @@ export default {
       isNavigationVisible: false,
     };
   },
-
+  
   methods: {
     toggleNavigation() {
       this.isNavigationVisible = !this.isNavigationVisible;
