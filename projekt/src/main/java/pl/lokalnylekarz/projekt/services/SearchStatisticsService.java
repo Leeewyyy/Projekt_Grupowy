@@ -45,7 +45,10 @@ public class SearchStatisticsService {
 
 
     public List<SearchDetails> getAllSearchDetails() {
-        return repository.findAll();
+        return repository.findAll()
+                .stream()
+                .sorted((o1, o2) -> o2.getHits() - o1.getHits())
+                .toList();
     }
 
     public SearchDetails getGlobalSearch() {

@@ -2,7 +2,6 @@ package pl.lokalnylekarz.projekt.medicalFacility;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.lokalnylekarz.projekt.dataTypes.Image;
 import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
@@ -11,6 +10,7 @@ import pl.lokalnylekarz.projekt.opinion.OpinionService;
 import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
 import pl.lokalnylekarz.projekt.repository.OpinionRepository;
 import pl.lokalnylekarz.projekt.repository.UserRepository;
+import pl.lokalnylekarz.projekt.services.Geocoder;
 import pl.lokalnylekarz.projekt.services.ImageSave;
 import pl.lokalnylekarz.projekt.services.SearchStatisticsService;
 import pl.lokalnylekarz.projekt.specification.MedicalFacilitySpecification;
@@ -34,6 +34,7 @@ public class MedicalFacilityService {
     private final OpinionService opinionService;
     private final SearchStatisticsService searchStatisticsService;
     private final ImageSave imageService;
+    private final Geocoder geocoder;
 
     public List<MedicalFacilityListDto> getAll() {
         List<MedicalFacility> medicalFacilities = (List<MedicalFacility>) medicalFacilityRepository.findAll();
@@ -80,7 +81,9 @@ public class MedicalFacilityService {
     }
 
     public List<MedicalFacilityStatisticsDTO> getAllForStatistics() {
-        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findAll();
+        List<MedicalFacility> medicalFacilities = medicalFacilityRepository.findAll().stream()
+                .sorted((o1, o2) -> o2.getHits() - o1.getHits())
+                .toList();
 
         return medicalFacilities.stream().map(medicalFacilityMapper::fromEntityToStatisticsDto).toList();
     }
@@ -110,30 +113,63 @@ public class MedicalFacilityService {
     }
 
     public MedicalFacilityDto create(MedicalFacilityForRegisterDto mDto) throws IOException {
-        User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();
+        MedicalFacility.MedicalFacilityBuilder builder = MedicalFacility.builder();
 
 
-        String mainImage = imageService.saveImage(mDto.getImage());
+        if (mDto.getName() != null) {
+            builder.name(mDto.getName());
+        }
 
-        List<Image> additionalImages = imageService.saveImages(mDto.getAdditionalImages());
+        if (mDto.getType() != null) {
+            builder.type(MedicalFacilityTypes.valueOf(mDto.getType().toUpperCase()));
+        }
 
-        MedicalFacility newFacility = MedicalFacility.builder()
-                .name(mDto.getName())
-                .type(MedicalFacilityTypes.valueOf(mDto.getType().toUpperCase()))
-                .address(mDto.getAddress())
-                .phone(mDto.getPhone())
-                .websiteUrl(mDto.getWebsiteUrl())
-                .description(mDto.getDescription())
-                .nfzStatus(NfzStatuses.valueOf(mDto.getNfzStatus().toUpperCase()))
-                .openFrom(mDto.getOpenFrom())
-                .openTo(mDto.getOpenTo())
-                .location(new Location(mDto.getLat(), mDto.getLon()))
-                .addedBy(addedBy)
-                .imageUrl(mainImage != null ? mainImage : "")
-                .images(!additionalImages.isEmpty() ? additionalImages : new ArrayList<>())
-                .build();
+        if (mDto.getAddress() != null) {
+            builder.address(mDto.getAddress());
+        }
 
-        MedicalFacility addedFacility = medicalFacilityRepository.save(newFacility);
+        if (mDto.getWebsiteUrl() != null) {
+            builder.websiteUrl(mDto.getWebsiteUrl());
+        }
+
+        if (mDto.getPhone() != null) {
+            builder.phone(mDto.getPhone());
+        }
+
+        if (mDto.getDescription() != null) {
+            builder.description(mDto.getDescription());
+        }
+
+        if (mDto.getNfzStatus() != null) {
+            builder.nfzStatus(NfzStatuses.valueOf(mDto.getNfzStatus().toUpperCase()));
+        }
+
+        if (mDto.getOpenFrom() != null) {
+            builder.openFrom(mDto.getOpenFrom());
+        }
+
+        if (mDto.getOpenTo() != null) {
+            builder.openTo(mDto.getOpenTo());
+        }
+
+        if (mDto.getLat() != null && mDto.getLon() != null) {
+            builder.location(new Location(mDto.getLat(), mDto.getLon()));
+        }
+
+        if (mDto.getAddedBy() != null) {
+            User addedBy = userRepository.findById(mDto.getAddedBy()).orElseThrow();
+            builder.addedBy(addedBy);
+        }
+
+        if (mDto.getImage() != null) {
+            builder.imageUrl(imageService.saveImage(mDto.getImage()));
+        }
+
+        if (mDto.getAdditionalImages() != null) {
+            builder.images(imageService.saveImages(mDto.getAdditionalImages()));
+        }
+
+        MedicalFacility addedFacility = medicalFacilityRepository.save(builder.build());
         return medicalFacilityMapper.fromEntityToDto(addedFacility);
     }
 
