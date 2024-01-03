@@ -68,6 +68,7 @@
                     :href="link.href"
                     :target="link.icon === 'phone' ? '_self' : '_blank'"
                     rel="noopener noreferer"
+                    @click="handleOpenLink(link, $event)"
                   >
                     <Icon
                       class="link_icon"
@@ -164,6 +165,15 @@ export default {
         });
       }
 
+      if (this.isMapMobile) {
+        list.push({
+          name: 'Pokaż na mapie',
+          icon: 'location_on',
+          href: '',
+          key: 'map',
+        });
+      }
+
       return list;
     },
     
@@ -173,6 +183,10 @@ export default {
 
     prevRoutePath() {
       return this.$nuxt.context.from;
+    },
+
+    isMapMobile() {
+      return this.$store.getters['map/isMapMobile'];
     },
   },
 
@@ -212,6 +226,13 @@ export default {
 
       this.$nuxt.$emit('map:placeClosed');
       this.$emit('onClose');
+    },
+
+    handleOpenLink(link, event) {
+      if (link.key === 'map') {
+        event.preventDefault();
+        this.$nuxt.$emit('map:toggleMap', true, true);
+      }
     },
   },
 

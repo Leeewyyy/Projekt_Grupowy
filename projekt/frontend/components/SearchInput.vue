@@ -112,8 +112,9 @@ export default {
     },
 
     // eslint-disable-next-line
-    buildAddress({ address: { city, road, neighbourhood, postcode }}) {
-      return [city, road, neighbourhood, postcode]
+    buildAddress({ address: { city, road, postcode, house_number }}) {
+      // eslint-disable-next-line
+      return (house_number ? [city, `${road} ${house_number}`, postcode] : [city, road, postcode])
         .filter((el) => !!el)
         .join(', ');
     },

@@ -94,8 +94,8 @@ export default {
       return this.$store.getters['map/isMapOpened'];
     },
 
-    isMapHeaderTitle() {
-      return this.$store.getters['map/isMapHeaderTitle'];
+    isMapMobile() {
+      return this.$store.getters['map/isMapMobile'];
     },
 
     menuItems() {
@@ -116,7 +116,7 @@ export default {
         });
       }
       
-      if (['index', 'places', 'place-id'].includes(name) && this.isMapHeaderTitle) {
+      if (['index', 'places', 'place-id'].includes(name) && this.isMapMobile) {
         items.push({
           name: this.isMapOpened ? 'Zamknij mapę' : 'Otwórz mapę',
           href: this.$route.fullPath,

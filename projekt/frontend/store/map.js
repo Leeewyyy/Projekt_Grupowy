@@ -8,7 +8,7 @@ export const state = () => ({
 
   customCoords: false,
   isMapOpened: false,
-  isMapHeaderTitle: false,
+  isMapMobile: false,
 });
 
 export const getters = {
@@ -28,8 +28,8 @@ export const getters = {
     return state.isMapOpened;
   },
 
-  isMapHeaderTitle(state) {
-    return state.isMapHeaderTitle;
+  isMapMobile(state) {
+    return state.isMapMobile;
   },
 };
 
@@ -50,8 +50,8 @@ export const mutations = {
     state.isMapOpened = value;
   },
 
-  setIsMapHeaderTitle(state, value) {
-    state.isMapHeaderTitle = value;
+  setisMapMobile(state, value) {
+    state.isMapMobile = value;
   },
 };
 
@@ -72,7 +72,7 @@ export const actions = {
     commit('setMapState', value);
   },
 
-  setIsMapHeaderTitle({ commit }, value) {
-    commit('setIsMapHeaderTitle', value);
+  setisMapMobile({ commit }, value) {
+    commit('setisMapMobile', value);
   },
 };

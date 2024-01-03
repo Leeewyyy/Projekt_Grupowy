@@ -113,9 +113,16 @@ export default {
     },
 
     mapPosition() {
+      const lonDiff = this.isMapMobile ? 0 : 0.03;
+      const latDiff = this.isMapMobile ? 0 : 0.005;
+
       return this.zoomCords
-        ? [this.zoomCords.latitude, this.zoomCords.longitude - 0.03]
-        : [this.coords.latitude - 0.005, this.coords.longitude - 0.03];
+        ? [this.zoomCords.latitude, this.zoomCords.longitude - lonDiff]
+        : [this.coords.latitude - latDiff, this.coords.longitude - lonDiff];
+    },
+
+    isMapMobile() {
+      return this.$store.getters['map/isMapMobile'];
     },
 
     hoveredPlaceCardStyle() {
@@ -158,9 +165,9 @@ export default {
   },
 
   methods: {
-    onPlaceSelected({ id }) {
-      this.$router.push(`/place/${id}`);
-      this.onMapToggled(false);
+    onPlaceSelected(place) {
+      this.$router.push(`/place/${place.id}`);
+      this.onMapToggled(false, true);
     },
 
     showPlaceCard(place, point) {
@@ -192,7 +199,7 @@ export default {
       this.$store.dispatch('boxExpand/setExpanded', true);
     },
 
-    onMapToggled(val = null) {
+    onMapToggled(val = null, notSetMobile = false) {
       this.$store.dispatch('map/setMapState', val === null ? !this.isMapOpened : val);
       if (window.innerWidth >= 1280) {
         this.toggleBoxExpand(true);
@@ -202,7 +209,7 @@ export default {
         this.toggleBoxExpand(false);
       }
       
-      if (val !== null) this.$store.dispatch('map/setIsMapHeaderTitle', !val);
+      if (!notSetMobile && val !== null) this.$store.dispatch('map/setisMapMobile', !val);
       this.$store.dispatch('map/incrementKey');
     },
   },
@@ -210,7 +217,7 @@ export default {
     if (window.innerWidth >= 1280) {
       this.onMapToggled(true);
     } else {
-      this.$store.dispatch('map/setIsMapHeaderTitle', true);
+      this.$store.dispatch('map/setisMapMobile', true);
     }
 
     window.addEventListener('resize', () => {
@@ -218,6 +225,8 @@ export default {
         this.onMapToggled(true);
       } else if (this.isMapOpened) {
         this.onMapToggled(false);
+      } else {
+        this.$store.dispatch('map/setisMapMobile', true);
       }
     });
   },
@@ -254,6 +263,12 @@ export default {
   outline: 0;
   box-sizing: border-box;
   font-family: inherit;
+}
+
+.custom-zoom-marker {
+  filter: saturate(4) invert(1) !important;
+  width: 50px !important;
+  height: 30px !important;
 }
 
 a {
