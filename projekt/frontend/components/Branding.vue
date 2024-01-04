@@ -9,7 +9,7 @@
         loading="lazy"
       />
       <h1 class="logo_text">
-        {{ customText || 'LokalnyLekarz' }}
+        <span v-html="customText || 'LokalnyLekarz'"></span>
       </h1>
     </div>
     <div v-if="description" class="Branding_description">

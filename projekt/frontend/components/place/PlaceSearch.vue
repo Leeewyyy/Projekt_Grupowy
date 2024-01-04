@@ -27,7 +27,7 @@
           @resultsLength="handleAddresses"
           @loading="setStep(SEARCH_STEPS.RESULTS_VISIBLE)"
           @iconClicked="getCurrentPosition()"
-          style="margin-bottom: 0.5rem;"
+          style="margin-bottom: 0.5rem; padding: 0 2rem;"
         />
         <WelcomeBox v-if="step === SEARCH_STEPS.WELCOME" />
         <div v-if="step === SEARCH_STEPS.MORE_FILTERS" class="more-filters">
@@ -147,6 +147,7 @@ export default {
   },
   
   mounted() {
+    this.resetForm();
     try {
       this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
       this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
@@ -266,8 +267,8 @@ export default {
     },
 
     isActive(address) {
-      return address?.location.longitude === this.coords?.longitude 
-      && address?.location.latitude === this.coords?.latitude;
+      return address?.location?.longitude === this.coords?.longitude 
+      && address?.location?.latitude === this.coords?.latitude;
     },
 
     // eslint-disable-next-line
@@ -296,8 +297,10 @@ export default {
     },
 
     updateCoordsInFormState() {
-      this.setFormState({ key: 'latitude', value: this.coords.latitude });
-      this.setFormState({ key: 'longitude', value: this.coords.longitude });
+      if (this.coords) {
+        this.setFormState({ key: 'latitude', value: this.coords.latitude });
+        this.setFormState({ key: 'longitude', value: this.coords.longitude });
+      }
     },
   },
 };

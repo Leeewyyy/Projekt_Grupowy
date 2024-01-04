@@ -31,7 +31,20 @@ export const actions = {
   },
 
   async add({}, payload) {
-    await this.$axios.$post('/api/medical-facilities', payload);
+    // eslint-disable-next-line no-use-before-define
+    const formData = new FormData();
+    Object.entries(payload).forEach(([name, value]) => {
+      if (value === undefined || value === null) {
+        return;
+      }
+
+      if (name === 'additionalImages') {
+        value.forEach((image) => formData.append(name, image));
+      } else {
+        formData.append(name, value);
+      }
+    });
+    return await this.$axios.$post('/api/medical-facilities', formData);
   },
 
   async edit({}, { facilityId, payload }) {

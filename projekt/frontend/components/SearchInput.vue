@@ -1,11 +1,11 @@
 <template>
-  <div class="SearchInput" style="padding: 0 2rem; box-sizing: border-box">
+  <div class="SearchInput" style="box-sizing: border-box">
     <InputText
       v-model="value"
       name="search-address"
       :label="!loading && !hideLabel ? 'Wpisz, aby zobaczyć proponowane adresy' : ''"
       :placeholder="placeholder || 'np. Gdańsk, Zwycięstwa'"
-      :icon="{ show: true, tooltip: 'Ustaw moją lokalizację', name: 'my_location', size: 23 }"
+      :icon="{ show: showIcon, tooltip: 'Ustaw moją lokalizację', name: 'my_location', size: 23 }"
       @input="getAddresses"
       @iconClicked="$emit('iconClicked')"
     >
@@ -61,6 +61,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showIcon: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -102,7 +106,7 @@ export default {
           this.$emit('loading', false);
         }, 500);
       } catch (error) {
-        this.$notify({ text: 'Błąd pobierania możliwych adresów' });
+        this.$notify({ text: 'Błąd pobierania możliwych adresów', type: 'error' });
       }
     },
 
@@ -117,6 +121,17 @@ export default {
       return (house_number ? [city, `${road} ${house_number}`, postcode] : [city, road, postcode])
         .filter((el) => !!el)
         .join(', ');
+    },
+
+    async clearAddresses() {
+      try {
+        await this.$store.commit('facilitiesSearch/setPossibleAddresses', []);
+      } catch (e) {
+        this.$notify({ text: 'Błąd resetu adresów', type: 'error' });
+      }
+
+      this.value = '';
+      this.$emit('toggleAddress', null);
     },
   },
 };

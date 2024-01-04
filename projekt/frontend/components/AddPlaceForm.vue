@@ -6,7 +6,7 @@
           id="addPlaceHeader"
           :with-image="false"
           :align-left="true"
-          custom-text="Dodaj placówkę"
+          :custom-text="placeId ? `Edytuj placówkę <i>${place && place.name || ''}</i>` : 'Dodaj placówkę'"
         />
       </div>
     </template>
@@ -30,28 +30,24 @@
                 />
               </div>
 
-              <div class="display-flex align-center row">
+              <div class="display-flex align-start row">
                 <div class="row-left">
                   <p>Adres</p>
                 </div>
                 <div class="display-flex align-center">
-                  <InputText
-                    id="address-main"
-                    name="address-street-input"
-                    label="ulica i numer"
-                    placeholder="np. Spacerowa 15"
-                    v-model="address.main"
-                    class="w-300px"
-                  />
-                  <InputText
-                    id="address-city"
-                    name="address-city-input"
-                    label="miasto"
-                    placeholder="np. Gdańsk"
-                    v-model="address.city"
-                    class="w-150px ml-1"
+                  <SearchInput
+                    ref="searchInput"
+                    @toggleAddress="handleToggleAddress"
+                    :coords="address && address.location || {}"
+                    :show-icon="false"
+                    :hide-results="false"
+                    placeholder="np. Spacerowa 15, Gdańsk"
+                    style="padding-left: 0 !important; width: 300px !important;"
                   />
                 </div>
+                <Button v-if="address" type="button" :active="true" :dark="true" @click="resetAddress()" class="reset-button">
+                  Resetuj
+                </Button>
               </div>
 
               <div class="display-flex align-center row">
@@ -109,19 +105,6 @@
 
               <div class="display-flex align-center row">
                 <div class="row-left">
-                  <p>E-mail</p>
-                </div>
-                <InputText
-                  id="email"
-                  name="email-input"
-                  placeholder="np. example@example.pl"
-                  v-model="email"
-                  class="w-300px"
-                />
-              </div>
-
-              <div class="display-flex align-center row">
-                <div class="row-left">
                   <p>Strona www</p>
                 </div>
                 <InputText
@@ -145,23 +128,6 @@
                   Nie
                   <template #right>Tak</template>
                 </SwitchButton>
-              </div>
-
-              <div class="display-flex align-center row">
-                <div class="row-left">
-                  <p class="mr-1">Zakres oferowanych specjalistów przez placówkę</p>
-                </div>
-                  <div class="display-flex align-center justify-center flex-wrap services-buttons">
-                     <Button 
-                      v-for="service in services"
-                      :key="service.id"
-                      type="button"
-                      :active="service.active"
-                      @click="service.active = !service.active"
-                    >
-                      {{ service.name }}
-                    </Button>
-                  </div>
               </div>
             </section>
 
@@ -192,6 +158,7 @@ import Branding from './Branding';
 import SectionName from '@/components/shared/SectionName';
 import Select from '@/components/shared/Select';
 import InputFile from '@/components/shared/InputFile';
+import SearchInput from '@/components/SearchInput';
 
 export default {
   components: {
@@ -203,14 +170,12 @@ export default {
     SectionName,
     Select,
     InputFile,
+    SearchInput,
   },
   data() {
     return {
       name: '',
-      address: {
-        main: '',
-        city: '',
-      },
+      address: null,
       placeType: null,
       description: '',
       phone: '',
@@ -220,52 +185,80 @@ export default {
       services: [],
       images: [],
       facility: null,
+      place: null,
     };
   },
   async mounted() {
+    this.resetAddress();
     try {
       await this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
-      await this.$store.dispatch('facilitiesSearch/getSpecialistsTypes');
-
-      //this.facility = await this.$store.dispatch('facility/fetchDetails', placeid);
+      if (this.placeId) {
+        this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
+      }
     } catch (e) {
       this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
     }
 
-    this.services = this.specialistsTypes.map(({ id, name }) => ({
-      id,
-      name,
-      active: false,
-    }));
+    if (this.place) {
+      this.assign(this.place);
+    }
   },
   computed: {
     ...mapGetters('facilitiesSearch', {
       facilitiesTypes: 'getFacilitiesTypes',
-      specialistsTypes: 'getSpecialistsTypes',
     }),
-    servicesSelected() {
-      return this.services.filter((service) => service.active);
+    userId() {
+      return this.$store.getters['user/getUserId'];
+    },
+    placeId() {
+      return +this.$route?.params?.id;
     },
     payload() {
       return {
         name: this.name,
-        type: this.placeType?.type || null,
-        address: `${this.address.main}, ${this.address.city}`,
-        images: this.images,
-        phone: this.phone,
-        websiteUrl: this.websiteUrl,
-        description: this.description,
+        type: this.placeType?.name ?? null,
+        address: this.address ? this.$refs.searchInput.buildAddress(this.address) : null,
+        phone: this.phone || null,
+        websiteUrl: this.websiteUrl || null,
+        description: this.description || null,
         nfzStatus: this.isNFZ ? 'FULL' : 'NONE',
-        specialists: this.services,
+        lat: this.address?.location.latitude,
+        lon: this.address?.location.longitude,
+        addedBy: this.userId ?? null,
+        image: this.images[0],
+        additionalImages: this.images.slice(1),
       };
     },
   },
   methods: {
+    async validate() {
+      return new Promise((resolve) => {
+        [{
+          name: 'Nazwa',
+          val: this.payload.name,
+        }, {
+          name: 'Typ placówki',
+          val: this.payload.type,
+        }, {
+          name: 'Adres',
+          val: this.payload.address,
+        }].forEach(({ val, name }) => {
+          if (val === null || !val.length) {
+            throw new Error(`Uzupełnij pole ${name}`);
+          }
+        });
+
+        resolve(true);
+      });
+    },
     goBack() {
       // eslint-disable-next-line
       if (confirm("Czy na pewno chcesz powrócić? Utracisz niezapisane dane.")) {
         this.$router.go(-1);
       }
+    },
+    handleToggleAddress(res) {
+      this.address = res;
     },
     toggleImages(ev) {
       if (ev.target.files.length > 1) {
@@ -286,12 +279,41 @@ export default {
       const fileIndex = this.images.findIndex(({ lastModified }) => lastModified === image.lastModified);
       this.images.splice(fileIndex, 1);
     },
+    resetAddress() {
+      this.$refs.searchInput.clearAddresses();
+    },
     async save() {
+      let res = null;
       try {
-        await this.$store.dispatch('myFacility/add', this.payload);
+        await this.validate();
+      } catch (error) {
+        this.$notify({ text: error.message, type: 'error' });
+        return;
+      }
+
+      try {
+        res = await this.$store.dispatch('myFacility/add', this.payload);
       } catch (e) {
         this.$notify({ text: 'Wystąpił problem przy zapisywaniu placówki.', type: 'error' });
+        console.error(e, e.message);
       }
+
+      if (res?.id) {
+        this.$notify({ text: 'Placówka zapisana pomyślnie. Teraz możesz ją edytować.', type: 'success' });
+        this.$router.push(`/place/edit/${res.id}`);
+      }
+    },
+    assign(place) {
+      this.name = place.name;
+      this.type = this.facilitiesTypes.find((el) => el.name === place.type);
+      this.address = {
+        address: place.address,
+        location: place.location,
+      };
+      this.description = place.description;
+      this.isNFZ = place.nfzStatus === 'FULL'; 
+      this.phone = place.phone;
+      this.websiteUrl = place.websiteUrl;
     },
   },
 };
@@ -321,6 +343,11 @@ export default {
   .submit {
     width: 65%;
   }
+}
+
+.reset-button {
+  height: 45px;
+  margin-left: 10px;
 }
 
 .services-buttons {
