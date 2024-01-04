@@ -190,6 +190,12 @@ public class UserService {
             }
 
             favoriteFacilities.add(medicalFacility);
+
+            List<User> favoriteFor  = medicalFacility.getFavoriteFor();
+            favoriteFor.add(user);
+            medicalFacility.setFavoriteFor(favoriteFor);
+            medicalFacilityRepository.save(medicalFacility);
+
             ++added;
         }
 
