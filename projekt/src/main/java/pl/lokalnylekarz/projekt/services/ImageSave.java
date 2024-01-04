@@ -3,6 +3,7 @@ package pl.lokalnylekarz.projekt.services;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import pl.lokalnylekarz.projekt.api.Endpoint;
 import pl.lokalnylekarz.projekt.dataTypes.Image;
@@ -11,6 +12,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,7 +51,10 @@ public class ImageSave {
     }
 
     protected String buildFilename(MultipartFile file) {
-        return String.format("%s", RandomStringUtils.randomAlphanumeric(8)) +
-                file.getOriginalFilename();
+        String originalFilename = file.getOriginalFilename();
+        String fileExtension = StringUtils.getFilenameExtension(originalFilename);
+        String newFilename = originalFilename.replace("." + fileExtension, "--" + System.currentTimeMillis() + "." + fileExtension);
+
+        return newFilename;
     }
 }
