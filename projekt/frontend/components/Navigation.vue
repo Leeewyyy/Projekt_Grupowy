@@ -1,5 +1,10 @@
 <template>
-  <nav class="Navigation">
+  <nav
+    class="Navigation"
+    :class="{
+      'Navigation--compact': menuItems.length < 2,
+    }"
+  >
     <ul class="Navigation_list">
       <li class="list_item" v-for="(item, idx) in menuItems" :key="idx">
         <MenuLink
@@ -200,6 +205,12 @@ export default {
       display: block;
     }
 
+    &.Navigation--compact {
+      .end-column .search {
+        margin-top: 10rem;
+      }
+    }
+
     .end-column {
       margin-top: .5rem;
       flex-direction: column;
@@ -366,7 +377,7 @@ export default {
       }
     }
   }
-
+  
   .Header_logout-button {
     @media screen and (min-width: $desktop_breakpoint) {
        margin-right: 15px;

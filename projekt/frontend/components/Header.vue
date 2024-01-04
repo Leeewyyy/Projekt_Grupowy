@@ -213,7 +213,7 @@ export default {
           .MenuLink_link, div {
             font-weight: 600;
             color: $dark-grey;
-            background: $light-grey;
+            // background: $light-grey;
           }
         }
       }
