@@ -35,7 +35,7 @@ public class ImagesConverter implements AttributeConverter<List<Image>, String> 
 
     @Override
     public List<Image> convertToEntityAttribute(String dbImage) {
-        if (dbImage.isEmpty()) {
+        if (dbImage == null || dbImage.isEmpty()) {
             return null;
         }
         List<Image> images = new ArrayList<>();

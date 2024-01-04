@@ -90,4 +90,7 @@ public class MedicalFacility {
     @ManyToMany()
     @JsonIgnore
     private List<User> favoriteFor;
+
+    @Column
+    private int hits;
 }

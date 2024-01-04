@@ -19,10 +19,9 @@ public class MedicalFacilityController {
     @GetMapping
     @ResponseBody
     @JsonIgnoreProperties("specialist")
-    public List<MedicalFacilityListDto> getMedicalFacilities(@RequestBody(required = false) MedicalFacilityFilter filters,
-                                                             @RequestParam(name = "addedBy", required = false) Long userId) {
-        if (userId != null) return service.getAllAddedByUser(userId);
-        else return (filters == null || filters.isEmpty()) ? service.getAll() : service.getAll(filters);
+    public List<MedicalFacilityListDto> getMedicalFacilities(MedicalFacilityFilter filters) {
+        if (filters.getAddedBy() != null) return service.getAllAddedByUser(filters.getAddedBy());
+        else return filters.isEmpty() ? service.getAll() : service.getAll(filters);
     }
 
     @GetMapping("/{id}")
@@ -42,7 +41,7 @@ public class MedicalFacilityController {
     }
 
     @PostMapping()
-    public ResponseEntity<MedicalFacilityDto> createMedicalFacility(@RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+    public ResponseEntity<MedicalFacilityDto> createMedicalFacility(MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
         try {
             return ResponseEntity.ok(service.create(medicalFacilityForRegisterDto));
         } catch (Exception e) {
@@ -51,13 +50,14 @@ public class MedicalFacilityController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<MedicalFacilityDto> editMedicalFacility(@PathVariable(value = "id") Long id, @RequestBody MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
+    public ResponseEntity<MedicalFacilityDto> editMedicalFacility(@PathVariable(value = "id") Long id, MedicalFacilityForRegisterDto medicalFacilityForRegisterDto) {
         try {
             return ResponseEntity.ok(service.edit(id, medicalFacilityForRegisterDto));
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicalFacility(@PathVariable(value = "id") Long id) {
         try {

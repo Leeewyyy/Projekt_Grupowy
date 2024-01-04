@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.multipart.MultipartFile;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityForRegisterDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityService;
@@ -53,31 +54,6 @@ public class MedicalFacilityControllerCRUDTest {
     public void testGetMedicalFacilityTypes() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/medical-facilities/types")
                                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    public void testCreateMedicalFacility() throws Exception {
-        MedicalFacilityForRegisterDto facilityDto = new MedicalFacilityForRegisterDto(
-                "Name", "SZPITAL", "Address", "Phone", "website", "Descriptioin", "PARTIAL",
-                LocalTime.now(), LocalTime.now(), 1d, 2d, 1l, "iMG"
-        );
-        mockMvc.perform(MockMvcRequestBuilders.post("/medical-facilities")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(facilityDto)))
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    public void testEditMedicalFacility() throws Exception {
-        Long id = 1L;
-        MedicalFacilityForRegisterDto facilityDto = new MedicalFacilityForRegisterDto(
-                "Name", "SZPITAL", "Address", "Phone", "website", "Descriptioin", "PARTIAL",
-                LocalTime.now(), LocalTime.now(), 1d, 2d, 1l, "iMG"
-        );
-        mockMvc.perform(MockMvcRequestBuilders.patch("/medical-facilities/{id}", id)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(facilityDto)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

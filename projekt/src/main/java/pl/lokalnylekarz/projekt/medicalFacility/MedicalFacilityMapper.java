@@ -5,8 +5,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MedicalFacilityMapper {
 
@@ -14,4 +12,6 @@ public interface MedicalFacilityMapper {
 
     @Mapping(target = "specialists", ignore = true)
     MedicalFacilityListDto fromEntityToListDto(MedicalFacility medicalFacility);
+
+    MedicalFacilityStatisticsDTO fromEntityToStatisticsDto(MedicalFacility medicalFacility);
 }

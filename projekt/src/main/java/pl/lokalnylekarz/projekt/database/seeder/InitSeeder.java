@@ -8,19 +8,16 @@ import pl.lokalnylekarz.projekt.dataTypes.Location;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
 import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
-import pl.lokalnylekarz.projekt.model.MedicalFacility;
-import pl.lokalnylekarz.projekt.model.Opinion;
-import pl.lokalnylekarz.projekt.model.Specialist;
-import pl.lokalnylekarz.projekt.model.User;
-import pl.lokalnylekarz.projekt.repository.MedicalFacilityRepository;
-import pl.lokalnylekarz.projekt.repository.OpinionRepository;
-import pl.lokalnylekarz.projekt.repository.SpecialistRepository;
-import pl.lokalnylekarz.projekt.repository.UserRepository;
+import pl.lokalnylekarz.projekt.model.*;
+import pl.lokalnylekarz.projekt.repository.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import static pl.lokalnylekarz.projekt.user.UserRoleEnum.*;
 
@@ -39,6 +36,9 @@ public class InitSeeder implements CommandLineRunner {
     @Autowired
     private OpinionRepository opinionRepository;
 
+    @Autowired
+    private SearchStatisticsRepository searchStatisticsRepository;
+
     @Override
     public void run(String... args) throws Exception {
         this.loadUserData();
@@ -51,7 +51,7 @@ public class InitSeeder implements CommandLineRunner {
                     .email("john.smitch1@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .role(ADMIN)
-                    .verificationDate(LocalDate.of(2023, Month.DECEMBER,01))
+                    .verificationDate(LocalDate.of(2023, Month.DECEMBER, 01))
                     .build();
 
             User user2 = User.builder()
@@ -59,7 +59,7 @@ public class InitSeeder implements CommandLineRunner {
                     .email("john.smitch2@gmail.com")
                     .password("cGFzc3dvcmQ=")
                     .role(VERIFIED)
-                    .verificationDate(LocalDate.of(2023, Month.DECEMBER,02))
+                    .verificationDate(LocalDate.of(2023, Month.DECEMBER, 02))
                     .build();
 
             User user3 = User.builder()
@@ -178,6 +178,7 @@ public class InitSeeder implements CommandLineRunner {
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user1)
                     .favoriteFor(users)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -219,6 +220,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.377320, 18.608100))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -253,6 +255,7 @@ public class InitSeeder implements CommandLineRunner {
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user3)
                     .favoriteFor(users)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -291,6 +294,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3739, 18.6214))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -335,6 +339,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.4029503, 18.6126574))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -387,6 +392,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3512137, 18.6387727))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -436,6 +442,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3421424, 18.5510178))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -480,6 +487,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3439, 18.6487))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -522,6 +530,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.391661, 18.5997536))
                     .specialists(getRandomElement((List<Specialist>) specialistRepository.findAll()))
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
@@ -556,14 +565,20 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(54.3376318, 18.6125888))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
-
 
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Kosciol_Jana_Bozego.JPG/220px-Kosciol_Jana_Bozego.JPG"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://hotmed.pl/index.php?option=com_jomcomdev&format=raw&task=ajax.image&pr=dz02NDA=&hash=afe9ed&dir=cb&src=1227-swjana.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Kosciol_Jana_Bozego.JPG/220px-Kosciol_Jana_Bozego.JPG"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://hotmed.pl/index.php?option=com_jomcomdev&format=raw&task=ajax.image&pr=dz02NDA=&hash=afe9ed&dir=cb&src=1227-swjana.jpg"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://hotmed.pl/index.php?option=com_jomcomdev&format=raw&task=ajax.image&pr=dz0xMzAw&hash=a60975&dir=bx&src=1228-swjan.jpg"
@@ -581,7 +596,8 @@ public class InitSeeder implements CommandLineRunner {
                             "https://example.com/image.jpg")
                     .images(images)
                     .phone("+48123456789")
-                    .websiteUrl("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6T87BchoQmPmeGvvXiA-hwN_FLB-c5jWXTYm4Eep6KOp49HjYZ8SPjxFxV4J1caiOgIw&usqp=CAU")
+                    .websiteUrl(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6T87BchoQmPmeGvvXiA-hwN_FLB-c5jWXTYm4Eep6KOp49HjYZ8SPjxFxV4J1caiOgIw&usqp=CAU")
                     .description("""
                                          ### Opis placówki
                                          Szpital Świętego Jana to renomowany szpital zlokalizowany w centrum Warszawy. Oferujemy wysoką jakość usług medycznych oraz kompleksową opiekę nad pacjentami. Nasz zespół doświadczonych lekarzy i pielęgniarek zapewnia opiekę na najwyższym poziomie. Posiadamy nowoczesny sprzęt medyczny oraz specjalistyczne oddziały, takie jak kardiologia, chirurgia, ortopedia, ginekologia i wiele innych. Naszym celem jest zapewnienie pacjentom pełnego wsparcia i szybkiego powrotu do zdrowia.
@@ -592,14 +608,20 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(52.2319585, 21.0067249))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
+                    .hits(generateHits())
                     .build();
-
 
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://s3-eu-west-1.amazonaws.com/znanylekarz.pl/doctor/5aacf6/5aacf657a136e37f0c72c2ccb55a947a_220_square.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://www.alterida-plus.pl/images/zdjecia/about.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://s3-eu-west-1.amazonaws.com/znanylekarz.pl/doctor/5aacf6/5aacf657a136e37f0c72c2ccb55a947a_220_square.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.alterida-plus.pl/images/zdjecia/about.jpg"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://www.kliniki.pl/photos/201/klinika-wielospecjalistyczna-plus-med_200776_h500.jpg"
@@ -628,6 +650,7 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(50.0646501, 19.9449799))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
 
@@ -662,12 +685,19 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(52.406374, 16.9251681))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://u.profitroom.com/hotelzawiercie.pl/uploads/Fizjo_w_tekst/Kinezyterapia3HotelZawiercie.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-1.png"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://u.profitroom.com/hotelzawiercie.pl/uploads/Fizjo_w_tekst/Kinezyterapia3HotelZawiercie.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-1.png"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://centrum-rehabilitacji.com.pl/wp-content/themes/rehabilitacja/img/home-1.png"
@@ -695,11 +725,15 @@ public class InitSeeder implements CommandLineRunner {
                     .location(new Location(51.107883, 17.038538))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user2)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://www.kliniki.pl/photos/11/plastic-surgery-clinic-gabinet-chirurgii-plastycznej-dr-jerzy-m-checinski_10089_h500.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.kliniki.pl/photos/11/plastic-surgery-clinic-gabinet-chirurgii-plastycznej-dr-jerzy-m-checinski_10089_h500.jpg"
+            ));
             images.add(new Image(UUID.randomUUID().toString(), "https://coit.pl/storage/1001/gchp_raczkowska-003.JPG"));
             images.add(new Image(
                     UUID.randomUUID().toString(),
@@ -725,15 +759,22 @@ public class InitSeeder implements CommandLineRunner {
                     .nfzStatus(NfzStatuses.PARTIAL)
                     .openFrom(LocalTime.parse("09:00"))
                     .openTo(LocalTime.parse("18:00"))
-                    .location(new Location(54.405832,18.576924))
+                    .location(new Location(54.405832, 18.576924))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user3)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://nox.olsztyn.pl/app/uploads/2023/03/nox-wejscie-scaled.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://s-trojmiasto.pl/zdj/c/n/9/3148/3000x0/3148082-Otwarcie-oddzialu-diagnostyki-obrazowej-Copernicus-w-Gdansku.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://nox.olsztyn.pl/app/uploads/2023/03/nox-wejscie-scaled.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://s-trojmiasto.pl/zdj/c/n/9/3148/3000x0/3148082-Otwarcie-oddzialu-diagnostyki-obrazowej-Copernicus-w-Gdansku.jpg"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://www.kliniki.pl/photos/86/klinika-wielospecjalistyczna-starmedica-centrum-diagnostyki-obrazowej-w-legnicy_85086_h500.jpg"
@@ -758,15 +799,22 @@ public class InitSeeder implements CommandLineRunner {
                     .nfzStatus(NfzStatuses.FULL)
                     .openFrom(LocalTime.parse("09:00"))
                     .openTo(LocalTime.parse("18:00"))
-                    .location(new Location(54.3783307,18.5814854))
+                    .location(new Location(54.3783307, 18.5814854))
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user4)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://stara.wim.mil.pl/images/zlotkowska/06102020daVinci/WIM_7990.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://pliki.rynekzdrowia.pl/i/19/05/91/190591_r2_940.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://stara.wim.mil.pl/images/zlotkowska/06102020daVinci/WIM_7990.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://pliki.rynekzdrowia.pl/i/19/05/91/190591_r2_940.jpg"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://pliki.rynekzdrowia.pl/i/17/96/34/179634_r2_940.jpg"
@@ -792,15 +840,22 @@ public class InitSeeder implements CommandLineRunner {
                     .nfzStatus(NfzStatuses.FULL)
                     .openFrom(LocalTime.parse("09:00"))
                     .openTo(LocalTime.parse("18:00"))
-                    .location(new Location(54.3475666,18.6351057)) // Warsaw coordinates: latitude, longitude
+                    .location(new Location(54.3475666, 18.6351057)) // Warsaw coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://www.visionmed-okulistyka.pl/images/design/box-1.webp"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://kolmed.pl/wp-content/uploads/2022/08/OKULISTA-1400.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://www.visionmed-okulistyka.pl/images/design/box-1.webp"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://kolmed.pl/wp-content/uploads/2022/08/OKULISTA-1400.jpg"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://klinikazacmy.pl/wp-content/uploads/2019/02/klinika-okulistyczna-operacja-zacmy-1024x577.jpg"
@@ -826,15 +881,22 @@ public class InitSeeder implements CommandLineRunner {
                     .nfzStatus(NfzStatuses.NONE)
                     .openFrom(LocalTime.parse("09:00"))
                     .openTo(LocalTime.parse("18:00"))
-                    .location(new Location(54.4412383,18.5678342)) // Gdańsk coordinates: latitude, longitude
+                    .location(new Location(54.4412383, 18.5678342)) // Gdańsk coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .hits(generateHits())
                     .build();
 
             images = new ArrayList<>();
 
-            images.add(new Image(UUID.randomUUID().toString(), "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-metody-1600x1000-1-1024x640.jpg"));
-            images.add(new Image(UUID.randomUUID().toString(), "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-diagnostyka-1600x1000-1-1024x640.jpg"));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-metody-1600x1000-1-1024x640.jpg"
+            ));
+            images.add(new Image(
+                    UUID.randomUUID().toString(),
+                    "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-diagnostyka-1600x1000-1-1024x640.jpg"
+            ));
             images.add(new Image(
                     UUID.randomUUID().toString(),
                     "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-terapeuci-1600x1000-1-1024x640.jpg"
@@ -849,7 +911,8 @@ public class InitSeeder implements CommandLineRunner {
                     .name("Ośrodek Zdrowia Naturalnego")
                     .type(MedicalFacilityTypes.PRZYCHODNIA)
                     .address("ul. Leśna 10")
-                    .imageUrl("https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-metody-1600x1000-1-1024x640.jpg")
+                    .imageUrl(
+                            "https://usercontent.one/wp/www.naturalnecentrumzdrowia.com/wp-content/uploads/2022/01/DZIAL-TERAPIE-metody-1600x1000-1-1024x640.jpg")
                     .images(images)
                     .phone("+48123456789")
                     .websiteUrl("https://zdrowienaturalne.pl/")
@@ -860,9 +923,10 @@ public class InitSeeder implements CommandLineRunner {
                     .nfzStatus(NfzStatuses.NONE)
                     .openFrom(LocalTime.parse("09:00"))
                     .openTo(LocalTime.parse("18:00"))
-                    .location(new Location(54.406957,18.5551332)) // Gdańsk coordinates: latitude, longitude
+                    .location(new Location(54.406957, 18.5551332)) // Gdańsk coordinates: latitude, longitude
                     .specialists((List<Specialist>) specialistRepository.findAll())
                     .addedBy(user1)
+                    .hits(generateHits())
                     .build();
 
 
@@ -918,7 +982,144 @@ public class InitSeeder implements CommandLineRunner {
             opinionRepository.save(opinion2);
             opinionRepository.save(opinion3);
             opinionRepository.save(opinion4);
+
+            Random random = new Random();
+
+            SearchDetails details2 = new SearchDetails();
+            details2.setSearchType("type");
+            details2.setValue("PRZYCHODNIA");
+            details2.setName("Typ placówki");
+            int hits2 = random.nextInt(10) + 1;
+            details2.setHits(hits2);
+
+            SearchDetails details3 = new SearchDetails();
+            details3.setSearchType("specialization");
+            details3.setValue("DERMATOLOG");
+            details3.setName("Specjalizacja lekarza");
+            int hits3 = random.nextInt(10) + 1;
+            details3.setHits(hits3);
+
+            SearchDetails details4 = new SearchDetails();
+            details4.setSearchType("longitude");
+            details4.setValue("18.5840874");
+            details4.setName("Długość geo.");
+            int hits4 = random.nextInt(10) + 1;
+            details4.setHits(hits4);
+
+            SearchDetails details5 = new SearchDetails();
+            details5.setSearchType("latitude");
+            details5.setValue("54.3074972");
+            details5.setName("Szerokość geo.");
+            int hits5 = random.nextInt(10) + 1;
+            details5.setHits(hits5);
+
+            SearchDetails details6 = new SearchDetails();
+            details6.setSearchType("distance");
+            details6.setValue("500.0");
+            details6.setName("Maks. odległość");
+            int hits6 = random.nextInt(10) + 1;
+            details6.setHits(hits6);
+
+            SearchDetails details7 = new SearchDetails();
+            details7.setSearchType("nfzStatus");
+            details7.setValue("[FULL, PARTIAL]");
+            details7.setName("Status NFZ");
+            int hits7 = random.nextInt(10) + 1;
+            details7.setHits(hits7);
+
+            SearchDetails details8 = new SearchDetails();
+            details8.setSearchType("distance");
+            details8.setValue("50.0");
+            details8.setName("Maks. odległość");
+            int hits8 = random.nextInt(10) + 1;
+            details8.setHits(hits8);
+
+            SearchDetails details9 = new SearchDetails();
+            details9.setSearchType("type");
+            details9.setValue("SZPITAL");
+            details9.setName("Typ placówki");
+            int hits9 = random.nextInt(10) + 1;
+            details9.setHits(hits9);
+
+            SearchDetails details10 = new SearchDetails();
+            details10.setSearchType("type");
+            details10.setValue("APTEKA");
+            details10.setName("Typ placówki");
+            int hits10 = random.nextInt(10) + 1;
+            details10.setHits(hits10);
+
+            SearchDetails details11 = new SearchDetails();
+            details11.setSearchType("nfzStatus");
+            details11.setValue("[NONE]");
+            details11.setName("Status NFZ");
+            int hits11 = random.nextInt(10) + 1;
+            details11.setHits(hits11);
+
+            SearchDetails details12 = new SearchDetails();
+            details12.setSearchType("nfzStatus");
+            details12.setValue("[FULL]");
+            details12.setName("Status NFZ");
+            int hits12 = random.nextInt(10) + 1;
+            details12.setHits(hits12);
+
+            SearchDetails details13 = new SearchDetails();
+            details13.setSearchType("specialization");
+            details13.setValue("KARDIOLOG");
+            details13.setName("Specjalizacja lekarza");
+            int hits13 = random.nextInt(10) + 1;
+            details13.setHits(hits13);
+
+            SearchDetails details14 = new SearchDetails();
+            details14.setSearchType("specialization");
+            details14.setValue("PSYCHOLOG");
+            details14.setName("Specjalizacja lekarza");
+            int hits14 = random.nextInt(10) + 1;
+            details14.setHits(hits14);
+
+            SearchDetails details15 = new SearchDetails();
+            details15.setSearchType("specialization");
+            details15.setValue("CHIRURG");
+            details15.setName("Specjalizacja lekarza");
+            int hits15 = random.nextInt(10) + 1;
+            details15.setHits(hits15);
+
+            SearchDetails details16 = new SearchDetails();
+            details16.setSearchType("specialization");
+            details16.setValue("STOMATOLOG");
+            details16.setName("Specjalizacja lekarza");
+            int hits16 = random.nextInt(10) + 1;
+            details16.setHits(hits16);
+
+            int totalHits = hits2 + hits3 + hits4 + hits5 + hits6 + hits7 + hits8 + hits9 + hits10 + hits11 + hits12 + hits13 + hits14 + hits15 + hits16;
+
+            SearchDetails details1 = new SearchDetails();
+            details1.setSearchType("Global");
+            details1.setValue(null);
+            details1.setName("Łącznie wyszukiwań");
+            details1.setHits(totalHits);
+
+            searchStatisticsRepository.save(details1);
+            searchStatisticsRepository.save(details2);
+            searchStatisticsRepository.save(details3);
+            searchStatisticsRepository.save(details4);
+            searchStatisticsRepository.save(details5);
+            searchStatisticsRepository.save(details6);
+            searchStatisticsRepository.save(details7);
+            searchStatisticsRepository.save(details8);
+            searchStatisticsRepository.save(details9);
+            searchStatisticsRepository.save(details10);
+            searchStatisticsRepository.save(details11);
+            searchStatisticsRepository.save(details12);
+            searchStatisticsRepository.save(details13);
+            searchStatisticsRepository.save(details14);
+            searchStatisticsRepository.save(details15);
+            searchStatisticsRepository.save(details16);
         }
+    }
+
+    private int generateHits() {
+        Random r = new Random();
+        return r.nextInt(100 - 10) + 10;
     }
 
     public List<Specialist> getRandomElement(List<Specialist> list) {
