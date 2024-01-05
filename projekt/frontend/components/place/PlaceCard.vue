@@ -44,8 +44,10 @@
         </div>
       </div>
       <div class="PlaceCard_sidebar">
+        <EditButton v-if="isOwn" :place-id="id" class="mb-1" />
+        <DeleteButton v-if="isOwn" :place-id="id" class="mb-1" @placeDeleted="$emit('placeDeleted')" />
         <FavouriteButton
-          v-if="isLogged"
+          v-if="isLogged && !isOwn"
           class="sidebar_favourite-button"
           :placeId="id"
         />
@@ -64,6 +66,8 @@ import Rating from '@/components/Rating';
 import Icon from '@/components/shared/Icon';
 import NFZStatus from '@/components/NFZStatus';
 import FavouriteButton from '@/components/place/FavouriteButton';
+import EditButton from '@/components/place/EditButton';
+import DeleteButton from '@/components/place/DeleteButton';
 
 export default {
   components: {
@@ -72,6 +76,8 @@ export default {
     Icon,
     NFZStatus,
     FavouriteButton,
+    EditButton,
+    DeleteButton,
   },
 
   inheritAttrs: false,
@@ -113,11 +119,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    isOwn: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     isLogged() {
       return this.$store.getters['user/isLoggedIn'];
+    },
+    userId() {
+      return this.$store.getters['user/getUserId'];
     },
   },
 };
