@@ -17,15 +17,18 @@ import java.util.ArrayList;
 public class LocationAutocomplete {
     private final Geocoder geocoder;
 
-    @GetMapping(produces = { "application/json; charset=utf-8" }, params = {"address", "limit"})
+    @GetMapping(produces = {"application/json; charset=utf-8"}, params = {"address", "limit"})
     @ResponseBody
-    public ResponseEntity<ArrayList<GeocoderLocation>> getLocation(@RequestParam String address, @RequestParam int limit) {
-        if (limit>10) limit=10;
+    public ResponseEntity<ArrayList<GeocoderLocation>> getLocation(
+            @RequestParam String address,
+            @RequestParam int limit
+    ) {
+        if (limit > 10) limit = 10;
         return new ResponseEntity<>(geocoder.geocodeAddress(address, limit), HttpStatus.OK);
 
     }
 
-    @GetMapping(produces = { "application/json; charset=utf-8" }, params = {"address"})
+    @GetMapping(produces = {"application/json; charset=utf-8"}, params = {"address"})
     @ResponseBody
     public ResponseEntity<ArrayList<GeocoderLocation>> getLocationWithoutLimit(@RequestParam String address) {
         return new ResponseEntity<>(geocoder.geocodeAddress(address, 10), HttpStatus.OK);

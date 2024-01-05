@@ -147,6 +147,11 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserOpinions(userId), HttpStatus.OK);
     }
 
+    @GetMapping("/{userId}/statistics")
+    public ResponseEntity<UserStatisticsDTO> statistics(@PathVariable Long userId) {
+        return new ResponseEntity<>(userService.getStatistics(userId), HttpStatus.OK);
+    }
+
     protected String saveImage(MultipartFile file) throws IOException {
         String filename = this.buildFilename(file);
         Path fileNameAndPath = Paths.get(userService.UPLOAD_DIRECTORY, filename);

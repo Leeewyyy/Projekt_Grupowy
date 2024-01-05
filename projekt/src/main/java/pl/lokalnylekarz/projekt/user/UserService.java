@@ -1,7 +1,6 @@
 package pl.lokalnylekarz.projekt.user;
 
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.control.MappingControl;
 import org.springframework.stereotype.Service;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityMapper;
@@ -106,6 +105,10 @@ public class UserService {
         return userDtos;
     }
 
+    public List<User> getAllVerified() {
+        return userRepository.findByVerificationDateIsNotNull();
+    }
+
     public UserDto get(long id) {
         User user = userRepository.findById(id).orElseThrow();
 
@@ -187,6 +190,12 @@ public class UserService {
             }
 
             favoriteFacilities.add(medicalFacility);
+
+            List<User> favoriteFor  = medicalFacility.getFavoriteFor();
+            favoriteFor.add(user);
+            medicalFacility.setFavoriteFor(favoriteFor);
+            medicalFacilityRepository.save(medicalFacility);
+
             ++added;
         }
 
@@ -286,5 +295,19 @@ public class UserService {
                 return -o1.getAddedAt().compareTo(o2.getAddedAt());
             }
         }).map(opinionService::fromOpinionToOpinionWithMedicalFacilityDTO).toList();
+    }
+
+    public UserStatisticsDTO getStatistics(Long userId) {
+        User user = userRepository.findById(userId).orElse(new User());
+
+        if (user.getId() == null) {
+            return new UserStatisticsDTO();
+        }
+
+        return new UserStatisticsDTO(
+            user.getOpinions().size(),
+            user.getAddedMedicalFacilities().size(),
+            user.getFavoriteFacilities().size()
+        );
     }
 }

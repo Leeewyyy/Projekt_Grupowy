@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.lokalnylekarz.projekt.enumeration.MedicalFacilityTypes;
-import pl.lokalnylekarz.projekt.enumeration.NfzStatuses;
 import pl.lokalnylekarz.projekt.enumeration.Specialization;
 
 import java.util.List;
@@ -20,9 +19,10 @@ public class MedicalFacilityFilter {
     private Double distance;
     private List<String> nfzStatus;
     private String search;
+    private Long addedBy;
 
     public boolean isEmpty() {
-        return type == null && specialization == null && longitude == null && latitude == null && distance == null && nfzStatus == null && search == null;
+        return type == null && specialization == null && longitude == null && latitude == null && distance == null && nfzStatus == null && search == null && addedBy == null;
     }
 
     public boolean isFilterDistance() {

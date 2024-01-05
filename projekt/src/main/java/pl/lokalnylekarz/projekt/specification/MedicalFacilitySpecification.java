@@ -30,7 +30,7 @@ public class MedicalFacilitySpecification implements Specification<MedicalFacili
         }
 
         if (searchCriteria.getSpecialization() != null) {
-            Path<Specialist> u = root.get("specialist");
+            Path<Specialist> u = root.get("specialists");
 
             predicates.add(builder.equal(
                     u.get("specialization"),
