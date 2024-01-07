@@ -21,9 +21,20 @@
           class="container_column"
           customTitle="Moje placówki"
           :places="myPlaces"
-          :selectable="false"
+          :selectable="true"
           :closable="false"
-        />
+          :are-own-places="true"
+          @updateList="$store.dispatch('myFacility/fetchAll', userId);"
+        >
+          <template #header-side>
+            <Button type="submit" @click.prevent="$router.push('/place/edit/0')" class="add-button">
+              <span class="display-flex align-center">
+                Dodaj
+                <i class="material-icons">add</i>
+              </span>
+            </Button>
+          </template>
+        </PlaceList>
       </div>
     </div>
   </AppPage>
@@ -35,6 +46,7 @@ import MyReviews from '@/components/user_panel/MyReviews';
 import AvatarBox from '@/components/user_panel/AvatarBox';
 import PlaceList from '@/components/place/PlaceList';
 import AccountData from '@/components/user_panel/AccountData';
+import Button from '@/components/shared/Button';
 
 export default {
   components: {
@@ -43,6 +55,7 @@ export default {
     AvatarBox,
     PlaceList,
     AccountData,
+    Button,
   },
 
   head() {
@@ -61,17 +74,23 @@ export default {
     user() {
       return this.$store.getters['user/getUser'];
     },
+    userId() {
+      return this.$store.getters['user/getUserId'];
+    },
   },
-
-  async asyncData({ store, error }) {
-    const currentUser = store.getters['user/getUser'];
-
-    // User not logged in - redirect to error page
-    if (!currentUser) {
-      return error({ statusCode: 401 });
+  async mounted() {
+    if (!this.userId) {
+      //eslint-disable-next-line
+      confirm('Brak dostępu. Zaloguj się.');
+      this.$router.push('/login');
+    } else {
+      try {
+        await this.$store.dispatch('myFacility/fetchAll', this.userId);
+        await this.$store.dispatch('favouriteFacility/fetchAll', this.userId);
+      } catch (e) {
+        this.$notify({ text: 'Błąd pobierania placówek', type: 'error' });
+      }
     }
-
-    return currentUser;
   },
 };
 </script>
@@ -105,6 +124,11 @@ export default {
     }
   }
 }
+
+ .add-button {
+    padding: 8px 12px !important;
+    margin-left: 1rem !important;
+  }
 
 @media screen and (min-width: $tablet_breakpoint) {
   .AppPage--user-panel {

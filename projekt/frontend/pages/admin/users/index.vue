@@ -123,8 +123,17 @@ export default {
         return true;
       });
     },
+    userId() {
+      return this.$store.getters['user/getUserId'];
+    },
   },
-
+  async mounted() {
+    if (!this.userId) {
+      //eslint-disable-next-line
+      confirm('Brak dostępu. Zaloguj się.');
+      this.$router.push('/');
+    }
+  },
   data() {
     return {
       columns: {
@@ -165,6 +174,7 @@ export default {
 
   async fetch() {
     try {
+      if (!this.userId) return;
       this.users = await this.$axios.$get('/api/users');
     } catch (error) {
       console.error(error);

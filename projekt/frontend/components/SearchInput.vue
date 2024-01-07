@@ -133,6 +133,10 @@ export default {
       this.value = '';
       this.$emit('toggleAddress', null);
     },
+
+    setValue(val) {
+      this.value = val;
+    },
   },
 };
 </script>

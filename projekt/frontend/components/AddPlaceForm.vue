@@ -98,8 +98,10 @@
                   id="phone-number"
                   name="phone-number-input"
                   v-model="phone"
-                  placeholder="np. +48 001 100 999"
+                  placeholder="np. +48001100999"
                   class="w-300px"
+                  :label="!isPhoneValid ? 'Poprawny format +48123123123' : ''"
+                  :is-label-error="true"
                 />
               </div>
 
@@ -113,6 +115,8 @@
                   v-model="website"
                   placeholder="np. https://stronaplacowki.pl"
                   class="w-300px"
+                  :label="!isWebValid ? 'Poprawny format https://examplepage.eu' : ''"
+                  :is-label-error="true"
                 />
               </div>
             </section>
@@ -184,24 +188,12 @@ export default {
       isNFZ: true,
       services: [],
       images: [],
-      facility: null,
       place: null,
     };
   },
   async mounted() {
     this.resetAddress();
-    try {
-      await this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
-      if (this.placeId) {
-        this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
-      }
-    } catch (e) {
-      this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
-    }
-
-    if (this.place) {
-      this.assign(this.place);
-    }
+    this.getData();
   },
   computed: {
     ...mapGetters('facilitiesSearch', {
@@ -219,7 +211,7 @@ export default {
         type: this.placeType?.name ?? null,
         address: this.address ? this.$refs.searchInput.buildAddress(this.address) : null,
         phone: this.phone || null,
-        websiteUrl: this.websiteUrl || null,
+        websiteUrl: this.website || null,
         description: this.description || null,
         nfzStatus: this.isNFZ ? 'FULL' : 'NONE',
         lat: this.address?.location.latitude,
@@ -229,8 +221,28 @@ export default {
         additionalImages: this.images.slice(1),
       };
     },
+    isPhoneValid() {
+      return this.phone?.length ? /^\+\d{2}\d{9}$/.test(this.phone) : true;
+    },
+    isWebValid() {
+      return this.website?.length ? /^(https?:\/\/)?[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.website) : true;
+    },
   },
   methods: {
+    async getData() {
+      try {
+        await this.$store.dispatch('facilitiesSearch/getFacilitiesTypes');
+        if (this.placeId) {
+          this.place = await this.$store.dispatch('facility/fetchDetails', this.placeId);
+        }
+      } catch (e) {
+        this.$notify({ text: 'Wystąpił błąd pobierania danych. Spróbuj odświeżyć stronę.', type: 'error' });
+      }
+
+      if (this.place) {
+        this.assign(this.place);
+      }
+    },
     async validate() {
       return new Promise((resolve) => {
         [{
@@ -248,13 +260,20 @@ export default {
           }
         });
 
+        if (!this.isPhoneValid) {
+          throw new Error('Podaj poprawny format numeru telefonu.');
+        }
+
+        if (!this.isWebValid) {
+          throw new Error('Podaj poprawny format adresu strony internetowej.');
+        }
         resolve(true);
       });
     },
     goBack() {
       // eslint-disable-next-line
       if (confirm("Czy na pewno chcesz powrócić? Utracisz niezapisane dane.")) {
-        this.$router.go(-1);
+        this.$router.go();
       }
     },
     handleToggleAddress(res) {
@@ -292,28 +311,61 @@ export default {
       }
 
       try {
-        res = await this.$store.dispatch('myFacility/add', this.payload);
+        if (this.placeId) {
+          res = await this.$store.dispatch('myFacility/edit', { facilityId: this.placeId, payload: this.payload });
+        } else {
+          res = await this.$store.dispatch('myFacility/add', this.payload);
+        }
       } catch (e) {
         this.$notify({ text: 'Wystąpił problem przy zapisywaniu placówki.', type: 'error' });
         console.error(e, e.message);
       }
 
-      if (res?.id) {
-        this.$notify({ text: 'Placówka zapisana pomyślnie. Teraz możesz ją edytować.', type: 'success' });
+      if (this.placeId) {
+        this.$notify({ text: 'Placówka edytowana pomyślnie.', type: 'success' });
+        this.images = [];
+        this.getData();
+      } else if (res?.id) {
         this.$router.push(`/place/edit/${res.id}`);
-      }
+        this.$notify({ text: 'Placówka zapisana pomyślnie. Teraz możesz ją edytować.', type: 'success' });
+      } 
     },
     assign(place) {
       this.name = place.name;
-      this.type = this.facilitiesTypes.find((el) => el.name === place.type);
+      this.placeType = this.facilitiesTypes.find((el) => el.name === place.type);
       this.address = {
-        address: place.address,
+        address: {
+          road: place.address,
+        },
         location: place.location,
       };
       this.description = place.description;
       this.isNFZ = place.nfzStatus === 'FULL'; 
       this.phone = place.phone;
-      this.websiteUrl = place.websiteUrl;
+      this.website = place.websiteUrl;
+      
+      this.images.push(this.createFile(place.imageUrl));
+
+      place.images.forEach(({ url }) => {
+        this.images.push(this.createFile(url));
+      });
+  
+      this.$refs.searchInput.setValue(place.address);
+    },
+
+    createFile(url) {
+      const mainImageName = `${url.split('/').at(-1)
+        .split('--')[0]}.${url.split('.').at(-1)}`;
+      const mainType = `image/${mainImageName.split('.').at(-1)}`;
+      const lastModifiedMain = url.split('/').at(-1)
+        .split('--').at(-1)
+        .split('.')[0];
+      const blobMain = new Blob([{
+        name: mainImageName,
+        lastModified: lastModifiedMain,
+      }], { type: `image/${mainImageName.split('.').at(-1)}` });
+      
+      return new File([blobMain], url, { type: mainType });
     },
   },
 };

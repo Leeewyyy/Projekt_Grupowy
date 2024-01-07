@@ -26,6 +26,7 @@
         <h2 class="header_title">
           {{ customTitle }}
         </h2>
+        <slot name="header-side" />
       </div>
     </template>
     <template #body>
@@ -41,8 +42,10 @@
                 v-bind="place"
                 class="item_place-card"
                 :full-width="true"
+                :is-own="areOwnPlaces"
                 @click="onPlaceSelected(place)"
                 @favoriteChanged="updateList"
+                @placeDeleted="updateList"
               />
             </li>
           </ul>
@@ -88,6 +91,10 @@ export default {
       default: true,
     },
     isLoading: {
+      type: Boolean,
+      default: false,
+    },
+    areOwnPlaces: {
       type: Boolean,
       default: false,
     },
@@ -145,11 +152,15 @@ export default {
 
   .PlaceList_header {
     padding: 1rem;
+    display: flex;
+    gap: 10px;
 
     .header_title {
       text-indent: 1rem;
       font-size: 1.2rem;
       font-weight: 600;
+      display: flex;
+      align-items: center;
     }
   }
 

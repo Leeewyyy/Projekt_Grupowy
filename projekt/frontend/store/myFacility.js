@@ -48,7 +48,20 @@ export const actions = {
   },
 
   async edit({}, { facilityId, payload }) {
-    await this.$axios.$patch(`/api/medical-facilities/${facilityId}`, payload);
+    // eslint-disable-next-line no-use-before-define
+    const formData = new FormData();
+    Object.entries(payload).forEach(([name, value]) => {
+      if (value === undefined || value === null) {
+        return;
+      }
+
+      if (name === 'additionalImages') {
+        value.forEach((image) => formData.append(name, image));
+      } else {
+        formData.append(name, value);
+      }
+    });
+    await this.$axios.$patch(`/api/medical-facilities/${facilityId}`, formData);
   },
 
   async delete({}, facilityId) {

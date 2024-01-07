@@ -17,8 +17,9 @@
         :key="image.lastModified"
         class="display-flex align-center picture-row"
       >
-        <span class="material-icons image">image</span>
-        <span class="text">{{ image.name }}</span>
+        <div v-if="image.name.includes('resources')" class="image-div" :style="`background-image: url(${image.name})`"></div>
+        <span v-else class="material-icons image">image</span>
+        <span class="text">{{ image.name.includes('resources') ? buildName(image.name) : image.name }}</span>
         <div class="liner"></div>
         <button type="button" @click="$emit('delete', image)">
           <span class="material-icons">close</span>
@@ -46,6 +47,12 @@ export default {
     images: {
       type: Array,
       default: () => ([]),
+    },
+  },
+  methods: {
+    buildName(name) {
+      return `${name.split('/').at(-1)
+        .split('--')[0]}.${name.split('.').at(-1)}`;
     },
   },
 };
@@ -108,6 +115,14 @@ input {
 
   .material-icons.image {
     color: $grey;
+  }
+
+  .image-div {
+    min-height: 40px;
+    min-width: 40px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
   }
 }
 

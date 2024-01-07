@@ -23,8 +23,7 @@
           </div>
           <div v-else-if="section.name === 'no-place'">
             <p>
-              W najbliższym czasie dodamy specjalny formularz zgłaszania placówki medycznej do naszego systemu.
-              Jeżeli znasz jakąś placówkę zachęcamy do napisania do nas <NuxtLink :to="{ name: 'contact'}">(kliknij tu)</NuxtLink> 
+              W celu dodania placówki utwórz konto użytkownika, zweryfikuj je, a w panelu użytkownika będziesz mógł dodać swoją placówkę.
             </p>
           </div>
           <div v-else-if="section.name === 'account'">
@@ -64,7 +63,7 @@ export default {
         {
           name: 'no-place',
           header: 'Brak placówki?',
-          description: 'Dodaj ją ręcznie przy pomocy prostego formularza',
+          description: 'Dodaj ją przy pomocy prostego formularza',
           isOpen: false,
           visible: true,
         },

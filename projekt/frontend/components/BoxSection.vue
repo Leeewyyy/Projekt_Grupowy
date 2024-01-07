@@ -65,6 +65,7 @@ export default {
 
   &.BoxSection--no-overflow {
     overflow: hidden;
+    margin-top: 0;
   }
 
   .BoxSection_header {

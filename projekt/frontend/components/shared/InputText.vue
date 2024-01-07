@@ -2,6 +2,7 @@
   <div class="width-100">
     <textarea 
       v-if="isTextArea"
+      v-model="val"
       :name="name"
       :placeholder="placeholder"
       :required="required"
@@ -36,7 +37,7 @@
       />
     </div>
     <slot />
-    <label v-if="label.length">{{ label }}</label>
+    <label v-if="label.length" :class="{ 'text-red': isLabelError }">{{ label }}</label>
   </div>
 </template>
 
@@ -84,6 +85,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isLabelError: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: { 
     IconToggleButton,
@@ -107,6 +112,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "~/assets/scss/colors.scss";
+.text-red {
+  color: $red;
+}
 
 .input-outer {
   min-height: 45px;
