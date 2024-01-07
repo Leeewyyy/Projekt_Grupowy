@@ -139,14 +139,14 @@ export default {
   computed: {
     mappedFacilities() {
       return this.facilitiesStatistics.map((row, idx) => ({
-        num: this.facilitiesStatistics.length - idx,
+        num: idx + 1,
         ...row,
       }));
     },
 
     mappedSearchs() {
       return this.searchStatistics.map((row, idx) => ({
-        num: this.searchStatistics.length - idx,
+        num: idx + 1,
         ...row,
       }));
     },
