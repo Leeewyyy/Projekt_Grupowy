@@ -2,6 +2,7 @@ package pl.lokalnylekarz.projekt.user;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,12 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.lokalnylekarz.projekt.api.Endpoint;
+import pl.lokalnylekarz.projekt.mailSender.MailSenderService;
+import pl.lokalnylekarz.projekt.mailSender.RegisterMailDto;
 import pl.lokalnylekarz.projekt.medicalFacility.MedicalFacilityListDto;
 import pl.lokalnylekarz.projekt.model.MedicalFacility;
 import pl.lokalnylekarz.projekt.model.User;
 import pl.lokalnylekarz.projekt.opinion.OpinionWithMedicalFacilityDTO;
 import pl.lokalnylekarz.projekt.pojo.FavouriteMedicalFacilityPOJO;
 import pl.lokalnylekarz.projekt.pojo.UserLoginPOJO;
+import pl.lokalnylekarz.projekt.services.ServerInfo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +33,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    public final MailSenderService mailSenderService;
 
     @GetMapping()
     @ResponseBody
@@ -61,6 +66,13 @@ public class UserController {
 
         User dto = userService.save(userDtoForRegister);
         if (dto==null) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
+        String userToken = ServerInfo.getBaseUrl() + Endpoint.USERS_BASE_ROUTE + "/verification/" + dto.getId() + "/" + dto.generateUserToken();
+
+        RegisterMailDto mailDto = new RegisterMailDto(dto, userToken);
+
+        mailSenderService.sendToUser(mailDto);
+
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
@@ -119,6 +131,17 @@ public class UserController {
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(new InputStreamResource(in));
+    }
+    
+    @GetMapping("/verification/{userId}/{token}")
+    public ResponseEntity<String> verification(@PathVariable Long userId, @PathVariable String token) {
+        boolean verificationResult = userService.verify(userId, token);
+
+        if (verificationResult) {
+            return ResponseEntity.ok("Dziękujemy za rejestrację.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User verification failed");
+        }
     }
 
     @PostMapping("/{userId}/image/update")

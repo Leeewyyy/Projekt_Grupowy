@@ -310,4 +310,18 @@ public class UserService {
             user.getFavoriteFacilities().size()
         );
     }
+
+    public boolean verify(Long userId, String token) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        if (user.generateUserToken().equals(token)) {
+            user.setRole(UserRoleEnum.VERIFIED);
+
+            userRepository.save(user);
+
+            return true;
+        }
+
+        return false;
+    }
 }

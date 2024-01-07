@@ -8,6 +8,9 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import pl.lokalnylekarz.projekt.user.UserRoleEnum;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -75,5 +78,30 @@ public class User {
         this.password = password;
         this.role = role;
         this.registrationDate = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public String generateUserToken() {
+        String tokenString = id + fullName + email + registrationDate;
+        String generatedToken = hashString(tokenString);
+
+        return generatedToken;
+    }
+
+    private String hashString(String input) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] encodedHash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexStringBuilder = new StringBuilder();
+            for (byte b : encodedHash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexStringBuilder.append('0');
+                }
+                hexStringBuilder.append(hex);
+            }
+            return hexStringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error hashing string", e);
+        }
     }
 }

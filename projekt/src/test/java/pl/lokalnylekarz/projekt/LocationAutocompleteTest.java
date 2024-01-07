@@ -30,14 +30,15 @@ class LocationAutocompleteTest {
 
     @Test
     public void getLocation() throws Exception {
-        // Arrange
         ArrayList<GeocoderLocation> geocoderLocations = new ArrayList<>();
         when(geocoder.geocodeAddress(anyString(), anyInt())).thenReturn(geocoderLocations);
 
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(locationAutocomplete).build();
 
-        mockMvc.perform(get("/ajax/locations?address=Grunwaldzka&limit=5")
-                                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+                    get("/ajax/locations?address=Grunwaldzka&limit=5")
+                    .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$").isArray());
