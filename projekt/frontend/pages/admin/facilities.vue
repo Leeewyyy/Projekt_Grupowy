@@ -61,7 +61,7 @@
           <ActionButton
             element="nuxt-link"
             class="Facilities_add-button"
-            to="/facilities/add"
+            to="/place/edit/0"
             icon="add"
             backgroundColor="#333"
             textColor="#fff"
@@ -124,7 +124,7 @@
               <div class="Facilities_actions">
                 <ActionButton
                   element="nuxt-link"
-                  :to="`/facilities/edit/${row.id}`"
+                  :to="`/place/edit/${row.id}`"
                   icon="edit"
                 >
                   Edytuj
