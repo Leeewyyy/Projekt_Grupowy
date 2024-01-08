@@ -21,11 +21,15 @@ export const getters = {
 
 export const mutations = {
   setCookie(state, { name, value }) {
-    this.$cookies.set(
-      name, 
-      value, 
-      cookiesTimes[name] ? { maxAge: 60 * 60 * cookiesTimes[name] } : {},
-    );
+    const options = {
+      path: '/',
+    };
+
+    if (cookiesTimes[name]) {
+      options.maxAge = cookiesTimes[name] * 60 * 60;
+    }
+    
+    this.$cookies.set(name, value, options);
     state[name] = value;
   },
 
