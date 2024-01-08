@@ -39,7 +39,8 @@ export default {
   },
 
   async fetch() {
-    await this.loadPlaces(true);
+    const showPreviouslyLoaded = this.placesQuery ? !Object.keys(this.placesQuery).includes('search') : true;
+    await this.loadPlaces(showPreviouslyLoaded);
   },
 
   data() {
@@ -53,7 +54,7 @@ export default {
     async loadPlaces(showPreviouslyLoaded = false) {
       // Show previously loaded facilities
       if (showPreviouslyLoaded && this.$store.getters['facilitiesSearch/getFacilities'] !== null) return;
-
+      console.log(showPreviouslyLoaded);
       this.isLoading = true;
 
       try {
