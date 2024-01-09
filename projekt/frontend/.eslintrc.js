@@ -14,6 +14,7 @@ module.exports = {
   ],
   plugins: [
   ],
+  ignorePatterns: ['/cypress'],
   rules: {
     'no-return-await': 'off',
     'import/extensions': 'off',
