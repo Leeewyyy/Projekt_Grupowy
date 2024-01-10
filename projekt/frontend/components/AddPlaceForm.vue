@@ -27,6 +27,7 @@
                   placeholder="np. Placówka medyczna"
                   v-model="name"
                   class="w-300px"
+                  data-tid="name"
                 />
               </div>
 
@@ -43,6 +44,7 @@
                     :hide-results="false"
                     placeholder="np. Spacerowa 15, Gdańsk"
                     style="padding-left: 0 !important; width: 300px !important;"
+                    data-tid="search-input"
                   />
                 </div>
                 <Button v-if="address" type="button" :active="true" :dark="true" @click="resetAddress()" class="reset-button">
@@ -60,6 +62,7 @@
                   :options="facilitiesTypes"
                   placeholder="np. SZPITAL"
                   class="w-300px"
+                  data-tid="place-type"
                 />
               </div>
 
@@ -74,6 +77,7 @@
                   placeholder="Co oferuje to miejsce, jaką prowadzi opiekę"
                   class="width-70"
                   :is-text-area="true"  
+                  data-tid="description"
                 />
               </div>
 
@@ -81,7 +85,7 @@
                 <div class="row-left">
                   <p>Zdjęcia</p>
                 </div>
-                <InputFile :show-images="true" class="width-70" @fileUploaded="toggleImages" @delete="deleteImage" :images="images" :multiple="true">
+                <InputFile data-tid="images" :show-images="true" class="width-70" @fileUploaded="toggleImages" @delete="deleteImage" :images="images" :multiple="true">
                   Wybierz
                 </InputFile>
               </div>
@@ -128,7 +132,7 @@
                 <div class="row-left">
                   <p>Czy placówka obsługuje finansowanie przez Narodowy Fundusz Zdrowia?</p>
                 </div>
-                <SwitchButton id="isNFZ" v-model="isNFZ" class="w-300px">
+                <SwitchButton data-tid="nfz" id="isNFZ" v-model="isNFZ" class="w-300px">
                   Nie
                   <template #right>Tak</template>
                 </SwitchButton>

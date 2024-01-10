@@ -46,6 +46,7 @@
           href="/login"
           class="account_button"
           type="button"
+          data-tid="login-link"
         >
           Zaloguj się
         </MenuLink>
