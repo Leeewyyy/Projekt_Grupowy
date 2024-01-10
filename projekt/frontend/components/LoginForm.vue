@@ -37,7 +37,7 @@
             <Button name="submit-button" type="submit" variant="dark"> Zaloguj się</Button>
           </div>
         </div>
-        <NuxtLink to="register" class="register-link"> Nie masz konta? Zarejestruj się! </NuxtLink>
+        <NuxtLink to="register" class="register-link" data-tid="login-go-to-register-button"> Nie masz konta? Zarejestruj się! </NuxtLink>
       </form>
     </template>
   </BoxSection>

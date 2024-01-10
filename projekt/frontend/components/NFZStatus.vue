@@ -3,6 +3,7 @@
     class="NFZStatus"
     :class="`NFZStatus--${statusValue}`"
     v-tooltip="tooltipText"
+    :data-tid="`nfz-status-${statusValue}`"
   >
     <Icon
       class="NFZStatus_icon"

@@ -28,8 +28,14 @@
             :icon-size="[44, 57]"
             :icon-anchor="[30, 94]"
           >
-            <img src="/images/my_position3.svg" class="my-position-icon">
-            <div class="main_headline">
+            <img
+              src="/images/my_position3.svg"
+              class="my-position-icon"
+            >
+            <div
+              class="main_headline"
+              data-tid="user-location"
+            >
               Twoja lokalizacja
             </div>
           </l-icon>

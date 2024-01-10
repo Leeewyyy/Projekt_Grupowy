@@ -17,6 +17,7 @@
             v-model="form.fullName"
             label="Imię i nazwisko"
             class="element"
+            data-tid="register-fullname"
             required
           />
 
@@ -28,6 +29,7 @@
             label="Adres e-mail"
             placeholder="np. jan@kowalski.pl"
             class="element"
+            data-tid="register-email"
             required
           />
 
@@ -44,6 +46,7 @@
               size: 23,
             }"
             @iconClicked="showPass = !showPass"
+            data-tid="register-password"
             required
           />
 
@@ -60,19 +63,20 @@
               size: 23,
             }"
             @iconClicked="showConfirmPass = !showConfirmPass"
+            data-tid="register-password-confirm"
             required
           />
 
-          <SwitchButton class="register-switch" id="consent-regulations" v-model="regulations" dir="right">
+          <SwitchButton class="register-switch" id="consent-regulations" data-tid="register-consent-tos" v-model="regulations" dir="right">
             Akceptuję <a href="#" target="_blank">regulamin</a> serwisu
           </SwitchButton>
 
-          <SwitchButton class="register-switch" id="consent-policy" v-model="privatePolicy" dir="right">
+          <SwitchButton class="register-switch" id="consent-policy" data-tid="register-consent-pp" v-model="privatePolicy" dir="right">
             Akceptuję <a href="#" target="_blank">politykę prywatności</a>
           </SwitchButton>
 
           <div class="buttons">
-            <Button name="submit-button" type="submit" variant="dark">
+            <Button name="submit-button" type="submit" variant="dark" data-tid="register-submit">
               Zarejestruj
             </Button>
           </div>
