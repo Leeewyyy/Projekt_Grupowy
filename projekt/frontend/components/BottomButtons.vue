@@ -10,6 +10,7 @@
       class="BottomButtons_button"
       type="button"
       @click="onClick"
+      data-tid="main-back"
     >
       <Icon
         class="BottomButtons_icon"
@@ -18,7 +19,15 @@
       />
       Powrót
     </button>
-    <Button v-if="showSubmit" @click="onSubmit" type="submit" class="BottomButtons_submit">Szukaj</Button>
+    <Button
+      @click="onSubmit"
+      v-if="showSubmit"
+      type="submit"
+      class="BottomButtons_submit"
+      data-tid="main-submit"
+    >
+      Szukaj
+    </Button>
   </div>
 </template>
 

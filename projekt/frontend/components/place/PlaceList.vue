@@ -18,7 +18,7 @@
         </div>
         <div class="header_title">
           <span v-if="isLoading">Trwa ładowanie placówek...</span>
-          <span v-else>Znaleziono <b class="title_count">{{ places.length }}</b> wyników</span>
+          <span v-else data-tid="place-list-count">Znaleziono <b class="title_count">{{ places.length }}</b> wyników</span>
         </div>
         <CollapseButton class="mobile-hidden" @collapse="$emit('hideBox')" />
       </div>
@@ -30,14 +30,14 @@
       </div>
     </template>
     <template #body>
-      <div class="PlaceList_container">
+      <div class="PlaceList_container" data-tid="place-list-container">
         <Loader v-if="isLoading" style="padding: 1rem;" />
         <div v-else-if="!places.length" class="container_empty">
           Nie znaleziono żadnych miejsc spełniających kryteria.
         </div>
         <vue-scroll v-else :ops="scrollOptions">
-          <ul class="container_list">
-            <li class="list_item" v-for="place in places" :key="place.id">
+          <ul class="container_list" data-tid="place-list">
+            <li class="list_item" v-for="place in places" :key="place.id" data-tid="place-list-item">
               <PlaceCard
                 v-bind="place"
                 class="item_place-card"
@@ -46,6 +46,7 @@
                 @click="onPlaceSelected(place)"
                 @favoriteChanged="updateList"
                 @placeDeleted="updateList"
+                data-tid="place-list-card"
               />
             </li>
           </ul>

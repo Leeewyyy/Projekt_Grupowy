@@ -28,9 +28,10 @@
           @loading="setStep(SEARCH_STEPS.RESULTS_VISIBLE)"
           @iconClicked="getCurrentPosition()"
           style="margin-bottom: 0.5rem; padding: 0 2rem;"
+          data-tid="address-search-input"
         />
         <WelcomeBox v-if="step === SEARCH_STEPS.WELCOME" />
-        <div v-if="step === SEARCH_STEPS.MORE_FILTERS" class="more-filters">
+        <div v-if="step === SEARCH_STEPS.MORE_FILTERS" class="more-filters" data-tid="place-filters">
           <div class="display-flex align-center justify-between first-row">
             <Select
               name="placeType"
@@ -40,8 +41,9 @@
               select-label="Wybierz typ placówki"
               @input="(value) => setFormState({ key: 'type', value })"
               class="select"
+              data-tid="place-type-select"
             />
-            <SwitchButton id="switch-nfz" :model-value="formState.isNFZ" @change="(value) => setFormState({ key: 'isNFZ', value })" description="NFZ" class="switch" />
+            <SwitchButton id="switch-nfz" :model-value="formState.isNFZ" @change="(value) => setFormState({ key: 'isNFZ', value })" description="NFZ" class="switch" data-tid="nfz-switch" />
           </div>
 
           <Select
@@ -51,6 +53,7 @@
             select-label="Wybierz specjalizację lekarza"
             @input="(value) => setFormState({ key: 'specialization', value })"
             class="second-row"
+            data-tid="specialization-select"
           />
           
           <div class="buttons display-flex align-center justify-center flex-wrap">
@@ -61,6 +64,7 @@
               :class="['button', { 'wider': isWiderButton }]"
               :active="formState.distance === value"
               @click="setFormState({ key: 'distance', value })"
+              data-tid="distance-button"
             >
               {{ name }}
             </Button>

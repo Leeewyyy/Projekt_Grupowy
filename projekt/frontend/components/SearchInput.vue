@@ -24,6 +24,7 @@
               'active': isActive(result),
             }]"
             @click="$emit('toggleAddress', result)"
+            data-tid="address-result"
           >
             {{ buildAddress(result) }}
           </li>
