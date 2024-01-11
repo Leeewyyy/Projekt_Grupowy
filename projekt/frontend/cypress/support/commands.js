@@ -42,3 +42,41 @@ Cypress.Commands.add('submitPlaceSearchAndCheckPlaces', () => {
   cy.get('[data-tid="place-list-item"]').should('have.length.of.at.least', 1);
   cy.get('.leaflet-marker-icon').should('have.length.of.at.least', 1);
 });
+
+Cypress.Commands.add('attachFiles', (selector, ...fileNames) => {
+  // selector has to be a referrer to an input[type=file]
+  // only file names with extension from cypress/static/images directory
+  // example: cy.attachFiles('[data-tid="images"] input[type=file]', 'cy_example1.png', 'cy_example2.png');
+
+  const basePath = 'cypress/static/images';
+
+  cy.get(selector).as('fileInput');
+  const files = fileNames.map((name) => `${basePath}/${name}`);
+  cy.get(selector).selectFile(files, { force: true });
+
+  fileNames.forEach((fileName) => {
+    cy.readFile(`${basePath}/${fileName}`, null).then((file) => {
+      expect(Cypress.Buffer.isBuffer(file)).to.be.true
+    })
+  });
+});
+
+Cypress.Commands.add('changeSwitch', (selector, mode) => {
+  // mode: true - switch to right, false - switch to left
+  
+  if (mode === true) {
+    cy.get(`${selector} input[type=checkbox]`).should('be.checked');
+  } else {
+    cy.get(`${selector} label`).click();
+    cy.get(`${selector} input[type=checkbox]`).should('not.be.checked');
+  }
+});
+
+Cypress.Commands.add('navigationPlaceSearchType', (name, withSubmit = true) => {
+  cy.get('[data-tid="top-place-search"] input').type(name, { force: true });
+  if (withSubmit) {
+    cy.get('[data-tid="top-search-submit"]').click();
+    cy.url().should('include', 'places?search');
+    cy.get('#placeList').should('contain.text', name);
+  }
+});

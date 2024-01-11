@@ -132,7 +132,7 @@
                 <div class="row-left">
                   <p>Czy placówka obsługuje finansowanie przez Narodowy Fundusz Zdrowia?</p>
                 </div>
-                <SwitchButton data-tid="nfz" id="isNFZ" v-model="isNFZ" class="w-300px">
+                <SwitchButton data-tid="nfz-switch" id="isNFZ" v-model="isNFZ" class="w-300px">
                   Nie
                   <template #right>Tak</template>
                 </SwitchButton>
@@ -144,7 +144,7 @@
                 <Button type="button" :active="true" :dark="true" @click="goBack()" class="back-button">
                   Powrót
                 </Button>
-                <Button type="submit" class="submit">
+                <Button type="submit" class="submit" data-tid="submit">
                   Zapisz placówkę
                 </Button>
               </div>

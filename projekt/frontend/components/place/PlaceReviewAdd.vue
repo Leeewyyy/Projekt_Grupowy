@@ -3,7 +3,7 @@
     <div class="PlaceReviewAdd_title">
       Dodaj opinię
     </div>
-    <form action="" class="PlaceReviewAdd_form" @submit.prevent="addReview">
+    <form action="" class="PlaceReviewAdd_form" data-tid="form-change-review" @submit.prevent="addReview">
       <div class="form_group">
         <div class="group_name">
           Wybierz ocenę:

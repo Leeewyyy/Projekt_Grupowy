@@ -12,7 +12,7 @@
     </template>
     <template #body>
       <vue-scroll :ops="scrollOptions" class="scroll">
-        <div class="PlaceDetails_container" v-if="place">
+        <div class="PlaceDetails_container" data-tid="place-details-container" v-if="place">
           <div class="container_image">
             <ImageSlider
               v-if="place.images && place.images.length"

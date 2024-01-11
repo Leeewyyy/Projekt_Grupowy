@@ -15,6 +15,7 @@
           :places="favouritePlaces"
           :selectable="true"
           :closable="false"
+          data-tid="section-favourites"
           @onPlaceSelected="(place) => $router.push({ name: 'place-id', params: { id: place.id } })"
         />
         <PlaceList
@@ -24,10 +25,11 @@
           :selectable="true"
           :closable="false"
           :are-own-places="true"
+          data-tid="section-my-facilities"
           @updateList="$store.dispatch('myFacility/fetchAll', userId);"
         >
           <template #header-side>
-            <Button type="submit" @click.prevent="$router.push('/place/edit/0')" class="add-button">
+            <Button type="submit" @click.prevent="$router.push('/place/edit/0')" class="add-button" data-tid="add-place">
               <span class="display-flex align-center">
                 Dodaj
                 <i class="material-icons">add</i>

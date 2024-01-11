@@ -26,8 +26,9 @@
             v-model="searchValue"
             placeholder="Wpisz..."
             class="searchInput"
+            data-tid="top-place-search"
           />
-          <Button type="submit" class="submit-search">Szukaj</Button>
+          <Button type="submit" class="submit-search" data-tid="top-search-submit">Szukaj</Button>
       </form>
       <div
         v-if="$route.name === 'user-panel'"
@@ -50,7 +51,7 @@
         >
           Zaloguj się
         </MenuLink>
-        <MenuLink href="/user-panel" class="account_link flex-panel-button" v-else> 
+        <MenuLink href="/user-panel" class="account_link flex-panel-button" data-tid="header-account-panel" v-else> 
           <template #before>
             <img
               v-if="user && user.imageUrl"

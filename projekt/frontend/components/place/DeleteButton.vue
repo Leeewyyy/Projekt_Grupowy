@@ -3,6 +3,7 @@
     icon-name="delete"
     :size="24"
     variant="dark"
+    data-tid="delete-place-button"
     @click="deletePlace"
   />
 </template>

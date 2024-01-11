@@ -2,7 +2,7 @@ export class Login {
   Login() { };
 
   clickLoginLink() {
-    cy.get('[data-tid="login-link"]').click();
+    cy.get('[data-tid="header-login-button"]').click();
     cy.url().should('include', '/login');
   };
 

@@ -4,6 +4,7 @@
     :size="24"
     variant="dark"
     class="favourite"
+    data-tid="toggle-favourite"
     @click="toggleFavorite"
   />
 </template>

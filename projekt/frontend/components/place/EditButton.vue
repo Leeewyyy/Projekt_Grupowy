@@ -3,6 +3,7 @@
     icon-name="edit"
     :size="24"
     variant="dark"
+    data-tid="edit-place"
     @click="$router.push(`/place/edit/${placeId}`)"
   />
 </template>
