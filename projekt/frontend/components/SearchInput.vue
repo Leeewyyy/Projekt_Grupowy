@@ -145,6 +145,11 @@ export default {
 <style lang="scss" scoped>
 .SearchInput {
   min-width: 400px;
+  
+  @media screen and (max-width: $desktop_breakpoint) {
+    min-width: unset;
+    width: 100%;
+  }
 }
 
 .single-search-result {

@@ -68,6 +68,15 @@ export default {
     align-items: center;
     padding: 0 0.75rem;
 
+    @media screen and (max-width: $desktop_breakpoint) {
+      width: 100% !important;
+      height: auto !important;
+
+      .logo_text {
+        text-indent: 0 !important;
+      }
+    }
+
     .logo_image {
       height: 35px;
       width: auto;

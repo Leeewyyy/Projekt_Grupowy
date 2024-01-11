@@ -100,21 +100,37 @@ input {
 
   .text {
     min-width: fit-content;
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      order: 3;
+    }
   }
 
   .liner {
     height: 1px;
     background-color: $grey;
     width: 100%;
+    
+    @media screen and (max-width: $desktop_breakpoint) {
+      display: none;
+    }
   }
 
   button {
     background: none !important;
     cursor: pointer;
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      order: 1 !important;
+    }
   }
 
   .material-icons.image {
     color: $grey;
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      order: 2;
+    }
   }
 
   .image-div {
@@ -123,6 +139,10 @@ input {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      order: 2;
+    }
   }
 }
 

@@ -404,6 +404,12 @@ export default {
 .reset-button {
   height: 45px;
   margin-left: 10px;
+
+  @media screen and (max-width: $desktop_breakpoint) {
+    width: 100%;
+    margin: 1rem 0 0 0;
+    max-width: 300px;
+  }
 }
 
 .services-buttons {
@@ -434,6 +440,7 @@ code {
     background: #FDFDFD;
     box-shadow: unset;
     padding-top: 20px;
+    margin-top: 0 !important;
   }
   
   .info-box-title {
@@ -446,6 +453,30 @@ code {
   .info-box {
     padding: 0 2em 2em 2em;
     background: #fff;
+
+    @media screen and (max-width: $desktop_breakpoint) {
+      padding: 0 0 2em 0 !important;
+
+      .width-70 {
+        width: 100%;
+      }
+
+      .row {
+        margin-top: 1em;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        .row-left {
+          width: 100% !important;
+          margin-bottom: 5px;
+        }
+      }
+
+      textarea {
+        width: 100%;
+      }
+    }
 
     section:not(:first-of-type) {
       margin-top: 3em;
@@ -487,7 +518,7 @@ code {
 
     @media screen and (max-width: $desktop_breakpoint) {
       background: transparent;
-      padding: 0 2rem !important;
+      padding: 0 !important;
 
       #info-box-contact {
         margin-top: 0;
