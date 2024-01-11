@@ -20,6 +20,7 @@
               class="AdminNavigation_nav-link"
               :class="{ 'nav-link--active': $route.fullPath === tab.to }"
               :to="tab.to"
+              :data-tid="tab.key"
             >
               {{ tab.name }}
             </nuxt-link>
@@ -46,14 +47,17 @@ export default {
         {
           name: 'Zarządzanie użytkownikami',
           to: '/admin/users',
+          key: 'users-nav',
         },
         {
           name: 'Zarządzanie placówkami',
           to: '/admin/facilities',
+          key: 'places-nav',
         },
         {
           name: 'Statystyki',
           to: '/admin/statistics',
+          key: 'stats-nav',
         },
       ],
     };

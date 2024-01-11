@@ -1,5 +1,6 @@
 describe('Tworzenie konta w systemie', () => {
   before(() => {
+    cy.clearCookies();
     cy.visit('/');
   });
   

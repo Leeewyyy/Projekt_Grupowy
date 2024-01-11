@@ -1,5 +1,8 @@
 export class Login {
-  Login() { };
+
+  constructor(userType = 'user') {
+    this.userType = userType;
+  }
 
   clickLoginLink() {
     cy.get('[data-tid="header-login-button"]').click();
@@ -7,7 +10,7 @@ export class Login {
   };
 
   fillForm() {
-    cy.fixture('user').then(({ email, password }) => {
+    cy.fixture(this.userType).then(({ email, password }) => {
       cy.get('[data-tid="login"] input').type(email)
         .should('have.value', email);
       cy.get('[data-tid="password"] input').type(password)  

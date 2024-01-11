@@ -12,7 +12,7 @@ describe('Wyszukiwanie publicznych placówek medycznych po typie placówki Szpit
   });
 
   it('Na karcie z filtrami ustaw przełącznik NFZ na pozycję w prawo', () => {
-    cy.changeSwitch('[data-tid="nfz-switch"]', true);
+    cy.get('[data-tid="nfz-switch"]').should('be.checked');
   });
 
   it('Na karcie z filtrami wybierz z listy Typ placówki element "Szpital"', () => {

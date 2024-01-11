@@ -10,6 +10,7 @@
         <MenuLink
           class="item_link"
           :href="item.href"
+          :data-tid="item.key"
           @closeNavigation="handleCloseNavigation(item)"
         >
           {{ item.name }}
@@ -120,6 +121,7 @@ export default {
         items.push({
           name: 'Napisz do nas',
           href: '/contact',
+          key: 'contact',
         });
       }
       

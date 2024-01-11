@@ -16,6 +16,7 @@
               name="name-input"
               v-model="subject"
               label="Temat"
+              data-tid="subject"
             />
 
             <InputText
@@ -25,6 +26,7 @@
               label="Adres e-mail"
               placeholder="np. jan@kowalski.pl"
               style="margin-top: 20px;"
+              data-tid="email"
             />
             
             <InputText
@@ -34,16 +36,17 @@
               placeholder="Opisz problem, zadaj pytanie"
               label="Tekst wiadomości"
               style="margin-top: 20px"
+              data-tid="description"
             />
 
-            <SwitchButton id="consent" v-model="agreement" dir="right">
+            <SwitchButton data-tid="switch-consent" id="consent" v-model="agreement" dir="right">
               Wyrażam zgodę na przetwarzanie moich danych osobowych przez Politechnikę Gdańską,
               zgodnie z
               <a href="#" tabindex="5">polityką prywatności</a> w celu odpowiedzi na pytanie 
               zawarte w tym formularzu i dalszą korespondencję elektroniczą.
             </SwitchButton>
 
-            <Button type="submit" class="submit">
+            <Button type="submit" class="submit" data-tid="submit">
               Wyślij wiadomość
             </Button>
         </form>

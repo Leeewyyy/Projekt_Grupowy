@@ -75,6 +75,7 @@
           <Table
             :columns="columns"
             :rows="filteredRows"
+            data-tid="facilities-table"
           >
             <template #imageUrl="{ value }">
               <Avatar
@@ -133,6 +134,7 @@
                   icon="delete"
                   backgroundColor="#f00"
                   textColor="#fff"
+                  data-tid="delete-user"
                   @click.native="deleteFacility(row)"
                 >
                   Usuń

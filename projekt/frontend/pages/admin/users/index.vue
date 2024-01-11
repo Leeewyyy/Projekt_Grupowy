@@ -20,6 +20,7 @@
               name="searchName"
               v-model="searchNameTemp"
               placeholder="np. Adam Kowalski"
+              data-tid="full-name"
               @input="onSearchUpdated"
             />
           </div>
@@ -33,6 +34,7 @@
               name="searchEmail"
               v-model="searchEmailTemp"
               placeholder="np. adam@kowalski.pl"
+              data-tid="email"
               @input="onSearchUpdated"
             />
           </div>
@@ -50,6 +52,7 @@
           <Table
             :columns="columns"
             :rows="filteredUsers"
+            data-tid="users-table"
           >
             <template #imageUrl="{ value }">
               <Avatar
@@ -74,6 +77,7 @@
                 element="nuxt-link"
                 :to="`/admin/users/${row.id}`"
                 icon="visibility"
+                data-tid="show-user"
               >
                 Wyświetl
               </ActionButton>

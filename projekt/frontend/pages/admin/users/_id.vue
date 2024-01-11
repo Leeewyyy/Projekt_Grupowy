@@ -107,6 +107,7 @@
             icon="delete"
             backgroundColor="#f00"
             textColor="#fff"
+            data-tid="delete-user"
             @click.native="deleteUser"
           >
             Usuń użytkownika

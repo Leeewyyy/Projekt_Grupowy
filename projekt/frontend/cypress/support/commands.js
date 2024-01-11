@@ -63,11 +63,11 @@ Cypress.Commands.add('attachFiles', (selector, ...fileNames) => {
 
 Cypress.Commands.add('changeSwitch', (selector, mode) => {
   // mode: true - switch to right, false - switch to left
+  cy.get(`${selector} label`).click();
   
   if (mode === true) {
     cy.get(`${selector} input[type=checkbox]`).should('be.checked');
   } else {
-    cy.get(`${selector} label`).click();
     cy.get(`${selector} input[type=checkbox]`).should('not.be.checked');
   }
 });
